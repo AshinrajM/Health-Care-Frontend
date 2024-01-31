@@ -5,7 +5,6 @@ import React from 'react'
 
 export default function Signup() {
     return (
-        // <Page backgroundImage="src/assets/abc/3.jpg">
 
         <div className='max-w-lg mx-auto bg-transparent backdrop-blur shadow-md rounded-2xl m-10 p-10'>
             <h1 className='text-3xl text-center text-light-blue-900 underline-offset-auto font-semibold my-5'>Sign Up</h1>

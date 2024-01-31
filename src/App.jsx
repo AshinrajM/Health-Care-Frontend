@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './pages/home'
-import Signin from './pages/signin'
-import Signup from './pages/signup'
+import Home from './pages/user/Home'
+import Signin from './pages/user/Signin'
+import Signup from './pages/user/Signup'
 import Header from './components/Header/Header'
-import AdminLogin from './pages/AdminLogin'
+import AdminLogin from './pages/admin/AdminLogin'
 
 
 

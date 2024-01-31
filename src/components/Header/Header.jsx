@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function Header() {
     return (
-        <header className='bg-light-blue-0 shadow-md'>
+        <header className='bg-light-blue-0 shadow-md '>
             <div className='flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto p-3'>
                 <div className='flex justify-center md:justify-start mb-4 md:mb-0'>
                     <img src="src/assets/logo/logo3.png" alt="Logo" className="h-14 w-auto hover:cursor-pointer"/>
