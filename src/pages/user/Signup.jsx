@@ -1,31 +1,46 @@
-import { Button } from '@material-tailwind/react'
+import Header from '../../components/Header/Header'
+import { Card, Typography, Input, Button } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
-import { FaGooglePlusG } from "react-icons/fa";
-import React from 'react'
 
-export default function Signup() {
+export default function SignUp() {
+
+    const divStyle = {
+        background: 'rgba(255,255,255,0.1)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255,255,255,0.2)',
+    };
+    const imageStyle = {
+        backgroundImage: 'url("src/assets/background/3.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+    }
+
     return (
+        <div className='p-3' style={imageStyle}>
+            <Header />
+            <Card className="my-9 max-w-md mx-auto rounded-xl px-5 py-3" style={divStyle}>
+                <Typography className='text-center p-2' variant="h2" color="teal">Sign Up</Typography>
+                <form className="flex flex-col gap-4">
+                    <Input variant='standard' label="Username" id='username' color="black" />
+                    <Input variant='standard' label="Email" id="email" color="black" />
+                    <Input variant='standard' label="Password" id="password" color="black" />
+                    <Input variant='standard' label="Confirm Password" id="confirm_password" color="black" />
 
-        <div className='max-w-lg mx-auto bg-transparent backdrop-blur shadow-md rounded-2xl m-10 p-10'>
-            <h1 className='text-3xl text-center text-light-blue-900 underline-offset-auto font-semibold my-5'>Sign Up</h1>
-            <form className='flex flex-col gap-3'>
-                <input type="text" placeholder='Enter Username' id='username' className='border border-gray-400 focus:ring-1 focus:outline-none focus:ring-orange-200 p-2 rounded-lg' />
-                <input type="email" placeholder='Enter Email' id='email' className='border border-gray-400 focus:ring-1 focus:outline-none focus:ring-orange-200 p-2 rounded-lg' />
-                <input type="password" placeholder='Enter password' id='password' className='border border-gray-400 focus:ring-1 focus:outline-none focus:ring-orange-200  p-2 rounded-lg' />
-                <input type="password" placeholder='Confirm password' id='confirm_password' className='border border-gray-400 focus:ring-1 focus:outline-none focus:ring-orange-200 p-2 rounded-lg ' />
-                <div className='flex justify-between space-x-5 mb-2'>
+
                     <Button className='bg-blue-700 rounded-3xl w-full'>Sign Up</Button>
-                    <Button className='bg-red-800 rounded-3xl w-full flex items-center justify-center'><FaGooglePlusG size={20} /></Button>
+                    <Button className='bg-white rounded-3xl w-full h-10 flex items-center justify-center'>
+                        <img src='src/assets/logo/google.svg' alt='Button Image' className='h-5 w-auto ' />
+                    </Button>
+                </form>
+                <div className="flex items-center gap-2 my-3">
+                    <Typography className='text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
+                    <Link to='/signin' >
+                        <Typography className="text-primaryColor text-xs sm:text-sm hover:cursor-pointer">Log In</Typography>
+                    </Link>
                 </div>
-
-            </form>
-            <div className='flex gap-3 my-3'>
-                <p>Aleready have an account  ?</p>
-                <Link to='/sign-in'>
-                    <p className='text-primaryColor'>Log in</p>
-                </Link>
-            </div>
+            </Card>
         </div>
-        // </Page>
     )
 }
