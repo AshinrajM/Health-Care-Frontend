@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import axios from 'axios'
-import { data } from 'autoprefixer'
-
+import Slider from '../../components/Slider/Slider'
 
 export default function Home() {
 
@@ -20,34 +19,26 @@ export default function Home() {
         }
         getAllUser()
     }, [])
-
     return (
-        <>
+        <div>
             <Header />
-            {/* Welcome to HealthCare app */}
+            <img className='w-full' src="src\assets\sliderImages\slider.png" alt="" />
+            {/* <Slider /> */}
+
             <div>
                 {
                     users.map((user, i) => {
                         return (
-                            <div>
-                                <div>
-                                    {/* <h2 key={i}>{user.username},{user.email}</h2> */}
-                                </div>
-                                <div>
-                                    <h1 className='text-3xl text-center justify-center'>WElcome to Home</h1>
-                                </div>
-                            </div>
-
+                            <>
+                                <p>welcome home</p>
+                            </>
                         )
                     })
                 }
 
-                {/* <input type="text" placeholder='name' />
-                <input type="text" placeholder='age' />
-                <input type="text" placeholder='schoolname' /> */}
 
-            </div>
-        </>
+            </div >
+        </div>
     )
 }
 

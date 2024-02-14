@@ -1,9 +1,24 @@
-import React from 'react'
+import { createSlice } from "@reduxjs/toolkit";
 
-export default function userSlice() {
-  return (
-    <div>
-      
-    </div>
-  )
+const initialState = {
+  isAuthenticated: localStorage.getItem('access') ? true : false,
+  userData: ''
 }
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    loginUser(state) {
+      state.isAuthenticated = true;
+    },
+    logoutUser(state) {
+      state.isAuthenticated = false   
+      localStorage.removeItem('access')
+      localStorage.removeItem('refresh')
+    }
+  }
+})
+
+export const { loginUser, logoutUser } = userSlice.actions;
+export default userSlice.reducer;

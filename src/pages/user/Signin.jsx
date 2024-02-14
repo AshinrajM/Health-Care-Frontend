@@ -1,7 +1,8 @@
-//disabled={Object.keys(formik.errors).length !== 0}
 import { Card, Typography, Input, Button } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 
@@ -29,6 +30,14 @@ export default function SignIn() {
 
     const navigate = useNavigate();
 
+    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/')
+        }
+    }, [isAuthenticated, navigate])
+
     const onSubmit = async (values, actions) => {
 
 
@@ -43,7 +52,13 @@ export default function SignIn() {
                 console.log("arrived success")
 
                 if (response.data.role === "user") {
-                    localStorage.setItem('token', 'response.data');
+
+                    console.log(response.data)
+
+                    const { access, refresh } = response.data;
+
+                    localStorage.setItem('access', access);
+                    localStorage.setItem('refresh', refresh);
                     navigate('/')
                 } else {
                     actions.setErrors({ general: 'Only users are allowed to log in.' });
@@ -56,7 +71,6 @@ export default function SignIn() {
         } catch (error) {
             console.log('Error', error)
             actions.setErrors({ general: 'An error occurred. Please try again later.' });
-            //  actions.set4()
         }
     };
 
@@ -93,7 +107,9 @@ export default function SignIn() {
 
                     <Input variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
                     {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
+
                     <Button className="bg-blue-500 mb-5" type='submit'>Login</Button>
+
                 </form>
                 <div className="flex items-center gap-1">
                     <Typography className="my-2 text-sm sm:text-md" >Forgot Password ? </Typography>

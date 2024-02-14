@@ -85,7 +85,6 @@ export default function SignUp() {
     };
     const imageStyle = {
         backgroundImage: 'url("src/assets/background/3.jpg")',
-        // backgroundImage: 'url("https://www.shutterstock.com/image-photo/nurses-shake-hands-encourage-elderly-260nw-2173861297.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'left',
         backgroundRepeat: 'no-repeat',
