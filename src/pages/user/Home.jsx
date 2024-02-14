@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import axios from 'axios'
-import Slider from '../../components/Slider/Slider'
+// import Slider from '../../components/Slider/Slider'
 
 export default function Home() {
 
@@ -27,10 +27,10 @@ export default function Home() {
 
             <div>
                 {
-                    users.map((user, i) => {
+                    users.map((user, index) => {
                         return (
                             <>
-                                <p>welcome home</p>
+                                <p key={user.id ? user.id : index}>welcome home{user.id}</p>
                             </>
                         )
                     })

@@ -1,17 +1,34 @@
 import { FaUserCircle } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import {
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-} from "@material-tailwind/react";
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Menu, MenuHandler, MenuList, MenuItem, } from "@material-tailwind/react";
+import { logoutUser } from '../../redux/userSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 export default function Header() {
 
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        try {
+            const refresh = localStorage.getItem('refresh')
+            console.log('refresh', refresh)
+            if (refresh) {
+                localStorage.removeItem('access')
+                localStorage.removeItem('refresh')
+                dispatch(logoutUser())
+                navigate('/signin')
+            } else {
+                console.log("Refreh token not found")
+            }
+        }
+        catch (error) {
+            console.log('Logout failed')
+        }
+    }
 
     return (
         <header className='bg-light-blue-0 shadow-sm '>
@@ -35,7 +52,7 @@ export default function Header() {
                                 </MenuHandler>
                                 <MenuList>
                                     <MenuItem>Profile</MenuItem>
-                                    <MenuItem className='text-red-500'>Log Out</MenuItem>
+                                    <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
                                 </MenuList>
                             </Menu>)
                             : (<Link to='/signin'>
