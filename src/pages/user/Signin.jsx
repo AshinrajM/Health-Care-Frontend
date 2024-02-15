@@ -36,7 +36,7 @@ export default function SignIn() {
         if (isAuthenticated) {
             navigate('/')
         }
-    }, [isAuthenticated, navigate])
+    }, [isAuthenticated, navigate]);
 
     const onSubmit = async (values, actions) => {
 

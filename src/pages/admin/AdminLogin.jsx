@@ -2,6 +2,9 @@ import { Card, Typography, Input, Button } from '@material-tailwind/react'
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/userSlice';
 
 
 const initialValues = {
@@ -11,7 +14,19 @@ const initialValues = {
 
 export default function AdminLogin() {
 
+  // const isAuthenticated = useSelector(state => state.isAuthenticated)
+
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
+
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     console.log("arrived useEffect")
+  //     navigate('/admin/dashboard');
+  //   }
+  // }, [navigate, isAuthenticated]);
 
   const onSubmit = async (values, actions) => {
     console.log("adminData", values)
@@ -20,12 +35,17 @@ export default function AdminLogin() {
       console.log("Response:", response.data)
 
       if (response.data) {
-        console.log("arrived success")
+        console.log("arrived success", response.data)
 
         if (response.data.role === "superuser") {
-          localStorage.setItem('token', 'response.data');
-          console.log("token", response.data)
+          console.log("arrived superuser")
+          const { access, refresh } = response.data;
+
+          localStorage.setItem('access', access);
+          localStorage.setItem('refresh', refresh);
+          dispatch(loginUser())
           navigate('/admin/dashboard')
+
         } else {
           actions.setErrors({ general: 'Only Admins are allowed' });
         }
