@@ -1,7 +1,7 @@
 import { Card, Typography, Input, Button } from '@material-tailwind/react'
 import { useFormik } from 'formik';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/userSlice';
@@ -14,19 +14,18 @@ const initialValues = {
 
 export default function AdminLogin() {
 
-  // const isAuthenticated = useSelector(state => state.isAuthenticated)
-
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const navigate = useNavigate()
 
+  useEffect(() => {
+    console.log(isAuthenticated)
+    if (isAuthenticated) {
+      navigate('/admin/entry/dashboard')
+    }
+  }, [])
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     console.log("arrived useEffect")
-  //     navigate('/admin/dashboard');
-  //   }
-  // }, [navigate, isAuthenticated]);
 
   const onSubmit = async (values, actions) => {
     console.log("adminData", values)
@@ -35,7 +34,7 @@ export default function AdminLogin() {
       console.log("Response:", response.data)
 
       if (response.data) {
-        console.log("arrived success", response.data)
+        console.log("arrived response")
 
         if (response.data.role === "superuser") {
           console.log("arrived superuser")
@@ -44,7 +43,7 @@ export default function AdminLogin() {
           localStorage.setItem('access', access);
           localStorage.setItem('refresh', refresh);
           dispatch(loginUser())
-          navigate('/admin/dashboard')
+          navigate('/admin/entry/dashboard')
 
         } else {
           actions.setErrors({ general: 'Only Admins are allowed' });
@@ -64,7 +63,6 @@ export default function AdminLogin() {
   const formik = useFormik({
     initialValues,
     onSubmit,
-    // validate
   })
 
   const divStyle = {
@@ -76,11 +74,11 @@ export default function AdminLogin() {
   return (
     <div className='bg-black h-full min-h-screen p-5'>
       <div className=''>
-        <img src="src/assets/logo/logo3.png" alt="logo" className="h-12 w-auto hover:cursor-pointer " />
+        <img src="https://png.pngtree.com/png-clipart/20200727/original/pngtree-medical-health-care-logo-design-template-png-image_5315330.jpg" alt="logo" className="h-12 w-auto hover:cursor-pointer " />
       </div>
       <div className='flex justify-center items-center' style={{ Height: '100vh' }}>
         <Card className="my-10 max-w-md mx-auto rounded-xl p-10  " style={divStyle}>
-          <Typography className='text-center p-2' variant="h2" color="teal">Log In</Typography>
+          <Typography className='text-center p-2 m-5' variant="h2" color="teal">Log In</Typography>
           <form className="flex flex-col gap-4 w-full" onSubmit={formik.handleSubmit}>
             <Input variant='standard' label="Enter Admin ID" name='email' color="white" onChange={formik.handleChange} value={formik.values.email} />
             <Input variant='standard' label="Enter Password" name='password' color="white" onChange={formik.handleChange} value={formik.values.password} />

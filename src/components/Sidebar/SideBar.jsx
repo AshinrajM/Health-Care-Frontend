@@ -1,25 +1,24 @@
 import React from 'react'
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, } from "@material-tailwind/react";
-import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon } from "@heroicons/react/24/solid";
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon }
+    from "@heroicons/react/24/solid";
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import { logoutUser } from '../../redux/userSlice';
 
 export default function SideBar() {
 
-    const isAuthenticated = useSelector(state => state.isAuthenticated)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
 
-    const handleLogout = async () => {
+    const handleLogout = () => {
         try {
+            console.log("arrived onclick func")
             const refresh = localStorage.getItem('refresh')
             console.log("refresh", refresh)
             if (refresh) {
                 console.log("arrived with refresh")
-                localStorage.removeItem('access')
-                localStorage.removeItem('refresh')
                 dispatch(logoutUser())
                 navigate('/admin/login')
             } else {
@@ -29,10 +28,13 @@ export default function SideBar() {
             console.log("token not found")
         }
     }
+    const usersPage = () => {
+        navigate('/admin/entry/users')
+    }
 
     return (
         <>
-            <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5" >
+            <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
                 <div className="mb-2 p-4">
                     <Typography variant="h5" color="blue-gray">
                         HealthCare
@@ -51,14 +53,14 @@ export default function SideBar() {
                         </ListItemPrefix>
                         Bookings
                     </ListItem>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <UserGroupIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Users
-                        <ListItemSuffix>
-                        </ListItemSuffix>
-                    </ListItem>
+                    <Link to='/admin/entry/users'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <UserGroupIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Users
+                        </ListItem>
+                    </Link>
                     <ListItem>
                         <ListItemPrefix>
                             <BriefcaseIcon className="h-5 w-5" />
@@ -71,12 +73,11 @@ export default function SideBar() {
                         </ListItemPrefix>
                         Banners
                     </ListItem>
-
-                    <ListItem className='text-red-500 hover:bg-red-200'>
+                    <ListItem className='text-red-500 hover:bg-red-200' onClick={handleLogout}>
                         <ListItemPrefix>
-                            <PowerIcon className="h-5 w-5" /> {/* Apply text-red-500 class to the icon */}
+                            <PowerIcon className="h-5 w-5" />
                         </ListItemPrefix>
-                        <p onClick={handleLogout}>Log Out</p> {/* Apply text-red-500 class to the text */}
+                        Log Out
                     </ListItem>
                 </List>
             </Card>
