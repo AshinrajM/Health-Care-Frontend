@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
 
-const PrivateRoute = () => {
+const PrivateRouteAdmin = () => {
 
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
     console.log(isAuthenticated, "check")
@@ -14,4 +14,4 @@ const PrivateRoute = () => {
     }
 }
 
-export default PrivateRoute
+export default PrivateRouteAdmin

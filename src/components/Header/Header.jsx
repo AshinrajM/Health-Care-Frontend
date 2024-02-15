@@ -4,6 +4,7 @@ import { Menu, MenuHandler, MenuList, MenuItem, } from "@material-tailwind/react
 import { logoutUser } from '../../redux/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 
 export default function Header() {
@@ -39,29 +40,29 @@ export default function Header() {
                 <div className='flex justify-center md:justify-end'>
                     <ul className='flex flex-col md:flex-row gap-4 md:gap-11 items-center justify-end font-serif text-xl'>
                         <Link to='/'>
-                            <li className='text-green-400 mb-2 md:mb-0 hover:cursor-pointer'>Home</li>
-                        </Link>
-                        <li className='text-green-400 mb-2 md:mb-0 hover:cursor-pointer '>Bookings</li>
-                        <li className='text-green-400 mb-2 md:mb-0 hover:cursor-pointer'>Associates</li>
-                        <li className='text-green-400 mb-2 md:mb-0 hover:cursor-pointer'>Contact Us</li>
+                            <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Home</li>
+                    </Link>
+                    <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Bookings</li>
+                    <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Associates</li>
+                    <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Contact Us</li>
 
-                        {isAuthenticated ?
-                            (<Menu>
-                                <MenuHandler>
-                                    <li className='text-green-400 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
-                                </MenuHandler>
-                                <MenuList>
-                                    <MenuItem>Profile</MenuItem>
-                                    <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
-                                </MenuList>
-                            </Menu>)
-                            : (<Link to='/signin'>
-                                <li className='text-black md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
-                            </Link>)}
-                    </ul>
-                </div>
+                    {isAuthenticated ?
+                        (<Menu>
+                            <MenuHandler>
+                                <li className='text-green-400 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
+                            </MenuHandler>
+                            <MenuList>
+                                <MenuItem>Profile</MenuItem>
+                                <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
+                            </MenuList>
+                        </Menu>)
+                        : (<Link to='/signin'>
+                            <li className='text-black md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
+                        </Link>)}
+                </ul>
             </div>
-        </header>
+        </div>
+        </header >
 
 
     )

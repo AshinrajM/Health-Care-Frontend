@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, } from "@material-tailwind/react";
 import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon }
     from "@heroicons/react/24/solid";
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logoutUser } from '../../redux/userSlice';
+import { TfiAlignJustify } from "react-icons/tfi";
 
 export default function SideBar() {
 
@@ -28,16 +29,12 @@ export default function SideBar() {
             console.log("token not found")
         }
     }
-    const usersPage = () => {
-        navigate('/admin/entry/users')
-    }
-
     return (
         <>
-            <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
+            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none">
                 <div className="mb-2 p-4">
                     <Typography variant="h5" color="blue-gray">
-                        HealthCare
+                        <img src="https://cdn3.vectorstock.com/i/1000x1000/08/42/medical-care-logo-icon-design-vector-22560842.jpg" alt="" />
                     </Typography>
                 </div>
                 <List>
@@ -61,12 +58,20 @@ export default function SideBar() {
                             Users
                         </ListItem>
                     </Link>
-                    <ListItem>
+                    <Link to='/admin/entry/associates'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <BriefcaseIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Associates
+                        </ListItem>
+                    </Link>
+                    {/* <ListItem>
                         <ListItemPrefix>
                             <BriefcaseIcon className="h-5 w-5" />
                         </ListItemPrefix>
                         Associates
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem>
                         <ListItemPrefix>
                             <PhotoIcon className="h-5 w-5" />

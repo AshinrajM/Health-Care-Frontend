@@ -3,14 +3,14 @@ import { FaLock } from "react-icons/fa6";
 import { Card, Typography } from '@material-tailwind/react'
 import SideBar from '../../components/Sidebar/SideBar'
 
-export default function AdminUsers() {
+export default function AdminAssociates() {
     return (
         <div className='bg-blue-gray-500 flex flex-col lg:flex-row'>
             <div className='lg:w-64 flex-none'>
                 <SideBar />
             </div>
             <div className='flex-1 mx-4 lg:mx-10 my-4 lg:my-36'>
-                <Typography variant='h2' color='white'>Users</Typography>
+                <Typography variant='h2' color='white'>Associates</Typography>
                 <Card className='rounded-none bg-gray-100'>
                     <div className='overflow-x-auto'>
                         <table className='text-black w-full'>
@@ -52,4 +52,3 @@ export default function AdminUsers() {
         </div>
     )
 }
-
