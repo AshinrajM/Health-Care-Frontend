@@ -105,7 +105,7 @@ export default function SignIn() {
                     <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" />
                     {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
 
-                    <Input variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
+                    <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
                     {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
 
                     <Button className="bg-blue-500 mb-5" type='submit'>Login</Button>

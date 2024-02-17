@@ -1,7 +1,9 @@
 import { FaLockOpen } from "react-icons/fa6";
 import { FaLock } from "react-icons/fa6";
-import { Card, Typography } from '@material-tailwind/react'
+import { Button, Card, Typography } from '@material-tailwind/react'
+import { HiUserAdd } from "react-icons/hi";
 import SideBar from '../../components/Sidebar/SideBar'
+import { Link } from "react-router-dom";
 
 export default function AdminAssociates() {
     return (
@@ -10,7 +12,12 @@ export default function AdminAssociates() {
                 <SideBar />
             </div>
             <div className='flex-1 mx-4 lg:mx-10 my-4 lg:my-36'>
-                <Typography variant='h2' color='white'>Associates</Typography>
+                <div className="flex justify-between p-1">
+                    <Typography variant='h2' color='white' >Associates</Typography>
+                    <Link to="/admin/entry/add-associates">
+                        <Button color='white'><HiUserAdd className="w-7 h-7 " /></Button>
+                    </Link>
+                </div>
                 <Card className='rounded-none bg-gray-100'>
                     <div className='overflow-x-auto'>
                         <table className='text-black w-full'>
@@ -46,8 +53,6 @@ export default function AdminAssociates() {
                         </table>
                     </div>
                 </Card>
-
-
             </div>
         </div>
     )

@@ -5,7 +5,6 @@ import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGr
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logoutUser } from '../../redux/userSlice';
-import { TfiAlignJustify } from "react-icons/tfi";
 
 export default function SideBar() {
 
