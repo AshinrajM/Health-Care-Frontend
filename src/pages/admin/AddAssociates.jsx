@@ -1,18 +1,44 @@
-import { Card, Input, Button, Typography, Textarea, Select, Option } from "@material-tailwind/react";
+import { Card, Input, Button, Typography, Textarea } from "@material-tailwind/react";
 import SideBar from '../../components/Sidebar/SideBar'
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const initialValues = {
     name: '',
     email: '',
-    date_of_birth: '',
+    age: '',
     experience: '',
     certificate_no: '',
-    gender: '',
     fee_per_hour: '',
     phone: '',
+    password: '',
 
+
+}
+const validate = values => {
+
+    let errors = {}
+
+    const min_age = 21
+
+    if (!values.email) {
+        errors.email = "Required"
+    }
+
+    if (!values.age) {
+        errors.age = "Required"
+    } else if (values.age < min_age) {
+        errors.age = "Age should be greater than 21"
+        console.log("age error found")
+    }
+
+    if (!values.certificate_no) {
+        errors.certificate_no = "Required"
+    }
+
+    return errors
 
 }
 
@@ -27,20 +53,42 @@ const generatePassword = () => {
 
 export default function AddAssociates() {
 
+    const navigate = useNavigate()
+
+    const onSubmit = async (values, actions) => {
+
+        console.log('submitted form :', values)
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/users/register', values)
+            console.log("response:", response.data)
+
+            if (response) {
+                console.log("associate creation successfull")
+                navigate('/associate/login')
+            } else {
+                actions.setErrors({ general: 'signup failed' });
+            }
+        } catch (error) {
+            console.log('Error', error)
+            actions.setErrors({ general: 'An error occurred. Please try again later.' });
+        }
+
+    }
+
     const formik = useFormik({
         initialValues,
-        onSubmit: values => {
-            console.log(values)
-        }
+        onSubmit,
+        validate,
     })
-    console.log(formik.values)
+    console.log('Form values:', formik.values);
+    console.log('form error:', formik.errors);
 
-    const [password, setPassword] = useState(0)
 
     useEffect(() => {
         const otp = generatePassword()
-        setPassword(otp)
         console.log("otp", otp)
+        formik.setValues({ ...formik.values, password: otp })
     }, [])
 
 
@@ -62,18 +110,21 @@ export default function AddAssociates() {
                             </div>
                             <div className="w-full md:w-1/2">
                                 <Input label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} />
+                                {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row mx-5 gap-4 mb-6">
                             <div className="w-full md:w-1/3">
-                                <Input label="DOB" name="date_of_birth" type="date" onChange={formik.handleChange}
-                                    value={formik.values.date_of_birth} />
+                                <Input label="Age" name="age" type="number" onChange={formik.handleChange}
+                                    value={formik.values.age} />
+                                {formik.errors.age ? <p className='text-red-900 text-xs self-end'>{formik.errors.age}</p> : null}
                             </div>
                             <div className="w-full md:w-1/3">
                                 <Input label="Experience" type="number" name="experience" onChange={formik.handleChange} value={formik.values.experience} />
                             </div>
                             <div className="w-full md:w-1/3">
                                 <Input label="Certificate No" name="certificate_no" onChange={formik.handleChange} value={formik.values.certificate_no} />
+                                {formik.errors.certificate_no ? <p className='text-red-900 text-xs self-end'>{formik.errors.certificate_no}</p> : null}
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row mx-5 gap-4 mb-6">
@@ -92,9 +143,7 @@ export default function AddAssociates() {
                             <div className="w-full md:w-4/4">
                                 <Textarea label="Description" name="description" size="lg" onChange={formik.handleChange} value={formik.values.description} />
                             </div>
-                            <input type="text" name="password" value={password} hidden />
-
-
+                            <input type="text" name="password" value={formik.values.password} readOnly />
                         </div>
                         <div style={{ textAlign: 'center' }} className="mb-10">
                             <Button color="red" className="rounded-2xl" type="submit">Register</Button>
