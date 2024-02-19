@@ -60,12 +60,12 @@ export default function AddAssociates() {
         console.log('submitted form :', values)
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/register', values)
+            const response = await axios.post('http://127.0.0.1:8000/users/register-associate', values)
             console.log("response:", response.data)
 
             if (response) {
                 console.log("associate creation successfull")
-                navigate('/associate/login')
+                navigate('/admin/entry/associates')
             } else {
                 actions.setErrors({ general: 'signup failed' });
             }
