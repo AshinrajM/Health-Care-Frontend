@@ -54,7 +54,7 @@ export default function AssociateLogin() {
     return (
         <div className='h-full min-h-screen p-3' style={imageStyle}>
             <div className='h-auto w-40 mx-1 '>
-                <img src={logo} alt="logo" />
+                <img src={logo} alt="logo" className="" />
             </div>
             <div>
                 <Card className="my-20 py-4 max-w-md mx-auto  rounded-xl p-5" style={transparentstyle}>
@@ -64,9 +64,9 @@ export default function AssociateLogin() {
                     <CardBody className="flex flex-col gap-4">
                         <form className="space-y-6" onSubmit={formik.handleSubmit}>
                             <Input variant='standard' label="Email" type="email" name="email" onChange={formik.handleChange}
-                                value={formik.values.email} color="black" className="bg-none" />
+                                value={formik.values.email} color="black" className="text-blue-gray-900 text-lg" />
                             {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
-                            <Input variant='standard' label="Password" type="password" name="password" onChange={formik.handleChange} value={formik.values.password} color="black" />
+                            <Input variant='standard' label="Password" type="password" color="black" name="password" onChange={formik.handleChange} value={formik.values.password} className="text-blue-gray-900 text-lg" />
                             {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
                             <Button variant="gradient" fullWidth type="submit" disabled={!formik.values.email || !formik.values.password}>
                                 Sign In
