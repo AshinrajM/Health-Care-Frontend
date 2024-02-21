@@ -2,6 +2,10 @@ import { Card, CardBody, Typography, Input, Button } from "@material-tailwind/re
 import logo from '../../assets/logo/Hc2.png'
 import bg from '../../assets/background/associatelogin.png'
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../redux/userSlice";
 
 
 const initialValues = {
@@ -25,9 +29,29 @@ const validate = values => {
 
 export default function AssociateLogin() {
 
+    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
 
     const onSubmit = async (values) => {
         console.log("submitted form:", values)
+
+        const response = await axios.post('http://127.0.0.1:8000/users/login', values)
+
+        if (response.data) {
+            console.log("response received")
+
+            if (response.data.role == "associate") {
+
+                const { access, refresh } = response.data
+
+                localStorage.setItem('access', access)
+                localStorage.setItem('refresh', refresh)
+                dispatch(loginUser())
+                navigate('/associates/dashboard')
+            }
+        }
     }
 
     const transparentstyle = {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuHandler, MenuList, MenuItem, } from "@material-tailwind/react";
 import { logoutUser } from '../../redux/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo/HcWhite.png'
+import logo from '../../assets/logo/Hc2.png'
 
 
 export default function Header() {

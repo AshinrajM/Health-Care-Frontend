@@ -1,7 +1,9 @@
 import { Card, Typography, Input, Button } from '@material-tailwind/react'
-import { useFormik } from 'formik';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { baseUrl } from '../../Api/Api';
+import logo from '../../assets/logo/hcWhite.png'
+import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/userSlice';
@@ -74,7 +76,7 @@ export default function AdminLogin() {
   return (
     <div className='bg-black h-full min-h-screen p-5'>
       <div className=''>
-        <img src="https://png.pngtree.com/png-clipart/20200727/original/pngtree-medical-health-care-logo-design-template-png-image_5315330.jpg" alt="logo" className="h-12 w-auto hover:cursor-pointer " />
+        <img src={logo} alt="logo" className="h-24 w-auto hover:cursor-pointer " />
       </div>
       <div className='flex justify-center items-center' style={{ Height: '100vh' }}>
         <Card className="my-10 max-w-md mx-auto rounded-xl p-10  " style={divStyle}>
