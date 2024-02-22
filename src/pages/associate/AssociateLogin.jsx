@@ -1,17 +1,21 @@
+import axios from "axios";
+import bg from '../../assets/background/associatelogin.png'
 import { Card, CardBody, Typography, Input, Button } from "@material-tailwind/react";
 import logo from '../../assets/logo/Hc2.png'
-import bg from '../../assets/background/associatelogin.png'
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../../redux/userSlice";
+import { loginAssociate } from "../../redux/userSlice";
+import { BASE_URL } from "../../Api/Api";
+import { useEffect } from "react";
+
 
 
 const initialValues = {
     email: '',
     password: ''
 }
+
 
 const validate = values => {
 
@@ -29,15 +33,26 @@ const validate = values => {
 
 export default function AssociateLogin() {
 
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    const associateAuthenticated = useSelector(state => state.user.associateAuthenticated)
+    const adminAuthenticated = useSelector(state => state.user.adminAuthenticated)
+
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        console.log("associateAuthenticated:", associateAuthenticated)
+        if (associateAuthenticated) {
+            navigate('/associates/check/dashboard')
+        }
+    }, [])
 
 
     const onSubmit = async (values) => {
         console.log("submitted form:", values)
 
-        const response = await axios.post('http://127.0.0.1:8000/users/login', values)
+        // const response = await axios.post('http://127.0.0.1:8000/users/login', values)
+        const response = await axios.post(`${BASE_URL}/users/login`, values)
 
         if (response.data) {
             console.log("response received")
@@ -46,13 +61,15 @@ export default function AssociateLogin() {
 
                 const { access, refresh } = response.data
 
-                localStorage.setItem('access', access)
-                localStorage.setItem('refresh', refresh)
-                dispatch(loginUser())
-                navigate('/associates/dashboard')
+                localStorage.setItem('associateAccess', access)
+                localStorage.setItem('associateRefresh', refresh)
+                dispatch(loginAssociate())
+                navigate('/associates/check/dashboard')
             }
         }
     }
+
+
 
     const transparentstyle = {
         background: 'rgba(255,255,255,0.1)',
@@ -73,6 +90,12 @@ export default function AssociateLogin() {
         validate,
     })
     console.log('form values:', formik.values);
+
+    useEffect(() => {
+        if (adminAuthenticated) {
+            navigate('/admin/entry/dashboard')
+        }
+    },[adminAuthenticated, navigate])
 
 
     return (

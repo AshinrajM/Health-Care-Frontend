@@ -1,9 +1,18 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { Outlet, Navigate } from 'react-router-dom'
 
-export default function PrivateRouteAssociate() {
-  return (
-    <div>
-      
-    </div>
-  )
+
+const PrivateRouteAssociate = () => {
+
+  const associateAuthenticated = useSelector(state => state.user.associateAuthenticated)
+
+  if (associateAuthenticated) {
+    return <Outlet />
+  } else {
+    return <Navigate to={'/associates/login'} />
+  }
+
 }
+
+export default PrivateRouteAssociate

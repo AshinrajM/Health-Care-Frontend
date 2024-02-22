@@ -9,7 +9,6 @@ import AddAssociates from "../pages/admin/AddAssociates"
 
 
 export default function AdminRoutes() {
-    // const isAuthenticated = useSelector(state => state.user.isAuthenticated)
 
     return (
         <Routes>

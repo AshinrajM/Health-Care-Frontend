@@ -4,10 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 const PrivateRouteAdmin = () => {
 
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
-    console.log(isAuthenticated, "check")
+    const adminAuthenticated = useSelector(state => state.user.adminAuthenticated)
+    console.log(adminAuthenticated, "check")
 
-    if (isAuthenticated) {
+    if (adminAuthenticated) {
         return <Outlet />
     } else {
         return <Navigate to={'/admin/login'} />

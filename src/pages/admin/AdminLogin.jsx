@@ -1,12 +1,12 @@
 import { Card, Typography, Input, Button } from '@material-tailwind/react'
 import axios from 'axios';
-import { baseUrl } from '../../Api/Api';
 import logo from '../../assets/logo/hcWhite.png'
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/userSlice';
+import { loginAdmin } from '../../redux/userSlice';
+import { BASE_URL } from "../../Api/Api";
 
 
 const initialValues = {
@@ -16,14 +16,16 @@ const initialValues = {
 
 export default function AdminLogin() {
 
-  const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+  const adminAuthenticated = useSelector(state => state.user.adminAuthenticated)
+  const associateAuthenticated = useSelector(state => state.user.associateAuthenticated)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
 
   useEffect(() => {
-    console.log(isAuthenticated)
-    if (isAuthenticated) {
+    console.log("chhhhhhhhhhhhhhhhhhhhhhhh", adminAuthenticated)
+    if (adminAuthenticated) {
       navigate('/admin/entry/dashboard')
     }
   }, [])
@@ -32,7 +34,7 @@ export default function AdminLogin() {
   const onSubmit = async (values, actions) => {
     console.log("adminData", values)
     try {
-      const response = await axios.post('http://127.0.0.1:8000/users/login', values)
+      const response = await axios.post(`${BASE_URL}/users/login`, values)
       console.log("Response:", response.data)
 
       if (response.data) {
@@ -42,9 +44,9 @@ export default function AdminLogin() {
           console.log("arrived superuser")
           const { access, refresh } = response.data;
 
-          localStorage.setItem('access', access);
-          localStorage.setItem('refresh', refresh);
-          dispatch(loginUser())
+          localStorage.setItem('adminAccess', access);
+          localStorage.setItem('adminRefresh', refresh);
+          dispatch(loginAdmin())
           navigate('/admin/entry/dashboard')
 
         } else {
@@ -72,6 +74,12 @@ export default function AdminLogin() {
     backdropFilter: 'blur(30px)',
     border: '1px solid rgba(255,255,255,0.2)',
   };
+
+  useEffect(() => {
+    if (associateAuthenticated) {
+      navigate('/associates/check/dashboard')
+    }
+  }, [associateAuthenticated, navigate])
 
   return (
     <div className='bg-black h-full min-h-screen p-5'>

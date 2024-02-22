@@ -1,10 +1,11 @@
 import { Card, Typography, Input, Button } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+// import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { loginUser } from '../../redux/userSlice';
 
 const initialValues = {
     email: '',
@@ -29,14 +30,18 @@ const validate = values => {
 export default function SignIn() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+
+    const userAuthenticated = useSelector(state => state.user.userAuthenticated)
 
     useEffect(() => {
-        if (isAuthenticated) {
+        console.log(userAuthenticated)
+
+        if (adminAuthenticated) {
             navigate('/')
         }
-    }, [isAuthenticated, navigate]);
+    }, [])
 
     const onSubmit = async (values, actions) => {
 
@@ -57,8 +62,9 @@ export default function SignIn() {
 
                     const { access, refresh } = response.data;
 
-                    localStorage.setItem('access', access);
-                    localStorage.setItem('refresh', refresh);
+                    localStorage.setItem('userAccess', access);
+                    localStorage.setItem('userRefresh', refresh);
+                    dispatch(loginUser())
                     navigate('/')
                 } else {
                     actions.setErrors({ general: 'Only users are allowed to log in.' });

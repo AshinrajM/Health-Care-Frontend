@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, } from "@material-tailwind/react";
 import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon }
     from "@heroicons/react/24/solid";
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { logoutAdmin, logoutUser } from '../../redux/userSlice';
+import { logoutAssociate } from '../../redux/userSlice';
+import logo from '../../assets/logo/Hc2.png'
 
-export default function SideBar() {
+
+const SideBarAssociate = () => {
+
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -15,12 +18,12 @@ export default function SideBar() {
     const handleLogout = () => {
         try {
             console.log("arrived onclick func")
-            const adminRefresh = localStorage.getItem('adminRefresh')
-            console.log("adminRefresh", adminRefresh)
-            if (adminRefresh) {
+            const associateRefresh = localStorage.getItem('associateRefresh')
+            console.log("associateRefresh", associateRefresh)
+            if (associateRefresh) {
                 console.log("arrived with refresh")
-                dispatch(logoutAdmin())
-                navigate('/admin/login')
+                dispatch(logoutAssociate())
+                navigate('/associates/login')
             } else {
                 console.log("didnt got the refresh token")
             }
@@ -28,12 +31,18 @@ export default function SideBar() {
             console.log("token not found")
         }
     }
+
     return (
         <>
-            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none">
+            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl  bg-deep-orange-50 rounded-none">
                 <div className="mb-2 p-4">
                     <Typography variant="h5" color="blue-gray">
-                        <img src="https://cdn3.vectorstock.com/i/1000x1000/08/42/medical-care-logo-icon-design-vector-22560842.jpg" alt="" />
+                        <img src={logo} alt="" />
+                    </Typography>
+                </div>
+                <div className="mb-2 p-4">
+                    <Typography variant="h4" color="blue-gray">
+                        Associate Name
                     </Typography>
                 </div>
                 <List>
@@ -54,7 +63,7 @@ export default function SideBar() {
                             <ListItemPrefix>
                                 <UserGroupIcon className="h-5 w-5" />
                             </ListItemPrefix>
-                            Users
+                            Chat
                         </ListItem>
                     </Link>
                     <Link to='/admin/entry/associates'>
@@ -62,15 +71,9 @@ export default function SideBar() {
                             <ListItemPrefix>
                                 <BriefcaseIcon className="h-5 w-5" />
                             </ListItemPrefix>
-                            Associates
+                            Wallet
                         </ListItem>
                     </Link>
-                    {/* <ListItem>
-                        <ListItemPrefix>
-                            <BriefcaseIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Associates
-                    </ListItem> */}
                     <ListItem>
                         <ListItemPrefix>
                             <PhotoIcon className="h-5 w-5" />
@@ -88,3 +91,5 @@ export default function SideBar() {
         </>
     )
 }
+
+export default SideBarAssociate
