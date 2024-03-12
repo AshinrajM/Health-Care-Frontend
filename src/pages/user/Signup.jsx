@@ -54,6 +54,14 @@ export default function SignUp() {
         console.log("Encoded jwt id token:" + response.credential);
         var userObject = jwtDecode(response.credential);
         console.log(userObject)
+
+        const data = {
+            email: userObject.email,
+            password: userObject.sub,
+        }
+        console.log(data.email, data.password, "checked")
+
+        signUpGoogle(data)
     }
 
     useEffect(() => {
@@ -72,9 +80,24 @@ export default function SignUp() {
             document.getElementById('signinDiv'),
             { theme: "outline", size: "large" }
         )
-        
-    },[])
 
+    }, [])
+
+    const signUpGoogle = async (data) => {
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/users/register', data)
+            console.log("Response:", response.data)
+            if (response.data) {
+                console.log("arrived success")
+                navigate('/signin')
+            } else {
+                actions.setErrors({ general: 'Login failed. Please try again.' });
+            }
+        } catch (error) {
+            console.log('Error', error)
+            actions.setErrors({ general: 'An error occurred. Please try again later.' });
+        }
+    }
     const onSubmit = async (values, actions) => {
         console.log('form:', values);
         try {

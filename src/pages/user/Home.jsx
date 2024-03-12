@@ -23,7 +23,6 @@ export default function Home() {
         <div>
             <Header />
             <img className='w-full' src="src\assets\sliderImages\slider.png" alt="" />
-            {/* <Slider /> */}
 
             <div>
                 {

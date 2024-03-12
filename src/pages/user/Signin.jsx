@@ -9,6 +9,9 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import bg from '../../assets/background/signin.png'
 
+import {toast} from 'react-toastify'
+
+
 
 
 const initialValues = {
@@ -87,6 +90,8 @@ export default function SignIn() {
                     localStorage.setItem('userAccess', access);
                     localStorage.setItem('userRefresh', refresh);
                     dispatch(loginUser())
+                    console.log('sdfisjhfkk')
+                    toast.success('dsfsf')                    
                     navigate('/')
                 } else {
                     actions.setErrors({ general: 'Only users are allowed to log in.' });
