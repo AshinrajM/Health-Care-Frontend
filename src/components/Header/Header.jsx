@@ -8,17 +8,17 @@ import logo from '../../assets/logo/Hc2.png'
 
 export default function Header() {
 
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    const isAuthenticated = useSelector(state => state.user.userAuthenticated)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const handleLogout = async () => {
         try {
-            const refresh = localStorage.getItem('refresh')
+            const refresh = localStorage.getItem('userRefresh')
             console.log('refresh', refresh)
             if (refresh) {
-                localStorage.removeItem('access')
-                localStorage.removeItem('refresh')
+                localStorage.removeItem('userAccess')
+                localStorage.removeItem('userRefresh')
                 dispatch(logoutUser())
                 navigate('/signin')
             } else {
@@ -39,16 +39,16 @@ export default function Header() {
                 <div className='flex justify-center md:justify-end'>
                     <ul className='flex flex-col md:flex-row gap-4 md:gap-11 items-center justify-end font-serif text-xl'>
                         <Link to='/'>
-                            <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Home</li>
+                            <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Home</li>
                     </Link>
-                    <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Bookings</li>
-                    <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Associates</li>
-                    <li className={isAuthenticated ? 'text-green-400' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Contact Us</li>
+                    <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Bookings</li>
+                    <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Associates</li>
+                    <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Contact Us</li>
 
                     {isAuthenticated ?
                         (<Menu>
                             <MenuHandler>
-                                <li className='text-green-400 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
+                                <li className='text-blue-900 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
                             </MenuHandler>
                             <MenuList>
                                 <MenuItem>Profile</MenuItem>

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import axios from 'axios'
-// import Slider from '../../components/Slider/Slider'
-
+import homeCover from '../../assets/cover/homeCover.png';
 export default function Home() {
 
     const [users, setUsers] = useState([])
@@ -22,7 +21,7 @@ export default function Home() {
     return (
         <div>
             <Header />
-            <img className='w-full' src="src\assets\sliderImages\slider.png" alt="" />
+            <img className='w-full' src={homeCover} alt="home cover" />
 
             <div>
                 {
