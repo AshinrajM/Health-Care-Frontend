@@ -2,10 +2,14 @@ import { Card, Typography, Input, Button } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useFormik } from 'formik';
-import axios from 'axios';
 import { loginUser } from '../../redux/userSlice';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
+import bg from '../../assets/background/signin.png'
+
+
 
 const initialValues = {
     email: '',
@@ -35,13 +39,31 @@ export default function SignIn() {
 
     const userAuthenticated = useSelector(state => state.user.userAuthenticated)
 
+    const handleCallbackResponse = (response) => {
+        console.log("Encoded jwt id token:" + response.credential);
+        var userObject = jwtDecode(response.credential);
+        console.log(userObject)
+    }
+
     useEffect(() => {
         console.log(userAuthenticated)
 
-        if (adminAuthenticated) {
+        if (userAuthenticated) {
             navigate('/')
         }
+        /* global google*/
+        google.accounts.id.initialize({
+
+            client_id: "443952256934-sn2mj7pnfnblangilokooid8mvd81ldl.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById('signinDiv'),
+            { theme: "outline", size: "large" }
+        )
     }, [])
+
+
 
     const onSubmit = async (values, actions) => {
 
@@ -95,7 +117,7 @@ export default function SignIn() {
     };
 
     const imageStyle = {
-        backgroundImage: 'url("src/assets/background/3.jpg")',
+        backgroundImage: `url(${bg})`,
         backgroundSize: 'cover',
         minHeight: '100vh',
     };
@@ -115,14 +137,18 @@ export default function SignIn() {
                     {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
 
                     <Button className="bg-blue-500 mb-5" type='submit'>Login</Button>
+                    {/* <Button id='signinDiv' className='bg-transparent'></Button> */}
 
                 </form>
+                <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                    <div id='signinDiv' ></div>
+                </div>
                 <div className="flex items-center gap-1">
-                    <Typography className="my-2 text-sm sm:text-md" >Forgot Password ? </Typography>
+                    <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
                     <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer">Click here</Typography>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Typography className='text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
+                    <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
                     <Link to='/signup' >
                         <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
                     </Link>

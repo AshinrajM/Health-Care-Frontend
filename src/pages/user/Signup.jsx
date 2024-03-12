@@ -2,8 +2,9 @@ import Header from '../../components/Header/Header'
 import { Card, Typography, Input, Button } from '@material-tailwind/react'
 import axios from 'axios';
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-
+import { jwtDecode } from 'jwt-decode';
 
 const initialValues = {
     // username: '',
@@ -24,30 +25,55 @@ const validate = values => {
     //     errors.username = 'Numbers are not allowed'
     // }
 
-    if (!values.email) {
-        errors.email = "Cant be empty"
-    }
-    else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(values.email)) {
-        errors.email = 'Invalid email format'
-    }
+    // if (!values.email) {
+    //     errors.email = "Cant be empty"
+    // }
+    // else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(values.email)) {
+    //     errors.email = 'Invalid email format'
+    // }
 
-    if (!values.password) {
-        errors.password = "Cant be empty"
-    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i.test(values.password)) {
-        errors.password = 'Has to follow the pattern'
-    }
+    // if (!values.password) {
+    //     errors.password = "Cant be empty"
+    // } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i.test(values.password)) {
+    //     errors.password = 'Has to follow the pattern'
+    // }
 
-    if (!values.confirm_password) {
-        errors.confirm_password = "Cant be empty"
-    } else if (values.password !== values.confirm_password) {
-        errors.confirm_password = "Password didn't match"
-    }
+    // if (!values.confirm_password) {
+    //     errors.confirm_password = "Cant be empty"
+    // } else if (values.password !== values.confirm_password) {
+    //     errors.confirm_password = "Password didn't match"
+    // }
     return errors
 }
 
 export default function SignUp() {
 
     const navigate = useNavigate();
+
+    const handleCallbackResponse = (response) => {
+        console.log("Encoded jwt id token:" + response.credential);
+        var userObject = jwtDecode(response.credential);
+        console.log(userObject)
+    }
+
+    useEffect(() => {
+        // console.log(userAuthenticated)
+
+        // if (userAuthenticated) {
+        //     navigate('/')
+        // }
+        /* global google*/
+        google.accounts.id.initialize({
+
+            client_id: "443952256934-sn2mj7pnfnblangilokooid8mvd81ldl.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById('signinDiv'),
+            { theme: "outline", size: "large" }
+        )
+        
+    },[])
 
     const onSubmit = async (values, actions) => {
         console.log('form:', values);
@@ -77,6 +103,12 @@ export default function SignUp() {
 
     console.log('Form values:', formik.values);
     console.log('form error:', formik.errors);
+
+    // useEffect(() => {
+    //     // global google
+    //     google.accounts.id.intitialize
+    // })
+
 
     const divStyle = {
         background: 'rgba(255,255,255,0.1)',
@@ -125,9 +157,12 @@ export default function SignUp() {
                     {formik.errors.username ? <p className='text-red-900 text-xs self-end' >{formik.errors.username}</p> : null}
 
                     <Button className='bg-blue-700 rounded-3xl w-full' type='submit' disabled={Object.keys(formik.errors).length !== 0}>Sign Up</Button>
-                    <Button className='bg-white rounded-3xl w-full h-10 flex items-center justify-center'>
+                    {/* <Button className='bg-white rounded-3xl w-full h-10 flex items-center justify-center'>
                         <img src='src/assets/logo/google.svg' alt='Button Image' className='h-5 w-auto ' />
-                    </Button>
+                    </Button> */}
+                    <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                        <div id='signinDiv' ></div>
+                    </div>
                 </form>
                 <div className="flex items-center gap-2 my-3">
                     <Typography className='text-xs sm:text-sm text-black'>Dont Have Any Account ?</Typography>

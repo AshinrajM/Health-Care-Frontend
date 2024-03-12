@@ -34,7 +34,7 @@ export default function Header() {
         <header className='bg-light-blue-0 shadow-sm '>
             <div className='flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto p-2'>
                 <div className='flex justify-center md:justify-start mb-4 md:mb-0'>
-                    <img src={logo} alt="Logo" className="h-20 w-24 p-0 hover:cursor-pointer" />
+                    <img src={logo} alt="Logo" className="h-16 w-24 p-0 hover:cursor-pointer" />
                 </div>
                 <div className='flex justify-center md:justify-end'>
                     <ul className='flex flex-col md:flex-row gap-4 md:gap-11 items-center justify-end font-serif text-xl'>
