@@ -28,7 +28,7 @@ export default function Home() {
                     users.map((user, index) => {
                         return (
                             <>
-                                <p key={user.id ? user.id : index}>welcome home{user.id}</p>
+                                <p key={user.id ? user.id : index}>{user.id}</p>
                             </>
                         )
                     })

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SideBar from '../../components/Sidebar/SideBar'
 export default function AdminHome() {
+
 
     
     return (

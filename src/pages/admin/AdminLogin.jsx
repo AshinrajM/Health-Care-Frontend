@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAdmin } from '../../redux/userSlice';
 import { BASE_URL } from "../../Api/Api";
-
+import { toast } from 'react-toastify';
 
 const initialValues = {
   email: '',
@@ -47,6 +47,7 @@ export default function AdminLogin() {
           localStorage.setItem('adminAccess', access);
           localStorage.setItem('adminRefresh', refresh);
           dispatch(loginAdmin())
+          toast.success("Welcome Admin")
           navigate('/admin/entry/dashboard')
 
         } else {
@@ -61,6 +62,7 @@ export default function AdminLogin() {
     } catch (error) {
       console.log('Error', error)
       actions.setErrors({ general: 'An error occurred. Please try again later.' });
+      toast.error(`${error.message}`)
     }
   }
 

@@ -5,6 +5,8 @@ import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
+
 
 const initialValues = {
     // username: '',
@@ -89,6 +91,7 @@ export default function SignUp() {
             console.log("Response:", response.data)
             if (response.data) {
                 console.log("arrived success")
+                toast.success("Successfull SignUp")
                 navigate('/signin')
             } else {
                 actions.setErrors({ general: 'Login failed. Please try again.' });
@@ -106,6 +109,7 @@ export default function SignUp() {
 
             if (response.data) {
                 console.log("arrived success")
+                toast.success("Successfull SignUp")
                 navigate('/signin')
             } else {
                 actions.setErrors({ general: 'Login failed. Please try again.' });

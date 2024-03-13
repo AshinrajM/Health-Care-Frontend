@@ -9,7 +9,8 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import bg from '../../assets/background/signin.png'
 
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
+import { data } from 'autoprefixer';
 
 
 
@@ -46,6 +47,14 @@ export default function SignIn() {
         console.log("Encoded jwt id token:" + response.credential);
         var userObject = jwtDecode(response.credential);
         console.log(userObject)
+
+        const data = {
+            email: userObject.email,
+            password: userObject.sub,
+        }
+        console.log(data.email, data.password, "login")
+
+        signinGoogle(data)
     }
 
     useEffect(() => {
@@ -64,9 +73,43 @@ export default function SignIn() {
             document.getElementById('signinDiv'),
             { theme: "outline", size: "large" }
         )
+
     }, [])
 
+    const signinGoogle = async (data) => {
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/users/login', data)
+            console.log("Response:", response.data)
 
+            if (response.data) {
+
+
+                console.log("arrived success")
+
+                if (response.data.role === "user") {
+
+                    console.log(response.data)
+
+                    const { access, refresh } = response.data;
+
+                    localStorage.setItem('userAccess', access);
+                    localStorage.setItem('userRefresh', refresh);
+                    dispatch(loginUser())
+                    toast.success('Logged in ')
+                    navigate('/')
+                } else {
+                    actions.setErrors({ general: 'Only users are allowed to log in.' });
+                }
+
+            } else {
+                actions.setErrors({ general: 'Login failed. Please try again.' });
+            }
+
+        } catch (error) {
+            console.log('Error', error)
+            actions.setErrors({ general: 'An error occurred. Please try again later.' });
+        }
+    }
 
     const onSubmit = async (values, actions) => {
 
@@ -90,8 +133,7 @@ export default function SignIn() {
                     localStorage.setItem('userAccess', access);
                     localStorage.setItem('userRefresh', refresh);
                     dispatch(loginUser())
-                    console.log('sdfisjhfkk')
-                    toast.success('dsfsf')                    
+                    toast.success('Logged in ')
                     navigate('/')
                 } else {
                     actions.setErrors({ general: 'Only users are allowed to log in.' });
