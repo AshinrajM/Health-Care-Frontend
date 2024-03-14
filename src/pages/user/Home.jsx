@@ -4,26 +4,26 @@ import axios from 'axios'
 import homeCover from '../../assets/cover/homeCover.png';
 export default function Home() {
 
-    const [users, setUsers] = useState([])
+    // const [users, setUsers] = useState([])
 
     useEffect(() => {
-        async function getAllUser() {
-            try {
-                const users = await axios.get('http://127.0.0.1:8000/users/register')
-                console.log(users.data);
-                setUsers(users.data)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getAllUser()
+        // async function getAllUser() {
+        //     try {
+        //         const users = await axios.get('http://127.0.0.1:8000/users/register')
+        //         console.log(users.data);
+        //         setUsers(users.data)
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
+        // getAllUser()
     }, [])
     return (
-        <div>
+        <>
             <Header />
             <img className='w-full' src={homeCover} alt="home cover" />
 
-            <div>
+            {/* <div>
                 {
                     users.map((user, index) => {
                         return (
@@ -35,8 +35,8 @@ export default function Home() {
                 }
 
 
-            </div >
-        </div>
+            </div > */}
+        </>
     )
 }
 
