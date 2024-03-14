@@ -51,7 +51,9 @@ export default function Header() {
                                 <li className='text-blue-900 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
                             </MenuHandler>
                             <MenuList>
+                                <Link to='/secured/profile'>
                                 <MenuItem>Profile</MenuItem>
+                                </Link>
                                 <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
                             </MenuList>
                         </Menu>)

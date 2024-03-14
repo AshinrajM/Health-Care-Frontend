@@ -46,8 +46,8 @@ const Footer = () => {
                                 <li><FaMeta className='w-12 h-6' />  </li>
                             </ol>
                             <div className='flex items-center'>
-                                <CiLock className='text-blue-900' />
-                                <p className='text-center md:text-left mt-2 font-serif text-blue-900' > Secure payments By</p>
+                                <CiLock className='text-blue-900 h-6 w-6' />
+                                <p className='text-center md:text-left mt-2 font-serif text-blue-900' >100% Secure payments By</p>
                             </div>
                             <ol className='flex justify-center md:justify-start space-x-2 align-middle'>
                                 <li><SiVisa className='w-12 h-8' color='blue' /></li>
