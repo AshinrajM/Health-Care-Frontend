@@ -19,7 +19,7 @@ const Profile = () => {
         <>
             <Header />
             <div className='flex justify-center items-center mt-24'>
-                <Card className="w-full max-w-[42rem] flex  md:flex-row mx-6   hover:shadow-amber-300">
+                <Card className="w-full max-w-[42rem] flex  md:flex-row mx-6   hover:shadow-2xl">
                     <CardHeader
                         shadow={false}
                         floated={false}
