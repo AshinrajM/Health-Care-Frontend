@@ -8,6 +8,9 @@ import Footer from '../../components/Footer/Footer';
 
 
 const Profile = () => {
+
+     
+
     return (
         <>
             <Header />

@@ -83,17 +83,18 @@ export default function SignIn() {
 
             if (response.data) {
 
-
                 console.log("arrived success")
 
                 if (response.data.role === "user") {
 
-                    console.log(response.data)
 
-                    const { access, refresh } = response.data;
+                    const { access, refresh, user } = response.data;
+
+                    console.log("user datas", response.data.user)
 
                     localStorage.setItem('userAccess', access);
                     localStorage.setItem('userRefresh', refresh);
+                    localStorage.setItem("userDetails", JSON.stringify(user));
                     dispatch(loginUser())
                     toast.success('Logged in ')
                     navigate('/')
@@ -126,7 +127,6 @@ export default function SignIn() {
 
                 if (response.data.role === "user") {
 
-                    console.log(response.data)
 
                     const { access, refresh } = response.data;
 
@@ -136,6 +136,8 @@ export default function SignIn() {
                     toast.success('Logged in ')
                     navigate('/')
                 } else {
+                    toast.error("Only signed users can login")
+
                     actions.setErrors({ general: 'Only users are allowed to log in.' });
                 }
 

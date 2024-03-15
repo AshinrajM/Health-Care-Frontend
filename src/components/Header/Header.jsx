@@ -4,6 +4,7 @@ import { Menu, MenuHandler, MenuList, MenuItem, } from "@material-tailwind/react
 import { logoutUser } from '../../redux/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo/Hc2.png'
+import { useEffect, useState } from 'react';
 
 
 export default function Header() {
@@ -11,6 +12,9 @@ export default function Header() {
     const isAuthenticated = useSelector(state => state.user.userAuthenticated)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    const[email,setEmail]=useState('')
+
 
     const handleLogout = async () => {
         try {
@@ -29,6 +33,18 @@ export default function Header() {
             console.log('Logout failed')
         }
     }
+
+    useEffect(()=>{
+        if(isAuthenticated){
+            const user=localStorage.getItem('userDetails')
+            if(user){
+                const userDetails = JSON.parse(user)
+                console.log(userDetails.email,userDetails.id,userDetails.wallet,"userdatas")
+                setEmail(userDetails.email)
+
+            }
+        }
+    })
 
     return (
         <header className='bg-light-blue-0 shadow-sm '>
@@ -52,7 +68,7 @@ export default function Header() {
                             </MenuHandler>
                             <MenuList>
                                 <Link to='/secured/profile'>
-                                <MenuItem>Profile</MenuItem>
+                                <MenuItem className='hover:cursor-pointer'>{email}</MenuItem>
                                 </Link>
                                 <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
                             </MenuList>
