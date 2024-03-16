@@ -39,7 +39,7 @@ export default function Header() {
             const user=localStorage.getItem('userDetails')
             if(user){
                 const userDetails = JSON.parse(user)
-                console.log(userDetails.email,userDetails.id,userDetails.wallet,"userdatas")
+                // console.log(userDetails.email,userDetails.id,userDetails.wallet,"userdatas")
                 setEmail(userDetails.email)
 
             }
