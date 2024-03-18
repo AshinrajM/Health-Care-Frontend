@@ -13,7 +13,7 @@ export default function Header() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const[email,setEmail]=useState('')
+    const [email, setEmail] = useState('')
 
 
     const handleLogout = async () => {
@@ -34,10 +34,10 @@ export default function Header() {
         }
     }
 
-    useEffect(()=>{
-        if(isAuthenticated){
-            const user=localStorage.getItem('userDetails')
-            if(user){
+    useEffect(() => {
+        if (isAuthenticated) {
+            const user = localStorage.getItem('userDetails')
+            if (user) {
                 const userDetails = JSON.parse(user)
                 // console.log(userDetails.email,userDetails.id,userDetails.wallet,"userdatas")
                 setEmail(userDetails.email)
@@ -54,31 +54,38 @@ export default function Header() {
                 </div>
                 <div className='flex justify-center md:justify-end'>
                     <ul className='flex flex-col md:flex-row gap-4 md:gap-11 items-center justify-end font-serif text-xl'>
-                        <Link to='/'>
+                        {/* <Link to='/'>
                             <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Home</li>
-                    </Link>
-                    <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Bookings</li>
-                    <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Associates</li>
-                    <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Contact Us</li>
+                        </Link>
+                        <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Bookings</li>
+                        <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Associates</li>
+                        <li className={isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer>Contact Us</li> */}
+                        <Link to='/'>
+                            <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Home</li>
+                        </Link>
+                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Bookings</li>
+                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Associates</li>
+                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Contact Us</li>
 
-                    {isAuthenticated ?
-                        (<Menu>
-                            <MenuHandler>
-                                <li className='text-blue-900 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
-                            </MenuHandler>
-                            <MenuList>
-                                <Link to='/secured/profile'>
-                                <MenuItem className='hover:cursor-pointer'>{email}</MenuItem>
-                                </Link>
-                                <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
-                            </MenuList>
-                        </Menu>)
-                        : (<Link to='/signin'>
-                            <li className='text-black md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
-                        </Link>)}
-                </ul>
+
+                        {isAuthenticated ?
+                            (<Menu>
+                                <MenuHandler>
+                                    <li className='text-blue-900 md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
+                                </MenuHandler>
+                                <MenuList>
+                                    <Link to='/secured/profile'>
+                                        <MenuItem className='hover:cursor-pointer'>{email}</MenuItem>
+                                    </Link>
+                                    <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
+                                </MenuList>
+                            </Menu>)
+                            : (<Link to='/signin'>
+                                <li className='text-black md:mb-0 hover:cursor-pointer'><FaUserCircle /></li>
+                            </Link>)}
+                    </ul>
+                </div>
             </div>
-        </div>
         </header >
 
 

@@ -4,6 +4,7 @@ import { Button, Card, Typography } from '@material-tailwind/react'
 import SideBar from '../../components/Sidebar/SideBar'
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AdminUsers() {
 
@@ -14,7 +15,6 @@ export default function AdminUsers() {
             try {
                 const users = await axios.get('http://127.0.0.1:8000/users/userslist')
                 console.log("sdsd", users.data);
-                // console.log("is", users.data.is_active);
                 setUsers(users.data)
 
             } catch (error) {
@@ -22,7 +22,23 @@ export default function AdminUsers() {
             }
         }
         getAllUser()
-    }, [])
+    }, [users])
+
+    const userhandle = async (e, userId) => {
+        try {
+
+            const data = { userId }
+            const response = await axios.patch('http://127.0.0.1:8000/users/register', data)
+            toast.success("user staus changed", response.data.email)
+            console.log("user staus changed", response.data.email)
+
+        } catch (error) {
+            toast.error("error found")
+        }
+
+        // const response = await axios.post('http://127.0.0.1:8000/users/login', data)
+    }
+
     return (
         <div className='bg-blue-gray-500 flex flex-col lg:flex-row'>
             <div className='lg:w-64 flex-none'>
@@ -48,7 +64,7 @@ export default function AdminUsers() {
                                         <td className='p-2' style={{ display: 'flex', justifyContent: 'center' }}>
                                             {user.is_active ? <FaLockOpen className="w-7 h-7" /> : <FaLock className="w-7 h-7" />}
                                         </td>
-                                        <td>{user.is_active ? <Button color="red" size="sm">Block</Button> : <Button color="blue" size="sm">UnBlock</Button>}</td>
+                                        <td>{user.is_active ? <Button color="red" size="sm" onClick={() => userhandle(null, user.id)}>Block</Button> : <Button onClick={() => userhandle(null, user.id)} color="blue" size="sm">UnBlock</Button>}</td>
                                     </tr>
                                     ))
                                 }
