@@ -1,27 +1,70 @@
-import React from 'react'
-import { CgProfile } from "react-icons/cg";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { useEffect, useState } from 'react'
 import SideBarAssociate from '../../components/sideBarAssociate/sideBarAssociate';
-import logo from '../../assets/logo/Hc2.png'
+import {
+  Card,
+  CardBody,
+  Typography,
+} from "@material-tailwind/react";
+import axios from 'axios';
 
+import { Calendar } from 'primereact/calendar';
 
 
 const AssociateDashboard = () => {
+
+  const [user, setUser] = useState(null)
+  const [associate, setAssociate] = useState(null);
+
+
+  useEffect(() => {
+    const userdata = localStorage.getItem('user')
+    const associatedata = localStorage.getItem('associate')
+    if (userdata) {
+      const userDetails = JSON.parse(userdata)
+      const associateDetails = JSON.parse(associatedata)
+      setUser(userDetails)
+      setAssociate(associateDetails)
+    }
+  }, [])
+
+
   return (
-    <div className='bg-brown-200'>
-      {/* <header className='flex justify-between bg-white  p-1 items-center'>
-        <div className='h-11 w-20 '>
-          <img src={logo} alt="logo" className='object-fill lg:h-12 lg:w-16 md:h-8 md:w-12 sm:h-6 sm:w-8 xs:h-4 xs:w-6' />
-        </div>
-        <div className='flex items-center'  >
-          <div><CgProfile className='h-12 w-8 text-blue-900' /></div>
-          <div><IoMdArrowDropdown className='h-6 w-6 text-blue-900' /></div>
-        </div>
-      </header> */}
+    <div className='bg-brown-200 flex'>
       <div>
         <SideBarAssociate />
       </div>
-
+      <div>
+        <div>
+          <Card className="m-10 w-auto">
+            <CardBody>
+              <Typography>
+                Hi,<br />
+                The place is close to Barceloneta Beach and bus stop just 2 min by
+                walk and near to &quot;Naviglio&quot; where you can enjoy the main
+                night life in Barcelona.The place is close to Barceloneta Beach and
+                bus stop just 2 min by  walk and near to &quot;Naviglio&quot; where
+                you can enjoy the main night life in Barcelona.
+              </Typography>
+            </CardBody>
+          </Card>
+        </div>
+        <div>
+          <Card className="m-10 w-auto">
+            <CardBody>
+              <Typography variant='h2'>
+                Schedule Dates
+              </Typography>
+              {/* <div className="flex-auto">
+                <label htmlFor="calendar-12h" className="font-bold block mb-2">
+                  12h Format
+                </label>
+                <Calendar className='text-red-400' id="calendar-12h" value={datetime12h} onChange={(e) => setDateTime12h(e.value)} showTime hourFormat="12" />
+              </div> */}
+            </CardBody>
+          </Card>
+        </div>
+        <div></div>
+      </div>
     </div>
   )
 }

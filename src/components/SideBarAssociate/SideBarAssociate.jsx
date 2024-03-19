@@ -46,19 +46,21 @@ const SideBarAssociate = () => {
                     </Typography>
                 </div>
                 <List>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <PresentationChartBarIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Dashboard
-                    </ListItem>
+                    <Link to='/associates/check/dashboard'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <PresentationChartBarIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Dashboard
+                        </ListItem>
+                    </Link>
                     <ListItem>
                         <ListItemPrefix>
                             <ShoppingBagIcon className="h-5 w-5" />
                         </ListItemPrefix>
                         Bookings
                     </ListItem>
-                    <Link to='/admin/entry/users'>
+                    <Link to='/associates/entry/users'>
                         <ListItem>
                             <ListItemPrefix>
                                 <UserGroupIcon className="h-5 w-5" />
@@ -66,12 +68,12 @@ const SideBarAssociate = () => {
                             Chat
                         </ListItem>
                     </Link>
-                    <Link to='/admin/entry/associates'>
+                    <Link to='/associates/check/associate-profile'>
                         <ListItem>
                             <ListItemPrefix>
                                 <BriefcaseIcon className="h-5 w-5" />
                             </ListItemPrefix>
-                            Wallet
+                            Associate Profile
                         </ListItem>
                     </Link>
                     <ListItem>

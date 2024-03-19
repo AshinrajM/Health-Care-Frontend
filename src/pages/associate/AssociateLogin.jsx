@@ -59,10 +59,15 @@ export default function AssociateLogin() {
 
             if (response.data.role == "associate") {
 
-                const { access, refresh } = response.data
+                const { access, refresh, user, associate } = response.data
 
-                localStorage.setItem('associateAccess', access)
-                localStorage.setItem('associateRefresh', refresh)
+                console.log("user datas", response.data.user)
+                console.log("associate datas", response.data.associate)
+
+                localStorage.setItem('associateAccess', access);
+                localStorage.setItem('associateRefresh', refresh);
+                localStorage.setItem("user", JSON.stringify(user));
+                localStorage.setItem("associate", JSON.stringify(associate));
                 dispatch(loginAssociate())
                 navigate('/associates/check/dashboard')
             }
@@ -95,7 +100,7 @@ export default function AssociateLogin() {
         if (adminAuthenticated) {
             navigate('/admin/entry/dashboard')
         }
-    },[adminAuthenticated, navigate])
+    }, [adminAuthenticated, navigate])
 
 
     return (

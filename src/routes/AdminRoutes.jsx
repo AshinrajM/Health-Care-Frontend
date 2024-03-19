@@ -3,7 +3,6 @@ import Login from '../pages/admin/AdminLogin'
 import AdminHome from "../pages/admin/AdminHome"
 import PrivateRouteAdmin from "../routes/PrivateRoutes/PrivateRouteAdmin"
 import AdminUsers from "../pages/admin/AdminUsers"
-import { useSelector } from "react-redux"
 import AdminAssociates from "../pages/admin/AdminAssociates"
 import AddAssociates from "../pages/admin/AddAssociates"
 

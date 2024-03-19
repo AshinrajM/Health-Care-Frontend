@@ -7,13 +7,17 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import { PrimeReactProvider } from 'primereact/api';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.Fragment>
     <Provider store={store}>
       <BrowserRouter>
-      <ToastContainer/>
+        <ToastContainer />
+        {/* <PrimeReactProvider> */}
         <App />
+        {/* </PrimeReactProvider> */}
       </BrowserRouter>
     </Provider>
   </React.Fragment>

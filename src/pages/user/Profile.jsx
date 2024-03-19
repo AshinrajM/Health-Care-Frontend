@@ -7,44 +7,70 @@ import {
 import homeCover from '../../assets/profile/user.jpg';
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 
 const Profile = () => {
 
     const [user, setUser] = useState(null);
-    const [dob, setDob] = useState('')
-    const [location, setLocation] = useState('')
-    const [picture, setPicture] = useState(null)
-
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(!open);
 
-    const handleChange = (e) => {
-        const { name, value, files } = e.target
-        if (name === "date_of_birth") {
-            setDob(value)
-        } else if (name === 'location') {
-            setLocation(value)
-        } else if (name === 'profile_picture') {
-            setPicture(files[0])
-        }
-    }
-    const handleSubmit = (e) => {
-        console.log(dob, picture, location, "form data on updating")
-    }
+    const [dob, setDob] = useState('');
+    const [location, setLocation] = useState('');
+
+
+
+    const handleOpen = () => setOpen(!open);
 
     useEffect(() => {
         const data = localStorage.getItem('userDetails')
         if (data) {
             const userDetails = JSON.parse(data)
             setUser(userDetails)
-            setDob(userDetails.date_of_birth)
-            setLocation(userDetails.location)
-            setPicture(userDetails.profile_picture)
+            setDob(userDetails.date_of_birth);
+            setLocation(userDetails.location);
         }
     }, [])
     console.log(user, "check")
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "date_of_birth") {
+            setDob(value);
+        } else if (name === 'location') {
+            setLocation(value);
+        }
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('date_of_birth', dob);
+            formData.append('location', location);
+            formData.append('id', user.id)
+            console.log('id', user.id)
+            // for (let [key, value] of formData.entries()) {
+            //     console.log(`${key}: ${value}`);
+            // }
+
+            const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+            console.log(response.data, "response data")
+            handleOpen()
+            setUser(response.data)
+            const updatedUserDetails = { ...user, date_of_birth: dob, location };
+            if (JSON.stringify(updatedUserDetails) !== localStorage.getItem('userDetails')) {
+                localStorage.setItem('userDetails', JSON.stringify(updatedUserDetails));
+                setUser(updatedUserDetails);
+            }
+            toast.success("profile updated")
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     return (
         <>
             <Header />
@@ -58,7 +84,8 @@ const Profile = () => {
                         >
                             {user.profile_picture ? (
                                 <img
-                                    src={user.profile_picture}
+                                    // src={user.profile_picture}
+                                    src={`http://localhost:8000${user.profile_picture}`}
                                     alt="card-image"
                                     className="h-full w-full object-cover"
                                 />) : (
@@ -97,15 +124,30 @@ const Profile = () => {
                     <form onSubmit={handleSubmit}>
                         <div className='flex-col m-5 space-y-5'>
                             <div className="w-72 ">
-                                <Input label="Date of birth" type='date' name='date_of_birth' value={dob} onChange={handleChange} />
+                                <Input
+                                    label="Date of birth"
+                                    type="date"
+                                    name="date_of_birth"
+                                    value={dob}
+                                    onChange={handleChange}
+                                />
                             </div>
                             <div className="w-72">
-                                <Input label="location" name='location' value={location}
-                                    onChange={handleChange} />
+                                <Input
+                                    label="location"
+                                    name="location"
+                                    value={location}
+                                    onChange={handleChange}
+                                />
                             </div>
-                            <div className="w-72">
-                                <Input label="profile picture" name='profile_picture' type='file' value={user.profile_picture} onChange={picture} />
-                            </div>
+                            {/* <div className="w-72">
+                                <Input
+                                    label="profile picture"
+                                    name="profile_picture"
+                                    type="file"
+                                    onChange={handleChange}
+                                />
+                            </div> */}
                         </div>
 
                         <DialogFooter>

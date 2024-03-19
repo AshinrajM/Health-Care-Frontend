@@ -34,6 +34,8 @@ const userSlice = createSlice({
     logoutAssociate(state) {
       localStorage.removeItem('associateAccess')
       localStorage.removeItem('associateRefresh')
+      localStorage.removeItem('user')
+      localStorage.removeItem('associate')
       state.associateAuthenticated = false
 
     }
