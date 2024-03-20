@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, } from "@material-tailwind/react";
 import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon }
     from "@heroicons/react/24/solid";
@@ -11,8 +11,12 @@ import logo from '../../assets/logo/Hc2.png'
 const SideBarAssociate = () => {
 
 
+
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+
 
 
     const handleLogout = () => {
@@ -42,7 +46,6 @@ const SideBarAssociate = () => {
                 </div>
                 <div className="mb-2 p-4">
                     <Typography variant="h4" color="blue-gray">
-                        Associate Name
                     </Typography>
                 </div>
                 <List>

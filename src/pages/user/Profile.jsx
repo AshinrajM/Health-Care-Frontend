@@ -19,6 +19,8 @@ const Profile = () => {
 
     const [dob, setDob] = useState('');
     const [location, setLocation] = useState('');
+    const [profile_picture, setProfilePicture] = useState(null)
+
 
 
 
@@ -32,15 +34,20 @@ const Profile = () => {
             setDob(userDetails.date_of_birth);
             setLocation(userDetails.location);
         }
+        // if (userDetails.profile_picture) {
+        //     setProfilePicture(userDetails.profile_picture)
+        // }
     }, [])
-    console.log(user, "check")
+    // console.log(user, "check")
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "date_of_birth") {
-            setDob(value);
+            setDob(e.target.value);
         } else if (name === 'location') {
-            setLocation(value);
+            setLocation(e.target.value);
+        } else if (name === 'profile_picture') {
+            setProfilePicture(e.target.files[0]);
         }
     };
     const handleSubmit = async (e) => {
@@ -50,6 +57,9 @@ const Profile = () => {
             formData.append('date_of_birth', dob);
             formData.append('location', location);
             formData.append('id', user.id)
+            if (profile_picture) {
+                formData.append('profile_picture', profile_picture)
+            }
             console.log('id', user.id)
             // for (let [key, value] of formData.entries()) {
             //     console.log(`${key}: ${value}`);
@@ -59,7 +69,18 @@ const Profile = () => {
             console.log(response.data, "response data")
             handleOpen()
             setUser(response.data)
-            const updatedUserDetails = { ...user, date_of_birth: dob, location };
+
+            if (response.data.profile_picture) {
+                // Assuming the profile_picture field contains the URL of the updated image
+                setUser(prevUser => ({ ...prevUser, profile_picture: response.data.profile_picture }));
+            }
+
+
+            const updatedUserDetails = {
+                ...user, date_of_birth: dob,
+                location: response.data.location,
+                profile_picture: response.data.profile_picture,
+            };
             if (JSON.stringify(updatedUserDetails) !== localStorage.getItem('userDetails')) {
                 localStorage.setItem('userDetails', JSON.stringify(updatedUserDetails));
                 setUser(updatedUserDetails);
@@ -68,6 +89,8 @@ const Profile = () => {
 
         } catch (error) {
             console.error('Error:', error);
+            handleOpen()
+            toast.error("check credentials properly")
         }
     }
 
@@ -84,7 +107,6 @@ const Profile = () => {
                         >
                             {user.profile_picture ? (
                                 <img
-                                    // src={user.profile_picture}
                                     src={`http://localhost:8000${user.profile_picture}`}
                                     alt="card-image"
                                     className="h-full w-full object-cover"
@@ -119,54 +141,55 @@ const Profile = () => {
                     </Card>
                 </div>
             )}
-            {(user &&
-                <Dialog open={open} handler={handleOpen}>
-                    <form onSubmit={handleSubmit}>
-                        <div className='flex-col m-5 space-y-5'>
-                            <div className="w-72 ">
-                                <Input
-                                    label="Date of birth"
-                                    type="date"
-                                    name="date_of_birth"
-                                    value={dob}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div className="w-72">
-                                <Input
-                                    label="location"
-                                    name="location"
-                                    value={location}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            {/* <div className="w-72">
-                                <Input
-                                    label="profile picture"
-                                    name="profile_picture"
-                                    type="file"
-                                    onChange={handleChange}
-                                />
-                            </div> */}
+            {/* {(user && */}
+            <Dialog open={open} handler={handleOpen}>
+                <form onSubmit={handleSubmit}>
+                    <div className='flex-col m-5 space-y-5'>
+                        <div className="w-72 ">
+                            <Input
+                                label="Date of birth"
+                                type="date"
+                                name="date_of_birth"
+                                value={dob}
+                                onChange={handleChange}
+                            />
                         </div>
+                        <div className="w-72">
+                            <Input
+                                label="location"
+                                name="location"
+                                value={location}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="w-72">
+                            <Input
+                                label="profile picture"
+                                name="profile_picture"
+                                type="file"
+                                accept=".png, .jpg, .jpeg"
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
 
-                        <DialogFooter>
-                            <Button
-                                variant="text"
-                                color="red"
-                                onClick={handleOpen}
-                                className="mr-1"
-                            >
-                                <span>Cancel</span>
-                            </Button>
-                            <Button variant="gradient" color="green" type='submit'>
-                                <span>Update</span>
-                            </Button>
-                        </DialogFooter>
-                    </form >
+                    <DialogFooter>
+                        <Button
+                            variant="text"
+                            color="red"
+                            onClick={handleOpen}
+                            className="mr-1"
+                        >
+                            <span>Cancel</span>
+                        </Button>
+                        <Button variant="gradient" color="green" type='submit'>
+                            <span>Update</span>
+                        </Button>
+                    </DialogFooter>
+                </form >
 
-                </Dialog>
-            )}
+            </Dialog>
+            {/* )} */}
             <Footer />
         </>
     )

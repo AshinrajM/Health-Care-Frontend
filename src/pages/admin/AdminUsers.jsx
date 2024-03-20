@@ -22,21 +22,37 @@ export default function AdminUsers() {
             }
         }
         getAllUser()
-    }, [users])
+    }, [])
 
-    const userhandle = async (e, userId) => {
+    const userhandle = async (e, userId, is_active) => {
         try {
+            let confirmationMessage = is_active ? "Are you sure you want to block this user?" : "Are you sure you want to unblock this user?"
+            const confirmed = window.confirm(confirmationMessage);
 
-            const data = { userId }
-            const response = await axios.patch('http://127.0.0.1:8000/users/register', data)
-            toast.success("user staus changed", response.data.email)
-            console.log("user staus changed", response.data.email)
+            // Proceed only if the user confirms
+            if (confirmed) {
+
+                const data = { userId }
+                const response = await axios.patch('http://127.0.0.1:8000/users/register', data)
+                toast.success("user staus changed", response.data.email)
+                console.log("user staus changed", response.data.email)
+
+                setUsers(prevUsers => prevUsers.map(user => {
+                    if (user.id === userId) {
+                        return {
+                            ...user,
+                            is_active: !user.is_active
+                        };
+                    }
+                    return user;
+                }));
+            }
 
         } catch (error) {
+            console.log(error)
             toast.error("error found")
         }
 
-        // const response = await axios.post('http://127.0.0.1:8000/users/login', data)
     }
 
     return (
