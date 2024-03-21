@@ -12,8 +12,12 @@ const AssociateProfile = () => {
     const [user, setUser] = useState(null)
     const [associate, setAssociate] = useState(null);
     const [open, setOpen] = React.useState(false);
+    const [openPassDialog, setOpenPassDialog] = useState(false);
     const [location, setLocation] = useState('')
     const [profile_picture, setProfilePicture] = useState(null)
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
 
     useEffect(() => {
@@ -29,10 +33,6 @@ const AssociateProfile = () => {
                 setAssociate(associateDetails)
 
             }
-            // if (userDetails.profile_picture) {
-            //     setProfilePicture(userDetails.profile_picture)
-            // }
-
         }
     }, [])
     console.log(user, "user details")
@@ -40,12 +40,21 @@ const AssociateProfile = () => {
 
     const handleOpen = () => setOpen(!open);
 
+    const handlePassOpen = () => setOpenPassDialog(!openPassDialog)
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "location") {
             setLocation(e.target.value);
         } else if (name === 'profile_picture') {
             setProfilePicture(e.target.files[0]);
+        } else if (name === "currentPassword") {
+            setCurrentPassword(value);
+        } else if (name === "newPassword") {
+            setNewPassword(value);
+        } else if (name === "confirmNewPassword") {
+            setConfirmNewPassword(value);
+
         }
     }
 
@@ -91,12 +100,39 @@ const AssociateProfile = () => {
         }
     }
 
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        try {
+            if (newPassword !== confirmNewPassword) {
+                toast.error("password not matching")
+                handlePassOpen()
+            } else {
+                if (currentPassword && newPassword) {
+                    const formData = new FormData();
+                    formData.append('currentPassword', currentPassword);
+                    formData.append('newPassword', newPassword);
+                    formData.append('id', user.id)
+
+                    const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+                    console.log(response.data, "response data , password changed")
+                    handlePassOpen()
+                    toast.success("password changed successfully")
+                }
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error)
+
+        }
+    }
+
     return (
-        <div className='bg-brown-200 flex'>
+        <div className='bg-brown-200 flex h-screen'>
             <div>
                 <SideBarAssociate />
             </div>
-            <div className='flex justify-center items-center md:mt-20 mb-10 mx-28'>
+            <div className='flex justify-center items-center md:mt-20 mb-10 mx-28 pl-64'>
                 {(user &&
                     <Card className="w-full max-w-[42rem] flex  md:flex-row mx-6 hover:shadow-2xl border border-gray-400">
                         <CardHeader
@@ -141,6 +177,7 @@ const AssociateProfile = () => {
                                     Service History
                                 </Button>
                                 <Button variant='outlined' onClick={handleOpen}><FaUserEdit className=' size-5' /></Button>
+                                <Button variant='outlined' onClick={() => setOpenPassDialog(true)}>Change Password</Button>
                             </CardFooter>
                         </CardBody>
                     </Card>
@@ -182,6 +219,50 @@ const AssociateProfile = () => {
                         </Button>
                     </DialogFooter>
                 </form >
+            </Dialog>
+            <Dialog open={openPassDialog} handler={() => setOpenPassDialog(false)}>
+                <form onSubmit={handlePasswordChange}>
+                    <div className='flex-col m-5 space-y-5'>
+                        <div className="w-72">
+                            <Input
+                                label="Current Password"
+                                name="currentPassword"
+                                type="password"
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="w-72">
+                            <Input
+                                label="New Password"
+                                name="newPassword"
+                                type="password"
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="w-72">
+                            <Input
+                                label="Confirm New Password"
+                                name="confirmNewPassword"
+                                type="password"
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button
+                            variant="text"
+                            color="red"
+                            onClick={() => setOpenPassDialog(false)}
+                            className="mr-1"
+                        >
+                            <span>Cancel</span>
+                        </Button>
+                        <Button variant="gradient" color="green" type='submit'>
+                            <span>Change Password</span>
+                        </Button>
+                    </DialogFooter>
+                </form>
             </Dialog>
         </div>
     )

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { PrimeReactProvider } from 'primereact/api';
+import 'react-calendar/dist/Calendar.css';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,9 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <BrowserRouter>
         <ToastContainer />
-        {/* <PrimeReactProvider> */}
         <App />
-        {/* </PrimeReactProvider> */}
       </BrowserRouter>
     </Provider>
   </React.Fragment>

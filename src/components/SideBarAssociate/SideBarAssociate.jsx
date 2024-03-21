@@ -38,7 +38,7 @@ const SideBarAssociate = () => {
 
     return (
         <>
-            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl  bg-deep-orange-50 rounded-none">
+            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl  bg-deep-orange-50 rounded-none fixed">
                 <div className="mb-2 p-4">
                     <Typography variant="h5" color="blue-gray">
                         <img src={logo} alt="" />
