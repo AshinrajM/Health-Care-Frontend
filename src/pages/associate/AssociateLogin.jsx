@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { loginAssociate } from "../../redux/userSlice";
 import { BASE_URL } from "../../Api/Api";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 
 
@@ -50,16 +51,12 @@ export default function AssociateLogin() {
 
     const onSubmit = async (values) => {
         console.log("submitted form:", values)
+        try {
+            const response = await axios.post(`${BASE_URL}/users/login`, values);
 
-        // const response = await axios.post('http://127.0.0.1:8000/users/login', values)
-        const response = await axios.post(`${BASE_URL}/users/login`, values)
+            if (response.data && response.data.role === "associate") {
 
-        if (response.data) {
-            console.log("response received")
-
-            if (response.data.role == "associate") {
-
-                const { access, refresh, user, associate } = response.data
+                const { access, refresh, user, associate } = response.data;
 
                 console.log("user datas", response.data.user)
                 console.log("associate datas", response.data.associate)
@@ -70,6 +67,17 @@ export default function AssociateLogin() {
                 localStorage.setItem("associate", JSON.stringify(associate));
                 dispatch(loginAssociate())
                 navigate('/associates/check/dashboard')
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                // Unauthorized - Invalid credentials
+                if (error.response.data.messages) {
+                    toast.error(error.response.data.messages);
+                }
+            } else {
+                // Other errors
+                console.error("Error:", error);
+                toast.error("An error occurred while processing your request");
             }
         }
     }
