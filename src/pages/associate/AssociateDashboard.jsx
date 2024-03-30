@@ -1,26 +1,25 @@
 import { useEffect, useState } from 'react'
 import SideBarAssociate from '../../components/sideBarAssociate/sideBarAssociate';
-import {
-  Card,
-  CardBody,
-  Typography,
-  Select,
-  Option,
-  Button
-} from "@material-tailwind/react";
+import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import Calendar from 'react-calendar';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { CiWallet } from "react-icons/ci";
+import { RiUserStarLine } from "react-icons/ri";
+import { MdMedicalServices } from "react-icons/md";
+import { BASE_URL } from "../../Api/Api";
+
+
 
 
 const AssociateDashboard = () => {
 
   const [user, setUser] = useState(null)
   const [associate, setAssociate] = useState(null);
-
   const [morningShift, setMorningShift] = useState(false);
   const [noonShift, setNoonShift] = useState(false);
-
-
   const [selectedDate, setSelectedDate] = useState(new Date());
+
 
   useEffect(() => {
     const userdata = localStorage.getItem('user')
@@ -30,28 +29,46 @@ const AssociateDashboard = () => {
       const associateDetails = JSON.parse(associatedata)
       setUser(userDetails)
       setAssociate(associateDetails)
+      console.log(associateDetails.id)
     }
   }, [])
-
-  const timeSlots = [
-    '08.00AM-12.00PM',
-    '01.00PM-05.00M',
-  ];
-
-  const handleTimeChange = (value) => {
-    setSelectedTime(value);
-    console.log(selectedTime, "choooosen time")
-  };
-
-  // const handleDateChange = (date) => {
-  //   setSelectedDate(date);
-  //   console.log(selectedDate, "choosen date")
-  // };
   console.log(selectedDate)
+
+  const today = new Date()
+  const startDate = new Date(today.setDate(today.getDate() + 1))
+  const endDate = new Date(today.setDate(today.getDate() + 7))
+
+  const handleSubmit = async () => {
+
+    let values = {
+      associate_id: associate.id,
+      date: selectedDate.toISOString().split('T')[0],
+      is_morning: morningShift,
+      is_noon: noonShift,
+    }
+
+    try {
+      const response = await axios.post(`${BASE_URL}/booking/slot`, values)
+
+      if (response.data) {
+        toast.success("Slot Created")
+        setMorningShift(false)
+        setNoonShift(false)
+        setSelectedDate(new Date())
+
+      } else {
+        toast.error("not found")
+      }
+
+    } catch (error) {
+      toast.error("error found in catch")
+      console.error("Error", error)
+    }
+  }
 
 
   return (
-    <div className='bg-brown-200 flex h-screen'>
+    <div className='bg-brown-200 flex h-full'>
       <div>
         <SideBarAssociate />
       </div>
@@ -71,6 +88,32 @@ const AssociateDashboard = () => {
           </Card>
         </div>
         <div>
+          <div className='flex justify-around m-10 gap-8'>
+            <div className='w-1/3'>
+              <Card className="">
+                <CardBody className='flex items-center'>
+                  <CiWallet className='h-12 w-12 text-black' />
+                  <Typography variant='h4' color='black'> &nbsp; $53435</Typography>
+                </CardBody>
+              </Card>
+            </div>
+            <div className='w-1/3'>
+              <Card className="">
+                <CardBody className='flex items-center'>
+                  <RiUserStarLine className='h-12 w-12 text-black' />
+                  <Typography variant='h4' color='black'> &nbsp; 4.5</Typography>
+                </CardBody>
+              </Card>
+            </div>
+            <div className='w-1/3'>
+              <Card className="">
+                <CardBody className='flex items-center'>
+                  <MdMedicalServices className='h-12 w-12 text-black' />
+                  <Typography variant='h4' color='black'>Services: &nbsp; 53</Typography>
+                </CardBody>
+              </Card>
+            </div>
+          </div>
           <Card className="m-10 w-full sm:w-auto">
             <CardBody>
               <Typography variant='h2' className='mb-5'>
@@ -78,10 +121,10 @@ const AssociateDashboard = () => {
               </Typography>
               <div className='flex flex-col sm:flex-row space-x-0 sm:space-x-6'>
                 <div className="w-full sm:w-96">
-                  <Calendar onChange={(date) => setSelectedDate(date)} value={selectedDate} style={{ height: '500px' }} />
+                  <Calendar minDate={startDate} maxDate={endDate} onChange={(date) => setSelectedDate(date)} value={selectedDate} style={{ height: '500px' }} />
                 </div>
                 <div className="w-full sm:w-96">
-                  <Card className="w-full">
+                  <Card className="w-full py-2 bg-pink-100">
                     <CardBody>
                       <h2 className="text-xl sm:text-2xl font-bold mb-4">Choose your Time Slot</h2>
                       <div className=''>
@@ -98,10 +141,9 @@ const AssociateDashboard = () => {
                         <h1>Selected Date : {selectedDate.toDateString()}</h1>
                         <h1>Selected Shifts : {morningShift && 'Morning'} {morningShift && noonShift && '|'} {noonShift && 'Noon'}</h1>
                       </div>
-                      <Button variant='outlined'>create availability</Button>
+                      <Button variant='outlined' onClick={handleSubmit}>create availability</Button>
                     </CardBody>
                   </Card>
-
                 </div>
               </div>
             </CardBody>

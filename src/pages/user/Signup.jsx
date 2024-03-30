@@ -131,12 +131,6 @@ export default function SignUp() {
     console.log('Form values:', formik.values);
     console.log('form error:', formik.errors);
 
-    // useEffect(() => {
-    //     // global google
-    //     google.accounts.id.intitialize
-    // })
-
-
     const divStyle = {
         background: 'rgba(255,255,255,0.1)',
         backdropFilter: 'blur(30px)',
@@ -157,9 +151,6 @@ export default function SignUp() {
                 <Typography className='text-center p-2' variant="h2" color="teal">Sign Up</Typography>
                 <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
 
-                    {/* <Input variant='standard' label="Username"  name='username' color="black" onChange={formik.handleChange} value={formik.values.name} />
-                    {formik.errors.username ? <p className='text-red-900 text-xs self-end'>{formik.errors.username}</p> : null} */}
-
                     <Input variant='standard' label="Email" id="email" name='email' color="black" onChange={formik.handleChange} value={formik.values.email} />
                     {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
 
@@ -167,10 +158,6 @@ export default function SignUp() {
                     {formik.errors.password ?
                         <div className='flex flex-row'>
                             <div className='text-gray-800 text-xs self-start'>
-                                {/* <li >One lowercase letter (a-z)</li>
-                                <li >One uppercase letter  (A-Z)</li>
-                                <li >One digit (0-9)</li>
-                                <li>One special character from the specified set (@$!%*?&)</li> */}
                                 <li >Minimum length of 8 characters</li>
                             </div>
                             <div>
@@ -184,9 +171,6 @@ export default function SignUp() {
                     {formik.errors.username ? <p className='text-red-900 text-xs self-end' >{formik.errors.username}</p> : null}
 
                     <Button className='bg-blue-700 rounded-3xl w-full' type='submit' disabled={Object.keys(formik.errors).length !== 0}>Sign Up</Button>
-                    {/* <Button className='bg-white rounded-3xl w-full h-10 flex items-center justify-center'>
-                        <img src='src/assets/logo/google.svg' alt='Button Image' className='h-5 w-auto ' />
-                    </Button> */}
                     <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
                         <div id='signinDiv' ></div>
                     </div>

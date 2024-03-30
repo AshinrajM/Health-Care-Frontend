@@ -7,13 +7,19 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Tooltip, Button } f
 import { FaArrowRightLong } from "react-icons/fa6";
 
 export default function Home() {
+    const headStyle = {
+        fontFamily: 'Oswald'
+    }
 
+    const tailStyle = {
+        fontFamily: 'Michroma'
+    }
     return (
         <>
             <Header />
             <img className='w-full' src={homeCover} alt="home cover" />
-            <div className='flex justify-center md:mt-5 sm:mt-1'>
-                <p className='md:text-2xl sm:text-md font-serif font-semibold text-blue-900'>WELCOME &nbsp; TO &nbsp;  HEALTH &nbsp; CARE &nbsp; SOLUTIONS &nbsp; WE &nbsp; CARE &nbsp; FOR &nbsp; YOUR &nbsp;HEALTH</p>
+            <div className='flex justify-center md:mt-5 sm:mt-1' >
+                <p className='md:text-4xl sm:text-md font-serif font-semibold text-blue-900' style={headStyle}>WELCOME &nbsp; TO &nbsp;  HEALTH &nbsp; CARE &nbsp; SOLUTIONS &nbsp; WE &nbsp; CARE &nbsp; FOR &nbsp; YOUR &nbsp;HEALTH</p>
             </div>
             <div className='flex flex-wrap md:flex-nowrap space-x-5 m-5 items-center'>
                 <div className='w-full md:w-1/2'>
@@ -37,10 +43,10 @@ export default function Home() {
 
             </div>
             <div className='flex justify-center md:mt-5 sm:mt-1'>
-                <p className='md:text-2xl sm:text-md font-serif font-semibold text-blue-900'>PREMIUM &nbsp;&nbsp; CARE &nbsp; AT &nbsp;&nbsp; YOUR &nbsp;DOORSTEP</p>
+                <p className='md:text-5xl sm:text-md font-serif font-semibold text-blue-900 ' style={headStyle}>PREMIUM &nbsp; CARE &nbsp; AT &nbsp; YOUR &nbsp;DOORSTEP</p>
             </div>
             <div className='flex justify-center md:mt-1'>
-                <p className='md:text-sm sm:text-md font-serif font-semibold text-blue-900'>START &nbsp;&nbsp; BOOKING &nbsp; TO &nbsp; EXPERIENCE &nbsp; THE &nbsp;&nbsp; PREMIUM &nbsp;CARE</p>
+                <p className='md:text-sm sm:text-md font-serif font-semibold text-blue-900' style={tailStyle}>START &nbsp;&nbsp; BOOKING &nbsp; TO &nbsp; EXPERIENCE &nbsp; THE &nbsp;&nbsp; PREMIUM &nbsp;CARE</p>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-3 mx-12 gap-5 space-x-8 m-10'>
                 <div className=''>
