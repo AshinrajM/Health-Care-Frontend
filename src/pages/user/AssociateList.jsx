@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import {
@@ -7,14 +7,17 @@ import {
     DialogBody,
     DialogFooter,
 } from "@material-tailwind/react";
+import { BASE_URL } from '../../Api/Api';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 const AssociateList = () => {
 
     const [exp, setExp] = useState(0);
     const [fee, setFee] = useState(0);
-    // const [search, setSearch] = useState(false)
     const [open, setOpen] = useState(false)
+    const [availabilityData, setAvailabilityData] = useState([]);
 
     const handleOpen = () => setOpen(!open);
 
@@ -27,6 +30,20 @@ const AssociateList = () => {
 
 
 
+    useEffect(() => {
+        const allAvailablilty = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/booking/slot`);
+                setAvailabilityData(response.data)
+                toast.success("successfully rendered")
+                console.log(response.data)
+            } catch (error) {
+                toast.error("error found")
+            }
+        }
+        allAvailablilty()
+    }, [])
+
 
     const textStyle = {
         fontFamily: "Afacad",
@@ -34,13 +51,14 @@ const AssociateList = () => {
         fontWeight: '550',
     }
 
+
     return (
         <>
             <div>
                 <Header />
             </div>
+            {/* {availabilityData.map((dataItem) => ( */}
             <div>
-
                 <Card className="mt-6 bg-green-300  shadow-xl rounded-none">
                     <CardBody className='flex space-x-5 items-center justify-center'>
                         <div >
@@ -77,70 +95,73 @@ const AssociateList = () => {
                 )} */}
                 <hr className='mt-5 mx-10' />
             </div>
-            <div>
-                <Card className="m-5 w-72  hover:shadow-xl hover:scale-105 duration-1000" >
-                    <CardBody>
-                        <Typography variant="h5" color="indigo" className="mb-2" style={{ fontFamily: 'Krona One' }}>
-                            Anwar Ali
-                        </Typography>
-                        <div className='px-3 ' >
-                            <div className='flex justify-between text-black'>
-                                <Typography className='self-end ' style={textStyle}>
-                                    Age
+            <div className="flex flex-wrap justify-center">
+                {availabilityData.map((data) => (
+                    <div key={data.id}>
+                        <Card className="m-5 w-72  hover:shadow-xl hover:scale-110 duration-200" >
+                            <CardBody>
+                                <Typography variant="h5" color="indigo" className="mb-2" style={{ fontFamily: 'Krona One' }}>
+                                    {data.associate.name}
                                 </Typography>
-                                <Typography className='' style={textStyle}>
-                                    &nbsp; 26 Yrs
-                                </Typography>
-                            </div>
-                            <div className='flex justify-between text-black'>
-                                <Typography className='self-end' style={textStyle}>
-                                    Experience
-                                </Typography>
-                                <Typography style={textStyle}>
-                                    &nbsp; 2 Yrs
-                                </Typography>
-                            </div>
-                            <div className='flex justify-between text-black' >
-                                <Typography className='self-end' style={textStyle}>
-                                    Fee per hour
-                                </Typography>
-                                <Typography style={textStyle}>
-                                    &nbsp; $ 260
-                                </Typography>
-                            </div>
-                            <div className='flex justify-between text-black' >
-                                <Typography className='self-end' style={textStyle}>
-                                    Date
-                                </Typography>
-                                <Typography style={textStyle}>
-                                    &nbsp; 26-10-2022
-                                </Typography>
-                            </div>
-                            <div className='flex justify-between text-black' >
-                                <Typography className='self-end' style={textStyle}>
-                                    Morning(08:00-12:00)
-                                </Typography>
-                                <Typography style={textStyle}>
-                                    &nbsp; Available
-                                </Typography>
-                            </div>
-                            <div className='flex justify-between text-black' >
-                                <Typography className='self-end' style={textStyle}>
-                                    Noon(01:00-05:00)
-                                </Typography>
-                                <Typography style={textStyle}>
-                                    &nbsp; Not Available
-                                </Typography>
-                            </div>
-                        </div>
+                                <div className='px-3 ' >
+                                    <div className='flex justify-between text-black'>
+                                        <Typography className='self-end ' style={textStyle}>
+                                            Age
+                                        </Typography>
+                                        <Typography className='' style={textStyle}>
+                                            &nbsp; {data.associate.age}Yrs
+                                        </Typography>
+                                    </div>
+                                    <div className='flex justify-between text-black'>
+                                        <Typography className='self-end' style={textStyle}>
+                                            Experience
+                                        </Typography>
+                                        <Typography style={textStyle}>
+                                            &nbsp; {data.associate.experience}Yrs
+                                        </Typography>
+                                    </div>
+                                    <div className='flex justify-between text-black' >
+                                        <Typography className='self-end' style={textStyle}>
+                                            Fee per hour
+                                        </Typography>
+                                        <Typography style={textStyle}>
+                                            &nbsp; ${data.associate.fee_per_hour}
+                                        </Typography>
+                                    </div>
+                                    <div className='flex justify-between text-black' >
+                                        <Typography className='self-end' style={textStyle}>
+                                            Date
+                                        </Typography>
+                                        <Typography style={textStyle}>
+                                            &nbsp; {data.date}
+                                        </Typography>
+                                    </div>
+                                    <div className='flex justify-between text-black' >
+                                        <Typography className='self-end' style={textStyle}>
+                                            Morning(08:00-12:00)
+                                        </Typography>
+                                        <Typography style={textStyle}>
+                                            &nbsp; {data.is_morning ? "Available" : "Not Available"}
+                                        </Typography>
+                                    </div>
+                                    <div className='flex justify-between text-black' >
+                                        <Typography className='self-end' style={textStyle}>
+                                            Noon(01:00-05:00)
+                                        </Typography>
+                                        <Typography style={textStyle}>
+                                            &nbsp; {data.is_noon ? "Available" : "Not Available"}
+                                        </Typography>
+                                    </div>
+                                </div>
 
-                    </CardBody>
-                    <CardFooter className="pt-0 space-x-2 flex">
-                        <Button variant='outlined' color='green' className='hover:bg-green-700 hover:text-white text-green-700 w-full'>Book</Button>
-                        <Button variant='outlined' color='indigo' className='w-full hover:bg-indigo-700 hover:text-white' data-dialog-target="dialog" onClick={handleOpen}>Details</Button>
-                    </CardFooter>
-                </Card>
-
+                            </CardBody>
+                            <CardFooter className="pt-0 space-x-2 flex">
+                                <Button variant='outlined' color='green' className='hover:bg-green-700 hover:text-white text-green-700 w-full'>Book</Button>
+                                <Button variant='outlined' color='indigo' className='w-full hover:bg-indigo-700 hover:text-white' data-dialog-target="dialog" onClick={handleOpen}>Details</Button>
+                            </CardFooter>
+                        </Card>
+                    </div >
+                ))}
             </div >
             <Dialog open={open} handler={handleOpen}>
                 <DialogHeader>Anwar Ali</DialogHeader>

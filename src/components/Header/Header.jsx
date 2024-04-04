@@ -39,13 +39,16 @@ export default function Header() {
             const user = localStorage.getItem('userDetails')
             if (user) {
                 const userDetails = JSON.parse(user)
-                // console.log(userDetails.email,userDetails.id,userDetails.wallet,"userdatas")
+                console.log("if condition")
                 setEmail(userDetails.email)
 
             }
         }
     })
 
+    const headerStyle = {
+        fontFamily: 'Cinzel'
+    }
     return (
         <header className='bg-light-blue-0 shadow-sm '>
             <div className='flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto p-2'>
@@ -55,19 +58,19 @@ export default function Header() {
                 <div className='flex justify-center md:justify-end'>
                     <ul className='flex flex-col md:flex-row gap-4 md:gap-11 items-center justify-end font-serif text-xl'>
                         <Link to='/'>
-                            <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Home</li>
+                            <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Home</li>
                         </Link>
-                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Bookings</li>
+                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Bookings</li>
                         {isAuthenticated ? (
                             <Link to='/secured/associate-list'>
-                                <li className={`text-blue-900 mb-2 md:mb-0 hover:cursor-pointer`}>Associates</li>
+                                <li className={`text-blue-900 mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Associates</li>
                             </Link>
                         ) : (
                             <Link to='/signin'>
-                                <li className={`text-black mb-2 md:mb-0 hover:cursor-pointer`}>Associates</li>
+                                <li className={`text-black mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Associates</li>
                             </Link>
                         )}
-                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`}>Contact Us</li>
+                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Contact Us</li>
 
 
                         {isAuthenticated ?
@@ -77,7 +80,7 @@ export default function Header() {
                                 </MenuHandler>
                                 <MenuList>
                                     <Link to='/secured/profile'>
-                                        <MenuItem className='hover:cursor-pointer'>{email}</MenuItem>
+                                        <MenuItem className='hover:cursor-pointer' style={headerStyle}>{email}</MenuItem>
                                     </Link>
                                     <MenuItem className='text-red-500' onClick={handleLogout}>Log Out</MenuItem>
                                 </MenuList>

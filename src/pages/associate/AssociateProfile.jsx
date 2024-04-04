@@ -32,11 +32,11 @@ const AssociateProfile = () => {
                 console.log(location)
                 setAssociate(associateDetails)
 
+                console.log(user, "user details")
+                console.log(associate, "associate details")
             }
         }
     }, [])
-    console.log(user, "user details")
-    console.log(associate, "associate details")
 
     const handleOpen = () => setOpen(!open);
 
@@ -154,31 +154,35 @@ const AssociateProfile = () => {
                             )}
                         </CardHeader>
                         <CardBody className='w-full'>
-                            <Typography variant="h4" color="blue-gray" className="mb-8">
-                                {associate.name}
-                            </Typography>
-                            <Typography color="black" className="mb-4 font-normal">
-                                Certificate no&nbsp; : &nbsp; {associate.certificate_no}
-                            </Typography>
-                            <Typography color="black" className="mb-4 font-normal">
-                                Experience&nbsp; : &nbsp; {associate.experience}yr
-                            </Typography>
-                            <Typography color="black" className="mb-4 font-normal">
-                                Salary &nbsp;&nbsp;: &nbsp; ₹{associate.fee_per_hour}/hr
-                            </Typography>
-                            <Typography color="black" className="mb-4 font-normal">
-                                Location &nbsp;&nbsp; : &nbsp; {user.location ? user.location : "not provided"}
-                            </Typography>
-                            <Typography color="black" className="mb-4 font-normal">
-                                Wallet balance &nbsp;&nbsp;&nbsp;&nbsp; : ₹{user.wallet}
-                            </Typography>
-                            <CardFooter className='flex gap-2'>
-                                <Button variant="outlined" size='md' className="w-full xs:cover">
-                                    Service History
-                                </Button>
-                                <Button variant='outlined' onClick={handleOpen}><FaUserEdit className=' size-5' /></Button>
-                                <Button variant='outlined' onClick={() => setOpenPassDialog(true)}>Change Password</Button>
-                            </CardFooter>
+                            {associate && (
+                                <>
+                                    <Typography variant="h4" color="blue-gray" className="mb-8">
+                                        {associate.name}
+                                    </Typography>
+                                    <Typography color="black" className="mb-4 font-normal">
+                                        Certificate no&nbsp; : &nbsp; {associate.certificate_no}
+                                    </Typography>
+                                    <Typography color="black" className="mb-4 font-normal">
+                                        Experience&nbsp; : &nbsp; {associate.experience}yr
+                                    </Typography>
+                                    <Typography color="black" className="mb-4 font-normal">
+                                        Salary &nbsp;&nbsp;: &nbsp; ₹{associate.fee_per_hour}/hr
+                                    </Typography>
+                                    <Typography color="black" className="mb-4 font-normal">
+                                        Location &nbsp;&nbsp; : &nbsp; {user.location ? user.location : "not provided"}
+                                    </Typography>
+                                    <Typography color="black" className="mb-4 font-normal">
+                                        Wallet balance &nbsp;&nbsp;&nbsp;&nbsp; : ₹{user.wallet}
+                                    </Typography>
+                                    <CardFooter className='flex gap-2'>
+                                        <Button variant="outlined" size='md' className="w-full xs:cover">
+                                            Service History
+                                        </Button>
+                                        <Button variant='outlined' onClick={handleOpen}><FaUserEdit className=' size-5' /></Button>
+                                        <Button variant='outlined' onClick={() => setOpenPassDialog(true)}>Change Password</Button>
+                                    </CardFooter>
+                                </>
+                            )}
                         </CardBody>
                     </Card>
                 )}
