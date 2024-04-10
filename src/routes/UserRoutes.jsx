@@ -5,6 +5,7 @@ import Home from '../pages/user/Home'
 import Profile from '../pages/user/profile'
 import PrivateRouteUser from './PrivateRoutes/PrivateRouteUser'
 import AssociateList from '../pages/user/AssociateList'
+import BookingFinal from '../pages/user/BookingFinal'
 
 export default function UserRoutes() {
   return (
@@ -15,6 +16,7 @@ export default function UserRoutes() {
       <Route path='secured' element={<PrivateRouteUser />}>
         <Route path='profile' element={<Profile />} />
         <Route path='associate-list' element={<AssociateList />} />
+        <Route path='booking-confirm' element={< BookingFinal />} />
       </Route>
     </Routes>
   )

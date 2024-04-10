@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import {
-    Card, CardBody, CardFooter, Typography, Button, Input, Radio, Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter,
+    Card, CardBody, CardFooter, Typography, Button, Input, Radio, Dialog, DialogHeader, DialogBody, DialogFooter,
 } from "@material-tailwind/react";
-import { BASE_URL } from '../../Api/Api';
+import { BASE_URL } from "../../api/api";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -16,19 +15,61 @@ const AssociateList = () => {
 
     const [exp, setExp] = useState(0);
     const [fee, setFee] = useState(0);
-    const [open, setOpen] = useState(false)
+    const [openDetail, setOpenDetail] = useState(false)
+    const [openBooking, setOpenBooking] = useState(false)
     const [availabilityData, setAvailabilityData] = useState([]);
+    const [selectedCard, setSelectedCard] = useState(null)
+    const [selectedOption, setSelectedOption] = useState('');
+    const [location, setLocation] = useState('')
+    const [phone, setPhone] = useState('')
+    const navigate = useNavigate();
 
-    const handleOpen = () => setOpen(!open);
+
+
+    const handleOpenBooking = (data) => {
+        console.log(data, "data")
+        setSelectedCard(data)
+        setOpenBooking(!openBooking)
+
+    }
+
+    const handleOpenDetail = () => {
+        setOpenDetail(!openDetail);
+    }
 
     const currentDate = new Date();
+
     const minDate = new Date();
     minDate.setDate(currentDate.getDate() + 1)
+
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 7);
 
+    const handleOptionChange = (value) => {
+        setSelectedOption(value);
+    };
 
 
+    const isFormValid = location.trim() !== '' && phone.trim() !== '' && selectedOption !== '';
+
+    const confirm = () => {
+        // console.log(location, phone, selectedOption, selectedCard, "datas form")
+        if (!isFormValid) {
+            return;
+        }
+
+        const bookingDetail = {
+            location: location,
+            phone: phone,
+            shift: selectedOption,
+            slot: selectedCard
+        }
+        localStorage.setItem("bookingDetail", JSON.stringify(bookingDetail));
+
+        setOpenBooking(!openBooking)
+
+        navigate('/secured/booking-confirm');
+    }
 
     useEffect(() => {
         const allAvailablilty = async () => {
@@ -36,7 +77,7 @@ const AssociateList = () => {
                 const response = await axios.get(`${BASE_URL}/booking/slot`);
                 setAvailabilityData(response.data)
                 toast.success("successfully rendered")
-                console.log(response.data)
+                console.log(response, "repsonse data")
             } catch (error) {
                 toast.error("error found")
             }
@@ -50,7 +91,6 @@ const AssociateList = () => {
         fontSize: '14px',
         fontWeight: '550',
     }
-
 
     return (
         <>
@@ -125,7 +165,7 @@ const AssociateList = () => {
                                             Fee per hour
                                         </Typography>
                                         <Typography style={textStyle}>
-                                            &nbsp; ${data.associate.fee_per_hour}
+                                            &nbsp; ₹{data.associate.fee_per_hour}
                                         </Typography>
                                     </div>
                                     <div className='flex justify-between text-black' >
@@ -156,14 +196,15 @@ const AssociateList = () => {
 
                             </CardBody>
                             <CardFooter className="pt-0 space-x-2 flex">
-                                <Button variant='outlined' color='green' className='hover:bg-green-700 hover:text-white text-green-700 w-full'>Book</Button>
-                                <Button variant='outlined' color='indigo' className='w-full hover:bg-indigo-700 hover:text-white' data-dialog-target="dialog" onClick={handleOpen}>Details</Button>
+                                <Button variant='outlined' color='green' className='hover:bg-green-700 hover:text-white text-green-700 w-full' onClick={() => handleOpenBooking(data)}>Book</Button>
+                                <Button variant='outlined' color='indigo' className='w-full hover:bg-indigo-700 hover:text-white' onClick={handleOpenDetail}>Details</Button>
                             </CardFooter>
                         </Card>
                     </div >
                 ))}
             </div >
-            <Dialog open={open} handler={handleOpen}>
+
+            <Dialog open={openDetail} handler={handleOpenDetail}>
                 <DialogHeader>Anwar Ali</DialogHeader>
                 <Typography>Description</Typography>
                 <DialogBody>
@@ -187,16 +228,92 @@ const AssociateList = () => {
                     <Button
                         variant="text"
                         color="red"
-                        onClick={handleOpen}
+                        onClick={handleOpenDetail}
                         className="mr-1"
                     >
                         <span>Cancel</span>
                     </Button>
-                    <Button variant="gradient" color="green" onClick={handleOpen}>
+                    <Button variant="gradient" color="green" onClick={handleOpenDetail}>
                         <span>Confirm Booking</span>
                     </Button>
                 </DialogFooter>
             </Dialog>
+
+            <Dialog open={openBooking} handler={handleOpenBooking}>
+                <DialogHeader>Confirm Selection</DialogHeader>
+                <DialogBody className='space-y-5 text-black'>
+                    <div className='flex justify-between'>
+                        <Typography>Associate:</Typography>
+                        <Typography>{selectedCard?.associate.name}</Typography>
+                    </div>
+                    <div className='flex justify-between'>
+                        <Typography>Date:</Typography>
+                        <Typography>{selectedCard?.date}</Typography>
+                    </div>
+                    <div className='flex justify-between'>
+                        <Typography>Fee per hour </Typography>
+                        <Typography>{selectedCard?.associate.fee_per_hour}</Typography>
+                    </div>
+                    <div className='flex justify-between'>
+                        <Typography>shift :</Typography>
+                        <div className=''>
+                            <div className="flex items-center">
+                                {selectedCard?.is_morning ?
+                                    <Radio
+                                        color="green"
+                                        name="shift"
+                                        value="morning"
+                                        checked={selectedOption === "morning"}
+                                        onChange={() => handleOptionChange("morning")}
+                                        label="Morning"
+                                    />
+                                    : null}
+                                {selectedCard?.is_noon ?
+                                    <Radio
+                                        color="red"
+                                        name="shift"
+                                        value="noon"
+                                        checked={selectedOption === "noon"}
+                                        onChange={() => handleOptionChange("noon")}
+                                        label="Noon"
+                                    />
+                                    : null}
+                                {selectedCard?.is_morning && selectedCard?.is_noon ?
+                                    <Radio
+                                        color="indigo"
+                                        name="shift"
+                                        value="fullday"
+                                        checked={selectedOption === "fullday"}
+                                        onChange={() => handleOptionChange("fullday")}
+                                        label="Full Day"
+                                    />
+                                    : null}
+                            </div>
+
+                        </div>
+                    </div>
+                    {/* <Typography>{selectedCard?.is_morning ? "Morning" : null}{selectedCard?.is_morning && selectedCard?.is_noon ? "," : null}{selectedCard?.is_noon ? "Noon" : null}</Typography> */}
+
+                    <div>
+                        <Input label='Enter location' value={location} onChange={(e) => setLocation(e.target.value)} required />
+
+                    </div>
+                    <div>
+                        <Input label='Enter mobile number' value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                    </div>
+                </DialogBody>
+                <DialogFooter>
+                    <Button variant="text" color="red" onClick={() => setOpenBooking(!openBooking)}>
+                        Cancel
+                    </Button>
+                    {/* <Button variant="gradient" color="green" onClick={() => setOpenBooking(!openBooking)}> */}
+                    <Button variant="gradient" color="green" onClick={confirm} disabled={!isFormValid}>
+                        Confirm Booking
+                    </Button>
+                </DialogFooter>
+            </Dialog>
+
+
             <div>
                 <Footer />
             </div>

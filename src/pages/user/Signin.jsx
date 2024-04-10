@@ -149,6 +149,7 @@ export default function SignIn() {
                 const errorMessage = error.response.data.detail || 'An error occurred. Check credentials ';
                 actions.setErrors({ general: errorMessage });
                 toast.error(errorMessage);
+                console.log('errorMessage::', error.response.data);
             } else {
                 // If there's no response, it might be a network error or something else
                 actions.setErrors({ general: 'An error occurred. Check credentials properly' });

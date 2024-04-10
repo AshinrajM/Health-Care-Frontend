@@ -7,7 +7,9 @@ import { toast } from 'react-toastify';
 import { CiWallet } from "react-icons/ci";
 import { RiUserStarLine } from "react-icons/ri";
 import { MdMedicalServices } from "react-icons/md";
-import { BASE_URL } from "../../Api/Api";
+import { BASE_URL } from "../../api/api"
+import moment from 'moment';
+
 
 
 
@@ -19,6 +21,8 @@ const AssociateDashboard = () => {
   const [morningShift, setMorningShift] = useState(false);
   const [noonShift, setNoonShift] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [availabilityData, setAvailabilityData] = useState([]);
+
 
 
   useEffect(() => {
@@ -30,6 +34,9 @@ const AssociateDashboard = () => {
       setUser(userDetails)
       setAssociate(associateDetails)
       console.log(associateDetails.id)
+      scheduledDates(associateDetails.id)
+
+
     }
   }, [])
   console.log(selectedDate)
@@ -38,19 +45,48 @@ const AssociateDashboard = () => {
   const startDate = new Date(today.setDate(today.getDate() + 1))
   const endDate = new Date(today.setDate(today.getDate() + 7))
 
-  const handleSubmit = async () => {
+  const inputDate = selectedDate
 
+  const inputDateFormat = 'YYYY//MM/DD'
+
+  const momentObject = moment(inputDate, inputDateFormat)
+  const utcDate = momentObject.utc().format();
+
+  const actual = utcDate.toString().split('T')[0]
+  console.log(actual, "utc date")
+
+
+  const scheduledDates = async (associateId) => {
+    try {
+
+      const res = await axios.get(`${BASE_URL}/booking/slot/?associate_id=${associateId}`)
+      if (res.data) {
+        setAvailabilityData(res.data)
+        toast.success("availibility get data of slot")
+      }
+    } catch (error) {
+      toast.error("found error")
+    }
+  }
+
+  console.log(availabilityData, "full data")
+  const handleSubmit = async () => {
     let values = {
-      associate_id: associate.id,
-      date: selectedDate.toISOString().split('T')[0],
+      associate: associate.id,
+      // date: selectedDate.toISOString().split('T')[0],
+      date: actual,
       is_morning: morningShift,
       is_noon: noonShift,
     }
+    console.log(values, "semding values")
 
     try {
-      const response = await axios.post(`${BASE_URL}/booking/slot`, values)
+      const response = await axios.post(`${BASE_URL}/booking/slot/`, values)
 
       if (response.data) {
+        console.log(response.data, "res submit")
+        const arr = [...availabilityData, response.data]
+        setAvailabilityData(arr)
         toast.success("Slot Created")
         setMorningShift(false)
         setNoonShift(false)
@@ -61,14 +97,20 @@ const AssociateDashboard = () => {
       }
 
     } catch (error) {
-      toast.error("error found in catch")
-      console.error("Error", error)
+      if (error.response) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("error found in catch")
+        console.error("Error", error)
+      }
     }
   }
 
+  console.log(selectedDate, "CHOOSEN DATE")
 
   return (
     <div className='bg-brown-200 flex h-full'>
+
       <div>
         <SideBarAssociate />
       </div>
@@ -77,7 +119,10 @@ const AssociateDashboard = () => {
           <Card className="m-10 w-auto">
             <CardBody>
               <Typography>
-                Hi,<br />
+                <div className='flex gap-2'>
+                  <Typography>Hi</Typography>
+                  <Typography variant='h6' color='brown'> {associate?.name},</Typography><br />
+                </div>
                 The place is close to Barceloneta Beach and bus stop just 2 min by
                 walk and near to &quot;Naviglio&quot; where you can enjoy the main
                 night life in Barcelona.The place is close to Barceloneta Beach and
@@ -119,7 +164,7 @@ const AssociateDashboard = () => {
               <Typography variant='h2' className='mb-5'>
                 Schedule Dates
               </Typography>
-              <div className='flex flex-col sm:flex-row space-x-0 sm:space-x-6'>
+              <div className='flex flex-col sm:flex-row space-x-0 sm:space-x-6 justify-center'>
                 <div className="w-full sm:w-96">
                   <Calendar minDate={startDate} maxDate={endDate} onChange={(date) => setSelectedDate(date)} value={selectedDate} style={{ height: '500px' }} />
                 </div>
@@ -141,12 +186,37 @@ const AssociateDashboard = () => {
                         <h1>Selected Date : {selectedDate.toDateString()}</h1>
                         <h1>Selected Shifts : {morningShift && 'Morning'} {morningShift && noonShift && '|'} {noonShift && 'Noon'}</h1>
                       </div>
-                      <Button variant='outlined' onClick={handleSubmit}>create availability</Button>
+                      <Button variant='outlined' className='hover:bg-white hover:text-red-900 hover:' onClick={handleSubmit} disabled={!morningShift && !noonShift}>create availability</Button>
                     </CardBody>
                   </Card>
                 </div>
               </div>
             </CardBody>
+          </Card>
+          <Card className='mx-10 mb-10'>
+            <div className='m-5'>
+              <Typography variant='h2' className='mb-5'>
+                Scheduled Dates
+              </Typography>
+              <div>
+                {availabilityData.map((item, index) => (
+                  <Card key={item} className=' p-5 bg-gray-500 mb-2'>
+                    <div className='flex justify-between '>
+                      <div>
+                        <Typography variant='h6' color='black'>Date &nbsp; : {item.date}</Typography>
+                        <Typography variant='h6' color='black'>Shifts :
+                          {item.is_morning ? 'Morning' : null} {item.is_morning && item.is_noon ? "," : null} {item.is_noon ? 'Noon' : null}</Typography>
+                      </div>
+                      <div>
+                        <Button variant='outlined' color='red'
+                          className='hover:bg-red-500 hover:text-white'>Delete Schedule</Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+
+              </div>
+            </div>
           </Card>
         </div>
       </div>

@@ -32,12 +32,12 @@ const AssociateProfile = () => {
                 console.log(location)
                 setAssociate(associateDetails)
 
-                console.log(user, "user details")
-                console.log(associate, "associate details")
             }
         }
     }, [])
 
+    console.log(user, "user details")
+    console.log(associate, "associate details")
     const handleOpen = () => setOpen(!open);
 
     const handlePassOpen = () => setOpenPassDialog(!openPassDialog)
