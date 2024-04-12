@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { loginUser } from '../../redux/userSlice';
 import { jwtDecode } from 'jwt-decode';
+import { BASE_URL } from "../../api/api";
 import axios from 'axios';
 import bg from '../../assets/background/signin.png'
 
@@ -78,7 +79,7 @@ export default function SignIn() {
 
     const signinGoogle = async (data) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/login', data)
+            const response = await axios.post(`${BASE_URL}/users/login`, data)
             console.log("Response:", response.data)
 
             if (response.data) {
@@ -113,41 +114,47 @@ export default function SignIn() {
     }
 
     const onSubmit = async (values, actions) => {
-
-
         console.log('submitting form:', values);
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/login', values)
+            const response = await axios.post(`${BASE_URL}/users/login`, values)
             console.log("Response:", response.data)
-
             if (response.data) {
-
-
                 console.log("arrived success")
 
                 if (response.data.role === "user") {
-
-
-                    const { access, refresh } = response.data;
+                    const { access, refresh, user } = response.data;
 
                     localStorage.setItem('userAccess', access);
                     localStorage.setItem('userRefresh', refresh);
+                    localStorage.setItem("userDetails", JSON.stringify(user));
+
                     dispatch(loginUser())
-                    toast.success('Logged in ')
+                    toast.success('Logged in')
                     navigate('/')
                 } else {
                     toast.error("Only signed users can login")
-
                     actions.setErrors({ general: 'Only users are allowed to log in.' });
                 }
 
             } else {
+                toast.error("Check credentials")
                 actions.setErrors({ general: 'Login failed. Please try again.' });
             }
 
         } catch (error) {
             console.log('Error', error)
-            actions.setErrors({ general: 'An error occurred. Please try again later.' });
+            // Check if the error has a response property, which means it's an HTTP error
+            if (error.response) {
+                // Extract the custom error message from the response data
+                const errorMessage = error.response.data.detail || 'An error occurred. Check credentials ';
+                actions.setErrors({ general: errorMessage });
+                toast.error(errorMessage);
+                console.log('errorMessage::', error.response.data);
+            } else {
+                // If there's no response, it might be a network error or something else
+                actions.setErrors({ general: 'An error occurred. Check credentials properly' });
+                toast.error("An error occurred. Please try again later.");
+            }
         }
     };
 

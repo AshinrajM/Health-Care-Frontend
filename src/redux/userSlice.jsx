@@ -19,6 +19,7 @@ const userSlice = createSlice({
       state.userAuthenticated = false
       localStorage.removeItem('userAccess')
       localStorage.removeItem('userRefresh')
+      localStorage.removeItem('userDetails')
     },
     loginAdmin(state) {
       state.adminAuthenticated = true;

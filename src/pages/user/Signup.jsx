@@ -1,12 +1,12 @@
 import Header from '../../components/Header/Header'
-import { Card, Typography, Input, Button } from '@material-tailwind/react'
+import { Card, Typography, Input, Button, Dialog, DialogHeader, DialogFooter } from '@material-tailwind/react'
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
-
+import { BASE_URL } from '../../api/api';
 
 const initialValues = {
     // username: '',
@@ -14,6 +14,7 @@ const initialValues = {
     password: '',
     confirm_password: ''
 }
+
 
 
 
@@ -52,6 +53,11 @@ export default function SignUp() {
 
     const navigate = useNavigate();
 
+    const [open, setOpen] = useState(false)
+    const [otp, setOtp] = useState(new Array(6).fill(""))
+    const [tempId, setTempId] = useState("")
+
+
     const handleCallbackResponse = (response) => {
         console.log("Encoded jwt id token:" + response.credential);
         var userObject = jwtDecode(response.credential);
@@ -67,11 +73,6 @@ export default function SignUp() {
     }
 
     useEffect(() => {
-        // console.log(userAuthenticated)
-
-        // if (userAuthenticated) {
-        //     navigate('/')
-        // }
         /* global google*/
         google.accounts.id.initialize({
 
@@ -87,7 +88,7 @@ export default function SignUp() {
 
     const signUpGoogle = async (data) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/register', data)
+            const response = await axios.post(`${BASE_URL}/users/register`, data)
             console.log("Response:", response.data)
             if (response.data) {
                 console.log("arrived success")
@@ -101,18 +102,22 @@ export default function SignUp() {
             actions.setErrors({ general: 'An error occurred. Please try again later.' });
         }
     }
+
+
     const onSubmit = async (values, actions) => {
         console.log('form:', values);
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/register', values)
+            const response = await axios.post(`${BASE_URL}/users/register`, values)
             console.log("Response:", response.data)
 
             if (response.data) {
                 console.log("arrived success")
-                toast.success("Successfull SignUp")
-                navigate('/signin')
+                setTempId(response.data.temp_id)
+                // toast.success("Successfull SignUp")
+                setOpen(!open)
+                // navigate('/signin')
             } else {
-                actions.setErrors({ general: 'Login failed. Please try again.' });
+                actions.setErrors({ general: 'Signup failed. Please try again.' });
             }
 
         } catch (error) {
@@ -122,6 +127,34 @@ export default function SignUp() {
         }
     }
 
+    const verify = async () => {
+        const val = otp.join("")
+
+        const values = {
+            otp: val,
+            temp_id: tempId
+        }
+
+        try {
+            const response = await axios.post(`${BASE_URL}/users/verify`, values)
+            console.log(response.data, "successfull response")
+            if (response.data) {
+                toast.success("Signup successfull")
+                navigate('/signin')
+            } else {
+                actions.setErrors({ general: 'Signup failed. Please try again.' });
+            }
+
+        } catch (error) {
+            console.log('Error', error)
+            actions.setErrors({ general: 'An error occurred. Please try again later.' }); actions.set4()
+        }
+
+        // setOtp(val)
+        // console.log(val, "otp joined")
+    }
+
+
     const formik = useFormik({
         initialValues,
         onSubmit,
@@ -130,6 +163,20 @@ export default function SignUp() {
 
     console.log('Form values:', formik.values);
     console.log('form error:', formik.errors);
+
+
+    // const handleOpen = () => { setOpen(!open) }
+
+    const handleChange = (e, index) => {
+        if (isNaN(e.target.value)) return false;
+
+        setOtp([...otp.map((data, ind) => (index === ind ? e.target.value : data))])
+
+        if (e.target.value && e.target.nextSibling) {
+            e.target.nextSibling.focus()
+        }
+    }
+
 
     const divStyle = {
         background: 'rgba(255,255,255,0.1)',
@@ -145,43 +192,66 @@ export default function SignUp() {
     }
 
     return (
-        <div className='p-3 h-full' style={imageStyle}>
-            <Header />
-            <Card className="my-9 max-w-md mx-auto rounded-xl px-5 py-3" style={divStyle}>
-                <Typography className='text-center p-2' variant="h2" color="teal">Sign Up</Typography>
-                <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+        <>
+            <div className='p-3 h-full' style={imageStyle}>
+                <Header />
+                <Card className="my-9 max-w-md mx-auto rounded-xl px-5 py-3" style={divStyle}>
+                    <Typography className='text-center p-2' variant="h2" color="teal">Sign Up</Typography>
+                    <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
 
-                    <Input variant='standard' label="Email" id="email" name='email' color="black" onChange={formik.handleChange} value={formik.values.email} />
-                    {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
+                        <Input variant='standard' label="Email" id="email" name='email' color="black" onChange={formik.handleChange} value={formik.values.email} autoFocus />
+                        {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
 
-                    <Input variant='standard' label="Password" id="password" name='password' color="black" onChange={formik.handleChange} value={formik.values.name} />
-                    {formik.errors.password ?
-                        <div className='flex flex-row'>
-                            <div className='text-gray-800 text-xs self-start'>
-                                <li >Minimum length of 8 characters</li>
+                        <Input variant='standard' label="Password" id="password" name='password' color="black" onChange={formik.handleChange} value={formik.values.name} />
+                        {formik.errors.password ?
+                            <div className='flex flex-row'>
+                                <div className='text-gray-800 text-xs self-start'>
+                                    <li >Minimum length of 8 characters</li>
+                                </div>
+                                <div>
+                                    <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p>
+
+                                </div>
                             </div>
-                            <div>
-                                <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p>
+                            : null}
 
-                            </div>
+                        <Input variant='standard' type='password' label="Confirm Password" id="confirm_password" name='confirm_password' color="black" onChange={formik.handleChange} value={formik.values.name} />
+                        {formik.errors.username ? <p className='text-red-900 text-xs self-end' >{formik.errors.username}</p> : null}
+
+                        <Button className='bg-blue-700 rounded-3xl w-full' type='submit' disabled={Object.keys(formik.errors).length !== 0}>Sign Up</Button>
+                        <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                            <div id='signinDiv' ></div>
                         </div>
-                        : null}
-
-                    <Input variant='standard' type='password' label="Confirm Password" id="confirm_password" name='confirm_password' color="black" onChange={formik.handleChange} value={formik.values.name} />
-                    {formik.errors.username ? <p className='text-red-900 text-xs self-end' >{formik.errors.username}</p> : null}
-
-                    <Button className='bg-blue-700 rounded-3xl w-full' type='submit' disabled={Object.keys(formik.errors).length !== 0}>Sign Up</Button>
-                    <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
-                        <div id='signinDiv' ></div>
+                    </form>
+                    <div className="flex items-center gap-2 my-3">
+                        <Typography className='text-xs sm:text-sm text-black'>Dont Have Any Account ?</Typography>
+                        <Link to='/signin' >
+                            <Typography className="text-primaryColor text-xs sm:text-sm hover:cursor-pointer">Log In</Typography>
+                        </Link>
                     </div>
-                </form>
-                <div className="flex items-center gap-2 my-3">
-                    <Typography className='text-xs sm:text-sm text-black'>Dont Have Any Account ?</Typography>
-                    <Link to='/signin' >
-                        <Typography className="text-primaryColor text-xs sm:text-sm hover:cursor-pointer">Log In</Typography>
-                    </Link>
+                    {/* <button onClick={handleOpen}>hai</button> */}
+                </Card>
+            </div>
+
+            <Dialog open={open}>
+                <DialogHeader>Email Verification</DialogHeader>
+                <div className="w-72 m-10 flex gap-5">
+                    {
+                        otp.map((data, index) => {
+                            return <input type="text" variant='' className='w-14 p-3 text-center text-red-400
+                            border border-gray-900 rounded-lg'
+
+                                maxLength={1}
+                                onChange={(e) => handleChange(e, index)} />
+                        })
+                    }
                 </div>
-            </Card>
-        </div>
+                <DialogFooter className='w-full'>
+                    <Button variant="gradient" color="green" onClick={verify} className='w-full'>
+                        <span>Verify Account</span>
+                    </Button>
+                </DialogFooter>
+            </Dialog >
+        </>
     )
 }

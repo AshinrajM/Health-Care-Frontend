@@ -21,6 +21,10 @@ export default function Home() {
             <div className='flex justify-center md:mt-5 sm:mt-1' >
                 <p className='md:text-4xl sm:text-md font-serif font-semibold text-blue-900' style={headStyle}>WELCOME &nbsp; TO &nbsp;  HEALTH &nbsp; CARE &nbsp; SOLUTIONS &nbsp; WE &nbsp; CARE &nbsp; FOR &nbsp; YOUR &nbsp;HEALTH</p>
             </div>
+            <div className='flex justify-center md:mt-2 sm:mt-1' >
+                <p className='md:text-lg sm:text-md font-serif font-semibold text-blue-900' style={tailStyle}>Begin &nbsp; To &nbsp;  Care &nbsp; For &nbsp; Your &nbsp; Beloved &nbsp; One's &nbsp;</p>
+            </div>
+
             <div className='flex flex-wrap md:flex-nowrap space-x-5 m-5 items-center'>
                 <div className='w-full md:w-1/2'>
                     <CardHeader floated={false} className="h-auto mb-5">

@@ -10,14 +10,8 @@ import logo from '../../assets/logo/Hc2.png'
 
 const SideBarAssociate = () => {
 
-
-
-
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
-
-
 
     const handleLogout = () => {
         try {
