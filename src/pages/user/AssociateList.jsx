@@ -68,7 +68,7 @@ const AssociateList = () => {
 
         setOpenBooking(!openBooking)
 
-        navigate('/secured/booking-confirm');
+        navigate('/secured/checkout');
     }
 
     useEffect(() => {

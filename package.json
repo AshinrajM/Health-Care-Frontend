@@ -16,6 +16,8 @@
     "@heroicons/react": "^2.1.1",
     "@material-tailwind/react": "^2.1.8",
     "@reduxjs/toolkit": "^2.2.0",
+    "@stripe/react-stripe-js": "^2.7.0",
+    "@stripe/stripe-js": "^3.3.0",
     "axios": "^1.6.7",
     "formik": "^2.4.5",
     "jwt-decode": "^4.0.0",
@@ -45,3 +47,4 @@
     "vite": "^5.0.8"
   }
 }
+

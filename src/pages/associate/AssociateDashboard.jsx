@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import SideBarAssociate from '../../components/sideBarAssociate/sideBarAssociate';
-import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
+import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, } from "@material-tailwind/react";
 import Calendar from 'react-calendar';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -22,9 +22,15 @@ const AssociateDashboard = () => {
   const [noonShift, setNoonShift] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availabilityData, setAvailabilityData] = useState([]);
+  const [slot, setSlot] = useState('')
+  const [open, setOpen] = useState(false);
 
 
 
+  const handleOpen = () =>{
+    
+   setOpen(!open);
+  }
   useEffect(() => {
     const userdata = localStorage.getItem('user')
     const associatedata = localStorage.getItem('associate')
@@ -104,6 +110,11 @@ const AssociateDashboard = () => {
         console.error("Error", error)
       }
     }
+  }
+
+  const deleteSlot = (data) => {
+    console.log(data, "datas slot")
+    setSlot(data)
   }
 
   console.log(selectedDate, "CHOOSEN DATE")
@@ -209,7 +220,7 @@ const AssociateDashboard = () => {
                       </div>
                       <div>
                         <Button variant='outlined' color='red'
-                          className='hover:bg-red-500 hover:text-white'>Delete Schedule</Button>
+                          className='hover:bg-red-500 hover:text-white' onClick={handleOpen}>Delete Schedule</Button>
                       </div>
                     </div>
                   </Card>
@@ -220,7 +231,25 @@ const AssociateDashboard = () => {
           </Card>
         </div>
       </div>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Are sure You want to delete this slot</DialogHeader>
+        
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="blue"
+            onClick={handleOpen}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" color="red" onClick={handleOpen}>
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </div>
+
   )
 }
 
