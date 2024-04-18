@@ -5,8 +5,39 @@ import Footer from '../../components/Footer/Footer';
 import card from '../../assets/cover/2.jpg';
 import { Card, CardHeader, CardBody, CardFooter, Typography, Tooltip, Button } from "@material-tailwind/react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import axios from 'axios';
 
 export default function Home() {
+
+    const [location, setLocation] = useState(null);
+    const [address, setAddress] = useState(null);
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                // setLocation(position);
+                try {
+                    const apiKey = '9c09d04cf46241b98facdb7fd80de5a0'
+                    const { latitude, longitude } = position.coords;
+                    const response = await axios.get('https://api.geoapify.com/v1/geocode/reverse', {
+                        params: {
+                            lat: latitude,
+                            lon: longitude,
+                            apiKey: apiKey
+                        }
+                    })
+                    setAddress(response.data.features[0].properties.formatted);
+                } catch (error) {
+                    console.log("Geolocation is not supported by this browser.");
+                }
+            });
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }, []);
+
+
+
     const headStyle = {
         fontFamily: 'Oswald'
     }
@@ -16,6 +47,7 @@ export default function Home() {
     }
     return (
         <>
+
             <Header />
             <img className='w-full' src={homeCover} alt="home cover" />
             <div className='flex justify-center md:mt-5 sm:mt-1' >
@@ -69,6 +101,19 @@ export default function Home() {
                     </CardHeader>
                 </div>
             </div>
+            {/* {location && (
+                <div>
+                    <p style={headStyle}>Your Current Location:</p>
+                    <p style={tailStyle}>Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}</p>
+                    <p>Address:{address}</p>
+                </div>
+            )} */}
+            {address && (
+                <div>
+                    <p>Address:{address}</p>
+                </div>
+            )}
+
             <Footer />
 
         </>
