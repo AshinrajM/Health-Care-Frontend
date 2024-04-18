@@ -85,6 +85,12 @@ const AssociateList = () => {
         allAvailablilty()
     }, [])
 
+    const dialogStyle = {
+        fontFamily: "Jersey 25",
+        fontSize: '20px',
+        fontWeight: '550',
+    }
+
 
     const textStyle = {
         fontFamily: "Afacad",
@@ -97,7 +103,6 @@ const AssociateList = () => {
             <div>
                 <Header />
             </div>
-            {/* {availabilityData.map((dataItem) => ( */}
             <div>
                 <Card className="mt-6 bg-green-300  shadow-xl rounded-none">
                     <CardBody className='flex space-x-5 items-center justify-center'>
@@ -126,13 +131,6 @@ const AssociateList = () => {
                 </Card>
             </div>
             <div>
-                {/* {search && (
-                    <p>
-                        Search result: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nulla ac efficitur justo. Integer sit amet tincidunt urna, vel finibus orci.
-                        <a className='text-blue-800' onClick={(e)=>{setSearch(!search)}}>Clear</a>
-                    </p>
-                )} */}
                 <hr className='mt-5 mx-10' />
             </div>
             <div className="flex flex-wrap justify-center">
@@ -240,15 +238,15 @@ const AssociateList = () => {
             </Dialog>
 
             <Dialog open={openBooking} handler={handleOpenBooking}>
-                <DialogHeader>Confirm Selection</DialogHeader>
+                <DialogHeader style={dialogStyle}>Confirm Selection</DialogHeader>
                 <DialogBody className='space-y-5 text-black'>
                     <div className='flex justify-between'>
-                        <Typography>Associate:</Typography>
-                        <Typography>{selectedCard?.associate.name}</Typography>
+                        <Typography variant=''>Associate:</Typography>
+                        <Typography variant='h6' color='gray'>{selectedCard?.associate.name}</Typography>
                     </div>
                     <div className='flex justify-between'>
                         <Typography>Date:</Typography>
-                        <Typography>{selectedCard?.date}</Typography>
+                        <Typography variant='paragraph'>{selectedCard?.date}</Typography>
                     </div>
                     <div className='flex justify-between'>
                         <Typography>Fee per hour </Typography>

@@ -1,8 +1,13 @@
-import { Card, Typography, Input, Button } from '@material-tailwind/react';
+import {
+    Card, Typography, Input, Button, Dialog,
+    DialogHeader,
+    DialogBody,
+    DialogFooter,
+} from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { loginUser } from '../../redux/userSlice';
 import { jwtDecode } from 'jwt-decode';
@@ -40,6 +45,10 @@ export default function SignIn() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => setOpen(!open);
 
 
     const userAuthenticated = useSelector(state => state.user.userAuthenticated)
@@ -179,37 +188,61 @@ export default function SignIn() {
     };
 
     return (
+        <>
 
-        <div style={imageStyle} className='p-3'>
-            <Header />
-            <Card className="my-20 py-4 max-w-md mx-auto  rounded-xl p-7" color='transparent' style={divStyle}>
-                <Typography className='text-center font-mono p-4' variant="h2" color="teal">Log In</Typography>
-                <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
+            <div style={imageStyle} className='p-3'>
+                <Header />
+                <Card className="my-20 py-4 max-w-md mx-auto  rounded-xl p-7" color='transparent' style={divStyle}>
+                    <Typography className='text-center font-mono p-4' variant="h2" color="teal">Log In</Typography>
+                    <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
 
-                    <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" />
-                    {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
+                        <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" />
+                        {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
 
-                    <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
-                    {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
+                        <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
+                        {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
 
-                    <Button className="bg-blue-500 mb-5" type='submit'>Login</Button>
-                    {/* <Button id='signinDiv' className='bg-transparent'></Button> */}
+                        <Button className="bg-blue-500 mb-5" type='submit'>Login</Button>
+                        {/* <Button id='signinDiv' className='bg-transparent'></Button> */}
 
-                </form>
-                <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
-                    <div id='signinDiv' ></div>
+                    </form>
+                    <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                        <div id='signinDiv' ></div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
+                        <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" onClick={handleOpen}>Click here</Typography>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
+                        <Link to='/signup' >
+                            <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
+                        </Link>
+                    </div>
+                </Card>
+            </div>
+
+            <Dialog open={open} handler={handleOpen}>
+                <DialogHeader className='justify-center mb-5'>Forgot Your Password??</DialogHeader>
+
+                <div className='mx-5'>
+                    <Input label='Enter your registered Email' variant='outlined' type='email' error='false' />
                 </div>
-                <div className="flex items-center gap-1">
-                    <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
-                    <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer">Click here</Typography>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
-                    <Link to='/signup' >
-                        <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
-                    </Link>
-                </div>
-            </Card>
-        </div>
+                <DialogFooter>
+                    <Button
+                        variant="text"
+                        color="red"
+                        onClick={handleOpen}
+                        className="mr-1"
+                    >
+                        <span>Cancel</span>
+                    </Button>
+                    <Button variant="gradient" color="green" onClick={handleOpen}>
+                        <span>Validate Email</span>
+                    </Button>
+                </DialogFooter>
+            </Dialog>
+
+        </>
     );
 }
