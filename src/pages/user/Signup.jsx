@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../api/api';
+import bg from '../../assets/background/signup.jpg'
 
 const initialValues = {
     // username: '',
@@ -180,12 +181,12 @@ export default function SignUp() {
 
     const divStyle = {
         background: 'rgba(255,255,255,0.1)',
-        backdropFilter: 'blur(30px)',
-        border: '1px solid rgba(255,255,255,0.2)',
+        backdropFilter: 'blur(100px)',
+        border: '1px solid rgba(255,255,255,0.1)',
     };
     const imageStyle = {
-        backgroundImage: 'url("src/assets/background/3.jpg")',
-        backgroundSize: 'cover',
+        backgroundImage: `url(${bg})`,
+        backgroundSize: '100% 100%',
         backgroundPosition: 'left',
         backgroundRepeat: 'no-repeat',
         minHeight: '100vh',
@@ -195,7 +196,7 @@ export default function SignUp() {
         <>
             <div className='p-3 h-full' style={imageStyle}>
                 <Header />
-                <Card className="my-9 max-w-md mx-auto rounded-xl px-5 py-3" style={divStyle}>
+                <Card className="my-9 max-w-md mx-28 rounded-xl px-5 py-3" style={divStyle}>
                     <Typography className='text-center p-2' variant="h2" color="teal">Sign Up</Typography>
                     <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
 
