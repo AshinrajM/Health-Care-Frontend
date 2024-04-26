@@ -74,7 +74,7 @@ export default function AdminUsers() {
                             </thead>
                             <tbody>
                                 {
-                                    users.map((user, index) => (< tr key={user.id || index} className='text-black' style={{ borderBottom: '1px dotted' }}>
+                                    users.filter(user => !user.is_superuser).map((user, index) => (< tr key={user.id || index} className='text-black' style={{ borderBottom: '1px dotted' }}>
                                         <td className='p-2' style={{ textAlign: 'center' }}>{index + 1}</td>
                                         <td className='p-2' style={{ textAlign: 'center' }}>{user.email}</td>
                                         <td className='p-2' style={{ display: 'flex', justifyContent: 'center' }}>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardBody, CardFooter, Typography, Button } from "@material-tailwind/react";
 import Header from '../../components/Header/Header';
 import { BASE_URL } from '../../api/api'
+import { API_URL } from '../../Config/config';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -36,7 +37,8 @@ const BookingFinal = () => {
     const values = {
         user_id: user ? user.id : null,
         slot_id: finalData && finalData.slot ? finalData.slot.id : null,
-        payable_amount: payable_amount
+        payable_amount: payable_amount,
+        shift: finalData ? finalData.shift : null
     };
 
     const BookingConfirm = async () => {
@@ -44,7 +46,8 @@ const BookingFinal = () => {
 
         try {
             const response = await axios.post(`${BASE_URL}/booking/checkout`, values)
-
+            const checkoutUrl = response.data.url;
+            window.location.href = checkoutUrl;
 
         } catch (error) {
             toast.error(error, "error found")
@@ -56,12 +59,12 @@ const BookingFinal = () => {
     console.log(user, "user data")
     console.log(finalData, "final dataas of booking")
     return (
-        <div className='bg-blue-50 h-screen'>
-            <div className='bg-blue-100'>
+        <div className=''>
+            <div className='shadow-md'>
                 <Header />
             </div>
             <div className='mx-56'>
-                <Card className="mt-10 w-full ">
+                <Card className="mt-10 w-full bg-blue-gray-100 shadow-xl hover:cursor-pointer">
                     <CardBody>
                         <div className='flex justify-center'>
                             <Typography variant="h3" color="blue-gray" className="mb-2">
@@ -77,7 +80,7 @@ const BookingFinal = () => {
                                     </Typography>
                                     <Typography variant="h6" color="blue-gray" className="mb-2">
                                         {finalData.slot.associate.name}
-                                        {finalData.slot.id}
+                                        {/* {finalData.slot.id} */}
                                     </Typography>
                                 </div>
                                 <div className='flex justify-between'>
@@ -122,7 +125,7 @@ const BookingFinal = () => {
                                             ₹{finalData.slot.associate.fee_per_hour}/Hr
                                         </Typography>
                                         <Typography variant="h6" color="red" className="mb-3 items-end ">
-                                            &nbsp;x{finalData.shift === "full day" ? 8 : 4}
+                                            &nbsp;x{finalData.shift === "fullday" ? 8 : 4}
                                         </Typography>
                                     </div>
                                 </div>

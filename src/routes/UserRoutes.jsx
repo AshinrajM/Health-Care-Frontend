@@ -8,6 +8,7 @@ import AssociateList from '../pages/user/AssociateList'
 import BookingFinal from '../pages/user/BookingFinal'
 import BookingSuccess from '../pages/user/BookingSuccess'
 import BookingFailed from '../pages/user/BookingFailed'
+import BookingHistory from '../pages/user/BookingHistory'
 
 export default function UserRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function UserRoutes() {
         <Route path='checkout' element={< BookingFinal />} />
         <Route path='success' element={< BookingSuccess />} />
         <Route path='failed' element={< BookingFailed />} />
+        <Route path='bookings' element={< BookingHistory />} />
       </Route>
     </Routes>
   )

@@ -123,8 +123,7 @@ export default function AssociateLogin() {
                     </div>
                     <CardBody className="flex flex-col gap-4">
                         <form className="space-y-6" onSubmit={formik.handleSubmit}>
-                            <Input variant='standard' label="Email" type="email" name="email" onChange={formik.handleChange}
-                                value={formik.values.email} color="black" className="text-blue-gray-900 text-lg" />
+                            <Input variant='standard' label="Email" type="email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" className="text-blue-gray-900 text-lg" autoFocus />
                             {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
                             <Input variant='standard' label="Password" type="password" color="black" name="password" onChange={formik.handleChange} value={formik.values.password} className="text-blue-gray-900 text-lg" />
                             {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}

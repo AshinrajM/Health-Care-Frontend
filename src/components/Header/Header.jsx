@@ -39,7 +39,7 @@ export default function Header() {
             const user = localStorage.getItem('userDetails')
             if (user) {
                 const userDetails = JSON.parse(user)
-                console.log("if condition")
+                // console.log("if condition")
                 setEmail(userDetails.email)
 
             }
@@ -60,7 +60,20 @@ export default function Header() {
                         <Link to='/'>
                             <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Home</li>
                         </Link>
-                        <li className={`${isAuthenticated ? 'text-blue-900' : 'text-black'} mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Bookings</li>
+                        {isAuthenticated ? (
+                            <Link to='/secured/bookings' >
+                                <li className='text-blue-900  mb-2 md:mb-0 hover:cursor-pointer'
+                                    style={headerStyle}>Bookings</li>
+                            </Link>
+                        ) : (
+                            <Link to='/signin'>
+                                <li className='text-black  mb-2 md:mb-0 hover:cursor-pointer'
+                                    style={headerStyle}>Bookings</li>
+                            </Link>
+                        )}
+
+
+
                         {isAuthenticated ? (
                             <Link to='/secured/associate-list'>
                                 <li className={`text-blue-900 mb-2 md:mb-0 hover:cursor-pointer`} style={headerStyle}>Associates</li>

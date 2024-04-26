@@ -27,9 +27,9 @@ const AssociateDashboard = () => {
 
 
 
-  const handleOpen = () =>{
-    
-   setOpen(!open);
+  const handleOpen = () => {
+
+    setOpen(!open);
   }
   useEffect(() => {
     const userdata = localStorage.getItem('user')
@@ -233,7 +233,7 @@ const AssociateDashboard = () => {
       </div>
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader>Are sure You want to delete this slot</DialogHeader>
-        
+
         <DialogFooter>
           <Button
             variant="text"

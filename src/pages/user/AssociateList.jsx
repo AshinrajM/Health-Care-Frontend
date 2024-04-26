@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import {
-    Card, CardBody, CardFooter, Typography, Button, Input, Radio, Dialog, DialogHeader, DialogBody, DialogFooter,
-} from "@material-tailwind/react";
+import { Card, CardBody, CardFooter, Typography, Button, Input, Radio, Dialog, DialogHeader, DialogBody, DialogFooter, } from "@material-tailwind/react";
 import { BASE_URL } from "../../api/api";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -53,7 +51,6 @@ const AssociateList = () => {
     const isFormValid = location.trim() !== '' && phone.trim() !== '' && selectedOption !== '';
 
     const confirm = () => {
-        // console.log(location, phone, selectedOption, selectedCard, "datas form")
         if (!isFormValid) {
             return;
         }
@@ -76,7 +73,7 @@ const AssociateList = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/booking/slot`);
                 setAvailabilityData(response.data)
-                toast.success("successfully rendered")
+                // toast.success("successfully rendered")
                 console.log(response, "repsonse data")
             } catch (error) {
                 toast.error("error found")
@@ -229,11 +226,11 @@ const AssociateList = () => {
                         onClick={handleOpenDetail}
                         className="mr-1"
                     >
-                        <span>Cancel</span>
+                        <span>Close</span>
                     </Button>
-                    <Button variant="gradient" color="green" onClick={handleOpenDetail}>
+                    {/* <Button variant="gradient" color="green" onClick={handleOpenDetail}>
                         <span>Confirm Booking</span>
-                    </Button>
+                    </Button> */}
                 </DialogFooter>
             </Dialog>
 
