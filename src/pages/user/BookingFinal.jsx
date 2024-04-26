@@ -125,7 +125,7 @@ const BookingFinal = () => {
                                             ₹{finalData.slot.associate.fee_per_hour}/Hr
                                         </Typography>
                                         <Typography variant="h6" color="red" className="mb-3 items-end ">
-                                            &nbsp;x{finalData.shift === "full day" ? 8 : 4}
+                                            &nbsp;x{finalData.shift === "fullday" ? 8 : 4}
                                         </Typography>
                                     </div>
                                 </div>
