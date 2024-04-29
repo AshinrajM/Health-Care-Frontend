@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { FaStar } from "react-icons/fa6";
 
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
@@ -97,7 +98,7 @@ const AssociateList = () => {
 
     return (
         <>
-            <div>
+            <div className='shadow-md'>
                 <Header />
             </div>
             <div>
@@ -187,8 +188,18 @@ const AssociateList = () => {
                                             &nbsp; {data.is_noon ? "Available" : "Not Available"}
                                         </Typography>
                                     </div>
+                                    <div className='flex justify-between text-black' >
+                                        <Typography className='self-end' style={textStyle}>
+                                            User rating
+                                        </Typography>
+                                        <Typography className='flex items-center'>
+                                            <FaStar color='yellow' className='w-4 h-4' />
+                                            <FaStar color='yellow' className='w-4 h-4' />
+                                            <FaStar color='yellow' className='w-4 h-4' />
+                                            <FaStar color='yellow' className='w-4 h-4' />
+                                        </Typography>
+                                    </div>
                                 </div>
-
                             </CardBody>
                             <CardFooter className="pt-0 space-x-2 flex">
                                 <Button variant='outlined' color='green' className='hover:bg-green-700 hover:text-white text-green-700 w-full' onClick={() => handleOpenBooking(data)}>Book</Button>
@@ -234,7 +245,7 @@ const AssociateList = () => {
                 </DialogFooter>
             </Dialog>
 
-            <Dialog open={openBooking} handler={handleOpenBooking}>
+            <Dialog open={openBooking}>
                 <DialogHeader style={dialogStyle}>Confirm Selection</DialogHeader>
                 <DialogBody className='space-y-5 text-black'>
                     <div className='flex justify-between'>
@@ -297,7 +308,7 @@ const AssociateList = () => {
                         <Input label='Enter mobile number' value={phone} onChange={(e) => setPhone(e.target.value)} required />
                     </div>
                 </DialogBody>
-                <DialogFooter>
+                <DialogFooter className='gap-5'>
                     <Button variant="text" color="red" onClick={() => setOpenBooking(!openBooking)}>
                         Cancel
                     </Button>

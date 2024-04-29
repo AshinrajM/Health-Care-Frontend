@@ -114,16 +114,21 @@ export default function SignUp() {
             if (response.data) {
                 console.log("arrived success")
                 setTempId(response.data.temp_id)
-                // toast.success("Successfull SignUp")
                 setOpen(!open)
-                // navigate('/signin')
             } else {
+                console.log(response.data.message, "signup")
                 actions.setErrors({ general: 'Signup failed. Please try again.' });
+                toast.error(response.data.message);
             }
 
         } catch (error) {
-            console.log('Error', error)
-            actions.setErrors({ general: 'An error occurred. Please try again later.' }); actions.set4()
+            if (error.response) {
+                console.log(error.response.data.message, "backend response")
+                toast.error(error.response.data.message)
+            } else {
+                console.log('Error', error)
+                actions.setErrors({ general: 'An error occurred. Please try again later.' }); actions.set4()
+            }
 
         }
     }
@@ -192,12 +197,17 @@ export default function SignUp() {
         minHeight: '100vh',
     }
 
+    const headFont = {
+        fontFamily: "Platypi"
+    }
     return (
         <>
-            <div className='p-3 h-full' style={imageStyle}>
-                <Header />
+            <div style={imageStyle}>
+                <div className='shadow-md'>
+                    <Header />
+                </div>
                 <Card className="my-9 max-w-md mx-28 rounded-xl px-5 py-3" style={divStyle}>
-                    <Typography className='text-center p-2' variant="h2" color="teal">Sign Up</Typography>
+                    <Typography className='text-center p-2' variant="h2" color="teal" style={headFont}>Sign Up</Typography>
                     <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
 
                         <Input variant='standard' label="Email" id="email" name='email' color="black" onChange={formik.handleChange} value={formik.values.email} autoFocus />
@@ -218,10 +228,11 @@ export default function SignUp() {
 
                         <Input variant='standard' type='password' label="Confirm Password" id="confirm_password" name='confirm_password' color="black" onChange={formik.handleChange} value={formik.values.name} />
                         {formik.errors.username ? <p className='text-red-900 text-xs self-end' >{formik.errors.username}</p> : null}
-
-                        <Button className='bg-blue-700 rounded-3xl w-full' type='submit' disabled={Object.keys(formik.errors).length !== 0}>Sign Up</Button>
-                        <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
-                            <div id='signinDiv' ></div>
+                        <div className='flex gap-3'>
+                            <Button className='bg-blue-700 rounded-lg w-full' type='submit' disabled={!formik.values.email || !formik.values.password || !formik.values.confirm_password || Object.keys(formik.errors).length !== 0 || formik.values.password !== formik.values.confirm_password}>Sign Up</Button>
+                            <div className="bg-white">
+                                <div id='signinDiv' ></div>
+                            </div>
                         </div>
                     </form>
                     <div className="flex items-center gap-2 my-3">

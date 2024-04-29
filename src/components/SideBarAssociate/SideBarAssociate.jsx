@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logoutAssociate } from '../../redux/userSlice';
 import logo from '../../assets/logo/Hc2.png'
+import { GrSchedule } from "react-icons/gr";
 
 
 const SideBarAssociate = () => {
@@ -57,12 +58,20 @@ const SideBarAssociate = () => {
                         </ListItemPrefix>
                         Bookings
                     </ListItem>
-                    <Link to='/associates/entry/users'>
+                    <Link to='/associates/check/dashboard'>
                         <ListItem>
                             <ListItemPrefix>
                                 <UserGroupIcon className="h-5 w-5" />
                             </ListItemPrefix>
                             Chat
+                        </ListItem>
+                    </Link>
+                    <Link to='/associates/check/associate-schedules'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <GrSchedule className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Scheduled Dates
                         </ListItem>
                     </Link>
                     <Link to='/associates/check/associate-profile'>

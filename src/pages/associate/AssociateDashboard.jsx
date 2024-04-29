@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import SideBarAssociate from '../../components/sideBarAssociate/sideBarAssociate';
 import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, } from "@material-tailwind/react";
 import Calendar from 'react-calendar';
 import axios from 'axios';
+import SideBarAssociate from '../../components/SideBarAssociate/SideBarAssociate';
 import { toast } from 'react-toastify';
 import { CiWallet } from "react-icons/ci";
 import { RiUserStarLine } from "react-icons/ri";
@@ -21,7 +21,7 @@ const AssociateDashboard = () => {
   const [morningShift, setMorningShift] = useState(false);
   const [noonShift, setNoonShift] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [availabilityData, setAvailabilityData] = useState([]);
+  // const [availabilityData, setAvailabilityData] = useState([]);
   const [slot, setSlot] = useState('')
   const [open, setOpen] = useState(false);
 
@@ -40,7 +40,7 @@ const AssociateDashboard = () => {
       setUser(userDetails)
       setAssociate(associateDetails)
       console.log(associateDetails.id)
-      scheduledDates(associateDetails.id)
+      // scheduledDates(associateDetails.id)
 
 
     }
@@ -62,20 +62,20 @@ const AssociateDashboard = () => {
   console.log(actual, "utc date")
 
 
-  const scheduledDates = async (associateId) => {
-    try {
+  // const scheduledDates = async (associateId) => {
+  //   try {
 
-      const res = await axios.get(`${BASE_URL}/booking/slot/?associate_id=${associateId}`)
-      if (res.data) {
-        setAvailabilityData(res.data)
-        toast.success("availibility get data of slot")
-      }
-    } catch (error) {
-      toast.error("found error")
-    }
-  }
+  //     const res = await axios.get(`${BASE_URL}/booking/slot/?associate_id=${associateId}`)
+  //     if (res.data) {
+  //       setAvailabilityData(res.data)
+  //       toast.success("availibility get data of slot")
+  //     }
+  //   } catch (error) {
+  //     toast.error("found error")
+  //   }
+  // }
 
-  console.log(availabilityData, "full data")
+  // console.log(availabilityData, "full data")
   const handleSubmit = async () => {
     let values = {
       associate: associate.id,
@@ -121,7 +121,6 @@ const AssociateDashboard = () => {
 
   return (
     <div className='bg-brown-200 flex h-full'>
-
       <div>
         <SideBarAssociate />
       </div>
@@ -204,7 +203,7 @@ const AssociateDashboard = () => {
               </div>
             </CardBody>
           </Card>
-          <Card className='mx-10 mb-10'>
+          {/* <Card className='mx-10 mb-10'>
             <div className='m-5'>
               <Typography variant='h2' className='mb-5'>
                 Scheduled Dates
@@ -228,26 +227,10 @@ const AssociateDashboard = () => {
 
               </div>
             </div>
-          </Card>
+          </Card> */}
         </div>
       </div>
-      <Dialog open={open} handler={handleOpen}>
-        <DialogHeader>Are sure You want to delete this slot</DialogHeader>
-
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="blue"
-            onClick={handleOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="red" onClick={handleOpen}>
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
+      
     </div>
 
   )

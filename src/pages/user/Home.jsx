@@ -44,8 +44,6 @@ export default function Home() {
         navigate('/secured/associate-list')
     }
 
-
-
     const headStyle = {
         fontFamily: 'Oswald'
     }
@@ -55,7 +53,9 @@ export default function Home() {
     }
     return (
         <>
-            <Header />
+            <div className='shadow-md'>
+                <Header />
+            </div>
             <img className='w-full' src={homeCover} alt="home cover" />
             <div className='flex justify-center md:mt-5 sm:mt-1' >
                 <p className='md:text-4xl sm:text-md font-serif font-semibold text-blue-900' style={headStyle}>WELCOME &nbsp; TO &nbsp;  HEALTH &nbsp; CARE &nbsp; SOLUTIONS &nbsp; WE &nbsp; CARE &nbsp; FOR &nbsp; YOUR &nbsp;HEALTH</p>
@@ -109,7 +109,6 @@ export default function Home() {
                     <p>Address:{address}</p>
                 </div>
             )}
-
             <Footer />
 
         </>

@@ -299,8 +299,10 @@ export default function SignIn() {
     return (
         <>
 
-            <div style={imageStyle} className='p-3'>
-                <Header />
+            <div style={imageStyle}>
+                <div className='shadow-md'>
+                    <Header />
+                </div>
                 <Card className="my-20 py-4 max-w-md mx-10  rounded-xl p-5" color='transparent' style={divStyle}>
                     <Typography className='text-center font-mono p-4' variant="h3" color="teal" style={dialogFont}>Log In</Typography>
                     <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>

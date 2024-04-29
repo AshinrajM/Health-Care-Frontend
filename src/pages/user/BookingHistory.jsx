@@ -42,25 +42,32 @@ const BookingHistory = () => {
     return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
   };
 
+  const style = {
+    fontFamily: "Platypi"
+  }
+
+
   console.log(user, "details")
   console.log(bookings, 'booking datas')
 
   return (
     <div className=''>
-      <Header />
-      <div className='mx-48 mb-16'>
+      <div className='shadow-md'>
+        <Header />
+      </div>
+      <div className='mx-48 mb-2'>
         {bookings && bookings.map(booking => (
-          <Card key={booking.id} className="w-auto mt-12 bg-blue-50">
+          <Card key={booking.id} className="w-auto mt-8 bg-blue-50" >
             <CardBody>
-              <div className='flex justify-between mx-5'>
-                <Typography variant="h5" color="blue-gray" className="mb-2 ">
-                  Associate Name : {booking.associate.name}
+              <div className='flex justify-end '>
+                <Typography variant="h5" color="blue-gray" className="mb-2" style={style}>
+                  Associate : {booking.associate.name}
                 </Typography>
               </div>
               <div className='flex justify-between'>
-                <div className='mx-5'>
+                <div className=''>
                   <div className='space-y-2 text-black'>
-                    <div className='flex justify-between gap-8'>
+                    <div className='flex justify-between '>
                       <Typography variant='paragraph'>
                         Booking ID
                       </Typography>
@@ -68,7 +75,7 @@ const BookingHistory = () => {
                         {booking.booking_id}
                       </Typography>
                     </div>
-                    <div className='flex justify-between gap-8'>
+                    <div className='flex justify-between '>
                       <Typography variant='paragraph'>
                         Date
                       </Typography>
@@ -76,7 +83,7 @@ const BookingHistory = () => {
                         {formatDate(booking.date)}
                       </Typography>
                     </div>
-                    <div className='flex justify-between gap-8'>
+                    <div className='flex justify-between gap-20'>
                       <Typography variant='paragraph'>
                         Time slot
                       </Typography>
@@ -94,10 +101,10 @@ const BookingHistory = () => {
                     </div>
                   </div>
                 </div>
-                <div className='flex justify-end'>
-                  <div className='mx-5'>
+                <div className='flex justify-end '>
+                  <div className='mt-3'>
                     <div className='flex justify-end items-center gap-2'>
-                      <Typography variant="small" color="blue-gray" className="mb-2 ">
+                      <Typography variant="small" color="blue-gray" className="mb-1">
                         110 reviews,good
                       </Typography>
                       <Typography className='flex items-center gap-1 text-black text-sm mb-2 '>
@@ -108,13 +115,13 @@ const BookingHistory = () => {
                       </Typography>
                     </div>
                     <div className='flex justify-end'>
-                      <Typography className='mb-1 mt-8' variant='paragraph' color='black'>
-                        status : confirmed
+                      <Typography className='mb-1 mt-4' variant='paragraph' color={booking.status === 'confirmed' ? 'blue' : booking.status === 'completed' ? 'green' : 'red'}>
+                        Booking {booking.status}
                       </Typography>
                     </div>
-                    <div className='flex gap-3'>
-                      <Button color='green' size='sm' className='rounded-xl text-xs px-7'>Message</Button>
-                      <Button color='indigo' size='sm' className='rounded-xl text-xs px-4'>Booking Details</Button>
+                    <div className='flex gap-10 mt-4'>
+                      <Button color='green' size='sm' className='rounded-md text-xs px-7'>Message</Button>
+                      <Button color='indigo' size='sm' className='rounded-md text-xs px-4'>Booking Details</Button>
                     </div>
                   </div>
                 </div>
