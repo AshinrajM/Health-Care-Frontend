@@ -37,12 +37,14 @@ export default function SideBar() {
                     </Typography>
                 </div>
                 <List>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <PresentationChartBarIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Dashboard
-                    </ListItem>
+                    <Link to='/admin/entry/dashboard'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <PresentationChartBarIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Dashboard
+                        </ListItem>
+                    </Link>
                     <ListItem>
                         <ListItemPrefix>
                             <ShoppingBagIcon className="h-5 w-5" />
@@ -65,12 +67,6 @@ export default function SideBar() {
                             Associates
                         </ListItem>
                     </Link>
-                    {/* <ListItem>
-                        <ListItemPrefix>
-                            <BriefcaseIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Associates
-                    </ListItem> */}
                     <ListItem>
                         <ListItemPrefix>
                             <PhotoIcon className="h-5 w-5" />

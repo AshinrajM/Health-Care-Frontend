@@ -20,6 +20,7 @@ const userSlice = createSlice({
       localStorage.removeItem('userAccess')
       localStorage.removeItem('userRefresh')
       localStorage.removeItem('userDetails')
+      localStorage.removeItem('bookingDetail')
     },
     loginAdmin(state) {
       state.adminAuthenticated = true;

@@ -23,10 +23,12 @@ const validate = values => {
     let errors = {}
 
     if (!values.email) {
-        email.errors = "required"
+        // email.errors = "required"
+        errors.email = "required"
     }
     if (!values.password) {
-        password.errors = "required"
+        // password.errors = "required"
+        errors.password = "required"
     }
     return errors
 
@@ -66,7 +68,7 @@ export default function AssociateLogin() {
                 localStorage.setItem("user", JSON.stringify(user));
                 localStorage.setItem("associate", JSON.stringify(associate));
                 dispatch(loginAssociate())
-                navigate('/associates/check/dashboard')
+                navigate('/associates/check/associate-dashboard')
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {

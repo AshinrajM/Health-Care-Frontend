@@ -15,10 +15,15 @@ const Schedule = () => {
     const [open, setOpen] = useState(false);
 
 
+
+
     const handleOpen = () => {
 
         setOpen(!open);
     }
+
+    // const TABLE_HEAD = ['', "Booking Id", "Username", "Date", "Shift", "Location", 'status'];
+
 
     const scheduledDates = async (associateId) => {
         try {
@@ -58,9 +63,9 @@ const Schedule = () => {
                         <Typography variant='h2' className='mb-5'>
                             Scheduled Dates
                         </Typography>
-                        <div className='w-auto'>
+                        <div className='grid grid-cols-2 gap-5'>
                             {availabilityData.map((item, index) => (
-                                <Card key={item} className=' p-5 bg-gray-500 mb-2'>
+                                <Card key={item} className=' p-5 bg-gray-50 mb-2'>
                                     <div className='flex justify-between '>
                                         <div>
                                             <Typography variant='h6' color='black'>Date &nbsp; : {item.date}</Typography>

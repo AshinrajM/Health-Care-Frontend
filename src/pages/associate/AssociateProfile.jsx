@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import SideBarAssociate from '../../components/sideBarAssociate/sideBarAssociate'
+import React, { useState, useEffect } from 'react';
+import SideBarAssociate from '../../components/SideBarAssociate/SideBarAssociate';
 import { Card, CardHeader, CardBody, CardFooter, Typography, Button, Input, Dialog, DialogFooter } from "@material-tailwind/react";
 import homeCover from '../../assets/profile/user.jpg';
 import { FaUserEdit } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const AssociateProfile = () => {
+
 
 
     const [user, setUser] = useState(null)
