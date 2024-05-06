@@ -7,12 +7,11 @@ const Input = () => {
                 <input
                     type="text"
                     placeholder="Type a message..."
-                    className="flex-grow px-4 py-2 rounded-l-md border-r border-gray-300 focus:outline-none"
+                    className="flex-grow px-4 py-2 rounded-l-md  focus:outline-none"
                 />
                 <button
                     type="submit"
-                    className="px-4 py-2 rounded-r-md bg-blue-500 text-white"
-                >
+                    className="px-5 py-3 ml-2 rounded-md bg-blue-500 text-white">
                     Send
                 </button>
             </form>
