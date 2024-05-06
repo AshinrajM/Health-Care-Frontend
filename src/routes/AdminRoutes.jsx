@@ -5,6 +5,7 @@ import PrivateRouteAdmin from "../routes/PrivateRoutes/PrivateRouteAdmin"
 import AdminUsers from "../pages/admin/AdminUsers"
 import AdminAssociates from "../pages/admin/AdminAssociates"
 import AddAssociates from "../pages/admin/AddAssociates"
+import BookingsList from "../pages/admin/BookingsList"
 
 
 export default function AdminRoutes() {
@@ -17,6 +18,7 @@ export default function AdminRoutes() {
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="associates" element={<AdminAssociates />} />
                 <Route path="add-associates" element={<AddAssociates />} />
+                <Route path="bookings-list" element={<BookingsList />} />
             </Route>
         </Routes>
     )

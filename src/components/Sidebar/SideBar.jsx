@@ -45,12 +45,14 @@ export default function SideBar() {
                             Dashboard
                         </ListItem>
                     </Link>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <ShoppingBagIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Bookings
-                    </ListItem>
+                    <Link to='/admin/entry/bookings-list'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <ShoppingBagIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Bookings
+                        </ListItem>
+                    </Link>
                     <Link to='/admin/entry/users'>
                         <ListItem>
                             <ListItemPrefix>

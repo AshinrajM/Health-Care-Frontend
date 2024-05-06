@@ -85,11 +85,7 @@ export default function AdminUsers() {
                                     ))
                                 }
                             </tbody>
-
-
                         </table>
-
-
                     </div>
                 </Card>
 
