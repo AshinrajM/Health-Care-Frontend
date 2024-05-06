@@ -8,7 +8,7 @@ import axios from 'axios'
 
 const getBookings = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/booking/associate-booking`);
+        const response = await axios.get(`${BASE_URL}/booking/bookings-list`);
         console.log(response.data, "data"); // Log the data received
         return response.data;
     } catch (error) {
