@@ -8,9 +8,12 @@ import axios from 'axios'
 
 const getBookings = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/booking/bookings-list`);
+        const response = await axios.get(`${BASE_URL}/booking/booking-list/`);
+        // if (response.data && response.data.length > 0) {
+
         console.log(response.data, "data"); // Log the data received
         return response.data;
+
     } catch (error) {
         console.error("Error fetching bookings:", error); // Log the error
         throw error;
@@ -26,6 +29,19 @@ const BookingsList = () => {
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>An error has occurred: {error.message}</div>;
+    if (!data || data.length === 0) {
+        return (
+            <div className='bg-blue-gray-500 flex flex-col lg:flex-row'>
+                <div className='lg:w-64 flex-none'>
+                    <SideBar />
+                </div>
+                <div className='flex-1 justify-center mx-16 mt-10'>
+                    <Typography variant='h2' color='white' className='flex justify-center mb-6'>No Bookings Yet</Typography>
+                </div>
+            </div>
+
+        )
+    }
 
     return (
         <div className='bg-blue-gray-500 flex flex-col lg:flex-row'>
@@ -58,9 +74,9 @@ const BookingsList = () => {
                                         <td className='p-2 ' style={{ 'textAlign': 'center' }}>{booking.user_email.split('@')[0]}</td> {/* Assuming 'user' property exists */}
                                         <td className='p-2' style={{ 'textAlign': 'center' }}>{booking.amount_paid}</td> {/* Corrected property name */}
                                         <td className='p-2 ' style={{ 'textAlign': 'center' }}>{new Date(booking.date).toLocaleDateString('en-GB')}</td>
-                                        <td className='p-2'style={{ 'textAlign': 'center' }}>{booking.shift}</td> {/* Assuming 'shift' property exists */}
-                                        <td className='p-2 'style={{ 'textAlign': 'center' }}>{booking.associate_name}</td> {/* Assuming 'associate_name' property exists */}
-                                        <td className='p-2 'style={{ 'textAlign': 'center' }}>{booking.status}</td>
+                                        <td className='p-2' style={{ 'textAlign': 'center' }}>{booking.shift}</td> {/* Assuming 'shift' property exists */}
+                                        <td className='p-2 ' style={{ 'textAlign': 'center' }}>{booking.associate_name}</td> {/* Assuming 'associate_name' property exists */}
+                                        <td className='p-2 ' style={{ 'textAlign': 'center' }}>{booking.status}</td>
                                     </tr>
                                     // </div>
                                 ))}
