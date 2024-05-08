@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Typography, useAccordion } from "@material-tailwind/react";
+import { Button, Card, Typography, useAccordion } from "@material-tailwind/react";
 import SideBarAssociate from '../../components/SideBarAssociate/SideBarAssociate';
 import axios from 'axios';
 import { BASE_URL } from '../../api/api';
+import outlined from '@material-tailwind/react/theme/components/timeline/timelineIconColors/outlined';
+import { useNavigate } from 'react-router-dom';
 
 const Bookings = () => {
 
     const [bookings, setBookings] = useState(null)
     const [noBooking, setNoBooking] = useState(false)
 
-    const TABLE_HEAD = ['', "Booking Id", "Username", "Date", "Shift", "Location", 'status'];
+    const navigate = useNavigate()
+
+    const TABLE_HEAD = ['', "Booking Id", "Username", "Date", "Shift", "Chat", 'status'];
 
     const getBookings = async (Id) => {
         console.log("object", Id)
@@ -37,13 +41,18 @@ const Bookings = () => {
 
     }, [])
 
+    const sendMessage = (chatperson) => {
+        console.log(chatperson.id, "user id")
+        navigate('/associates/check/associate-chat')
+    }
+
     return (
         <div className='bg-brown-200 w-full flex h-screen'>
             <div className=''>
                 <SideBarAssociate />
             </div>
             {noBooking ? (
-                <div className='pl-64 w-full justify-center mx-5 mt-5 flex justify-center'>
+                <div className='pl-64 w-full justify-center mx-5 mt-5 flex '>
                     <Typography variant='h2' color='black' className='mt-7 mb-5'>No BOOKINGS Yet</Typography>
                 </div>
             ) : (
@@ -73,7 +82,7 @@ const Bookings = () => {
                                 </tr>
                             </thead>
                             <tbody className='bg-white'>
-                                {bookings && bookings.map(({ user_email, status, date, shift, location, booking_id }, index) => {
+                                {bookings && bookings.map(({ user_email, status, date, shift, user, booking_id }, index) => {
                                     const isLast = index === bookings.length - 1;
                                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
                                     const nameBeforeAt = user_email.split('@')[0];
@@ -133,7 +142,9 @@ const Bookings = () => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {location}
+                                                    {/* {location} */}
+                                                    <Button color='green' size='sm' variant={outlined}
+                                                        onClick={(e) => sendMessage({ id: user, role: 'user' })}>message</Button>
                                                 </Typography>
                                             </td>
 

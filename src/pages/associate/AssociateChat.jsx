@@ -1,20 +1,15 @@
-import React from 'react'
-import Input from "../../components/Chat/Input";
-import Message from '../../components/Chat/Message';
-import ChatHead from '../../components/Chat/ChatHead';
-import PrevChatBar from '../../components/Chat/PrevChatBar';
+import React, { useEffect } from 'react'
+import Chat from '../../components/Chat/Chat'
 
-const AssociateChat = () => {
+const AssociateChat = (chatperson) => {
+
+    useEffect(() => { 
+        console.log("object")
+    })
+
     return (
         <>
-            <div className="flex h-screen">
-                <PrevChatBar />
-                <div className="w-3/4 flex flex-col overflow-hidden">
-                    <ChatHead />
-                    <Message />
-                    <Input />
-                </div>
-            </div>
+            <Chat chatperson={chatperson} />
         </>
     )
 }

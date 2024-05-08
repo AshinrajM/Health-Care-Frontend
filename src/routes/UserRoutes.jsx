@@ -9,7 +9,7 @@ import BookingFinal from '../pages/user/BookingFinal'
 import BookingSuccess from '../pages/user/BookingSuccess'
 import BookingFailed from '../pages/user/BookingFailed'
 import BookingHistory from '../pages/user/BookingHistory'
-import Chat from '../pages/user/Chat'
+import UserChat from '../pages/user/UserChat'
 
 
 export default function UserRoutes() {
@@ -25,7 +25,7 @@ export default function UserRoutes() {
         <Route path='success' element={< BookingSuccess />} />
         <Route path='failed' element={< BookingFailed />} />
         <Route path='bookings' element={< BookingHistory />} />
-        <Route path='chat' element={< Chat />} />
+        <Route path='chat' element={< UserChat />} />
       </Route>
     </Routes>
   )

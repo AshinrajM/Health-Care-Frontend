@@ -6,6 +6,7 @@ import PrivateRouteAssociate from '../routes/PrivateRoutes/PrivateRouteAssociate
 import AssociateProfile from '../pages/associate/AssociateProfile'
 import Schedule from '../pages/associate/Schedule'
 import Bookings from '../pages/associate/Bookings'
+import AssociateChat from '../pages/associate/AssociateChat'
 
 export default function AssociateRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AssociateRoutes() {
         < Route path='associate-profile' element={< AssociateProfile />} />
         < Route path='associate-schedules' element={< Schedule />} />
         < Route path='associate-bookings' element={< Bookings />} />
+        < Route path='associate-chat' element={< AssociateChat />} />
       </Route>
     </Routes >
   )

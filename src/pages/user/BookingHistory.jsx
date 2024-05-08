@@ -11,12 +11,15 @@ import Footer from '../../components/Footer/Footer';
 import { BASE_URL } from '../../api/api';
 import axios from 'axios';
 import backgroundImage from '../../assets/background/3.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const BookingHistory = () => {
 
   const [user, setUser] = useState()
   const [bookings, setBookings] = useState(null)
   const [noBookings, setNoBookings] = useState(false)
+
+  const navigate = useNavigate()
 
 
   const getBookings = async (userId) => {
@@ -46,6 +49,11 @@ const BookingHistory = () => {
     return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
   };
 
+  const sendMessage = (chatperson) => {
+    console.log(chatperson, "show")
+    navigate('/secured/chat')
+  }
+
   const style = {
     fontFamily: "Platypi"
   }
@@ -65,8 +73,8 @@ const BookingHistory = () => {
         </div>
         {noBookings && (
           <div className='absolute bottom-32 left-1/2 transform -translate-x-1/2 flex justify-center items-center'>
-          <p className='text-teal-800 text-center text-2xl tracking-widest' style={style}>Start booking for your Loved One's</p>
-        </div>
+            <p className='text-teal-800 text-center text-2xl tracking-widest' style={style}>Start booking for your Loved One's</p>
+          </div>
         )}
         <div><Footer /></div>
 
@@ -146,7 +154,8 @@ const BookingHistory = () => {
                       </div>
                     </div>
                     <div className='flex gap-2 mt-4 justify-end'>
-                      <Button color='green' size='sm' className='rounded-md text-xs px-7'>Message</Button>
+                      <Button color='green' size='sm' className='rounded-md text-xs px-7'
+                        onClick={() => sendMessage({ id: booking.associate.id, role: 'associate' })}>Message</Button>
                       <Button color='indigo' size='sm' className='rounded-md text-xs px-4'>Booking Details</Button>
                     </div>
                   </div>
