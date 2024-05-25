@@ -47,7 +47,7 @@ const validate = values => {
     // } else if (values.password !== values.confirm_password) {
     //     errors.confirm_password = "Password didn't match"
     // }
-    return errors
+    // return errors
 }
 
 export default function SignUp() {

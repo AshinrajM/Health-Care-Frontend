@@ -11,7 +11,6 @@ import 'react-calendar/dist/Calendar.css';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from "@stripe/stripe-js/pure";
 import { VITE_APP_STRIPE_KEY } from '../src/Config/config.jsx'
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 

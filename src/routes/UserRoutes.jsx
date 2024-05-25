@@ -25,6 +25,7 @@ export default function UserRoutes() {
         <Route path='success' element={< BookingSuccess />} />
         <Route path='failed' element={< BookingFailed />} />
         <Route path='bookings' element={< BookingHistory />} />
+        {/* <Route path='chat/:id/:role' element={< UserChat />} /> */}
         <Route path='chat' element={< UserChat />} />
       </Route>
     </Routes>

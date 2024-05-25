@@ -21,7 +21,6 @@ const AssociateDashboard = () => {
   const [morningShift, setMorningShift] = useState(false);
   const [noonShift, setNoonShift] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  // const [availabilityData, setAvailabilityData] = useState([]);
   const [slot, setSlot] = useState('')
   const [open, setOpen] = useState(false);
 
@@ -31,6 +30,8 @@ const AssociateDashboard = () => {
 
     setOpen(!open);
   }
+
+
   useEffect(() => {
     const userdata = localStorage.getItem('user')
     const associatedata = localStorage.getItem('associate')
@@ -41,10 +42,27 @@ const AssociateDashboard = () => {
       setAssociate(associateDetails)
       console.log(associateDetails.id)
       // scheduledDates(associateDetails.id)
-
-
+      getAssociateUser()
     }
   }, [])
+
+  // to get latest associateuser datas
+  const getAssociateUser = async () => {
+
+    const userdata = JSON.parse(localStorage.getItem('user'))
+
+    const associateUserId = userdata.id
+    try {
+      const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
+      if (response.status === 200) {
+        console.log(response.data, 'latest associate user data')
+        setUser(response.data)
+      }
+    } catch (error) {
+      console.log("error found", error)
+    }
+  }
+
   console.log(selectedDate)
 
   const today = new Date()
@@ -76,6 +94,8 @@ const AssociateDashboard = () => {
   // }
 
   // console.log(availabilityData, "full data")
+
+
   const handleSubmit = async () => {
     let values = {
       associate: associate.id,
@@ -148,7 +168,7 @@ const AssociateDashboard = () => {
               <Card className="">
                 <CardBody className='flex items-center'>
                   <CiWallet className='h-12 w-12 text-black' />
-                  <Typography variant='h4' color='black'> &nbsp; $53435</Typography>
+                  <Typography variant='h4' color='black'> &nbsp; ₹{user?.wallet}</Typography>
                 </CardBody>
               </Card>
             </div>
@@ -230,7 +250,7 @@ const AssociateDashboard = () => {
           </Card> */}
         </div>
       </div>
-      
+
     </div>
 
   )

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Card,
-  CardBody,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
+import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
+
 import { FaStar } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
@@ -13,13 +9,26 @@ import axios from 'axios';
 import backgroundImage from '../../assets/background/3.jpg'
 import { useNavigate } from 'react-router-dom';
 
+
+
+
 const BookingHistory = () => {
+
+
+
+
+  const [open1, setOpen1] = useState(0);
+
+  const handleOpen1 = (value) => setOpen1(open1 === value ? 0 : value);
+
 
   const [user, setUser] = useState()
   const [bookings, setBookings] = useState(null)
   const [noBookings, setNoBookings] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const navigate = useNavigate()
+  const handleOpen = () => setOpen(!open);
 
 
   const getBookings = async (userId) => {
@@ -49,9 +58,33 @@ const BookingHistory = () => {
     return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
   };
 
-  const sendMessage = (chatperson) => {
-    console.log(chatperson, "show")
-    navigate('/secured/chat')
+  const sendMessage = (id, role) => {
+    console.log(id, role, "hey check")
+    const url = `/secured/chat?id=${id}&role=${role}`;
+    navigate(url);
+  };
+
+
+  const handleBookingCancel = async (booking_id) => {
+    const bookingId = booking_id
+    const userId = user.id
+    const values = {
+      bookingId: bookingId,
+      userId: userId
+    }
+    try {
+      const response = await axios.patch(`${BASE_URL}/booking/cancel-booking/`, values)
+      if (response.status === 200) {
+        console.log(response.data, "received response")
+        setOpen(!open)
+
+      }
+    } catch (error) {
+      console.log("error found", error);
+      setOpen(!open)
+
+    }
+
   }
 
   const style = {
@@ -88,6 +121,32 @@ const BookingHistory = () => {
         <div className='shadow-md'>
           <Header />
         </div>
+
+
+        <>
+          <div className='mx-4 sm:mx-8 md:mx-12 lg:mx-24 xl:mx-48 mb-2'>
+            {bookings && bookings.map(booking => (
+              <Accordion open={open1 === 1} className="mb-2 rounded-lg bg-blue-gray-700 border border-blue-gray-600 px-4">
+                <AccordionHeader
+                  onClick={() => handleOpen1(1)}
+                  className={`border-b-0 transition-colors ${open1 === 1 ? "text-white hover:!text-white" : "text-white"
+                    }`}
+                >
+                  What is Material Tailwind?
+                </AccordionHeader>
+                <AccordionBody className="pt-0 text-base font-normal text-white">
+                  We&apos;re not always in the position that we want to be at. We&apos;re constantly
+                  growing. We&apos;re constantly making mistakes. We&apos;re constantly trying to express
+                  ourselves and actualize our dreams.
+                </AccordionBody>
+              </Accordion>
+            ))}
+          </div>
+        </>
+
+
+
+
         <div className='mx-4 sm:mx-8 md:mx-12 lg:mx-24 xl:mx-48 mb-2'>
           {bookings && bookings.map(booking => (
             <Card key={booking.id} className="w-full sm:w-auto mt-8 bg-blue-50">
@@ -148,14 +207,21 @@ const BookingHistory = () => {
                         </Typography>
                       </div>
                       <div className='flex justify-end'>
-                        <Typography className='mb-1 mt-4' variant='paragraph' color={booking.status === 'confirmed' ? 'blue' : booking.status === 'completed' ? 'green' : 'red'}>
+                        <Typography className='mb-1 mt-4' variant='paragraph'
+                          color={booking.status === 'confirmed' ? 'blue' : booking.status === 'completed' ? 'green' : 'red'}>
                           Booking {booking.status}
                         </Typography>
                       </div>
                     </div>
                     <div className='flex gap-2 mt-4 justify-end'>
-                      <Button color='green' size='sm' className='rounded-md text-xs px-7'
-                        onClick={() => sendMessage({ id: booking.associate.id, role: 'associate' })}>Message</Button>
+                      {booking.status === 'confirmed' ? (
+                        <>
+                          <Button color='green' size='sm' className='rounded-md text-xs px-7'
+                            onClick={() => sendMessage(booking.associate.user, 'associate')}>Message</Button>
+                          <Button color='red' variant='gradient' size='sm' className='rounded-md
+                           text-xs px-7' onClick={handleOpen}>Cancel Booking</Button>
+                        </>
+                      ) : (null)}
                       <Button color='indigo' size='sm' className='rounded-md text-xs px-4'>Booking Details</Button>
                     </div>
                   </div>
@@ -164,6 +230,33 @@ const BookingHistory = () => {
             </Card>
           ))}
         </div>
+        {bookings && bookings.map(booking => (
+          <>
+            <Dialog open={open}>
+              <DialogHeader>Are sure on Cancelling this Order</DialogHeader>
+              <DialogBody>
+
+                Twenty five years of
+                blood sweat and tears, and I&apos;m never giving up, I&apos;m just
+                getting started. I&apos;m up to something. Fan luv. <br />
+                <p className='mt-10'>nb: 10% of the booking amount will be deducted</p>
+              </DialogBody>
+              <DialogFooter>
+                <Button
+                  variant="text"
+                  color="red"
+                  onClick={handleOpen}
+                  className="mr-1"
+                >
+                  <span>Cancel</span>
+                </Button>
+                <Button variant="gradient" color="green" onClick={() => handleBookingCancel(booking.booking_id)}>
+                  <span>Confirm </span>
+                </Button>
+              </DialogFooter>
+            </Dialog>
+          </>
+        ))}
         <div className='mt-24'>
           <Footer />
         </div>

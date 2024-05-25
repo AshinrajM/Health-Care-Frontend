@@ -9,7 +9,7 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { BASE_URL } from '../../api/api';
 
 
 const Profile = () => {
@@ -34,11 +34,27 @@ const Profile = () => {
             setDob(userDetails.date_of_birth);
             setLocation(userDetails.location);
         }
-        // if (userDetails.profile_picture) {
-        //     setProfilePicture(userDetails.profile_picture)
-        // }
+
+        getUser()
+
     }, [])
     // console.log(user, "check")
+
+    const getUser = async () => {
+        const userdata = JSON.parse(localStorage.getItem('userDetails'))
+        const associateUserId = userdata.id
+        try {
+            const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
+            if (response.status === 200) {
+                console.log(response.data, 'latest associate user data')
+                setUser(response.data)
+            }
+        } catch (error) {
+            console.log("error found", error)
+        }
+
+    }
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -122,9 +138,9 @@ const Profile = () => {
                             <Typography variant="h4" color="blue-gray" className="mb-4">
                                 {user.email}
                             </Typography>
-                            <Typography color="gray" className="mb-8 font-normal">
+                            {/* <Typography color="gray" className="mb-8 font-normal">
                                 date of birth : {user.date_of_birth}
-                            </Typography>
+                            </Typography> */}
                             <Typography color="gray" className="mb-8 font-normal">
                                 Location : {user.location}
                             </Typography>

@@ -3,17 +3,36 @@ import { IoExitOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { VscHome } from 'react-icons/vsc';
 
-const PrevChatBar = () => {
+const PrevChatBar = (props) => {
 
     const navigate = useNavigate()
 
+    const { chatperson } = props;
+
+
+    console.log(chatperson, "show chat per")
+
+
     const exit = () => {
-        navigate('/secured/bookings')
+        if (chatperson.role === 'associate') {
+
+            navigate('/secured/bookings')
+        } else {
+            navigate('/associates/check/associate-bookings')
+        }
     }
 
     const home = () => {
-        navigate('/')
+
+        if (chatperson.role === 'associate') {
+
+            navigate('/')
+        } else {
+            navigate('/associates/check/associate-dashboard')
+        }
     }
+
+
 
     return (
         <div className="w-1/5 bg-blue-gray-50">
@@ -29,3 +48,5 @@ const PrevChatBar = () => {
 }
 
 export default PrevChatBar
+
+
