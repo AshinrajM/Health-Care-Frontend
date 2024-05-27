@@ -5,11 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { useFormik } from 'formik';
 import { loginUser } from '../../redux/userSlice';
 import { jwtDecode } from 'jwt-decode';
 import { BASE_URL } from "../../api/api";
 import axios from 'axios';
+import Skeleton from 'react-loading-skeleton';
 import bg from '../../assets/background/cover.jpg'
 
 
@@ -32,9 +34,13 @@ const validate = values => {
 
     if (!values.email) {
         errors.email = "Can't be empty";
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(values.email)) {
+        errors.email = 'Invalid email format'
     }
     if (!values.password) {
         errors.password = "Can't be empty";
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i.test(values.password)) {
+        errors.password = 'Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one digit, and one special character.'
     }
 
     return errors;
@@ -54,6 +60,11 @@ export default function SignIn() {
     const [password, setPassword] = useState('')
     const [tempId, setTempId] = useState()
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true);
+    const [otpError, setOtpError] = useState('');
+    const [passError, setPassError] = useState('');
+
 
 
     const handleOpen = () => setOpen(!open);
@@ -69,13 +80,24 @@ export default function SignIn() {
         setPassword('');
         setTempId('');
         setConfirmPassword('');
+        setOtpError('')
+        setErrorMessage('')
+        setPassError('')
     };
+
+    useEffect(() => {
+        setTimeout(() => {
+            setPageLoading(false);
+        }, 300); // Simulate loading delay
+    }, []);
 
     // reset-password mail validation
     const handleSendResetEmail = async () => {
         console.log(resetEmail)
+        setButtonLoading(true)
         try {
             const response = await axios.post(`${BASE_URL}/users/reset-password-validate`, { email: resetEmail })
+            setButtonLoading(false)
             if (response.status === 200) {
                 setShowOtpField(!showOtpField)
                 setTempId(response.data.temp_id)
@@ -83,6 +105,7 @@ export default function SignIn() {
                 toast.error('Failed to send reset email. Please try again.');
             }
         } catch (error) {
+            setButtonLoading(false)
             console.error('Error sending reset email:', error);
             handleOpen()
             if (error.response) {
@@ -97,6 +120,7 @@ export default function SignIn() {
 
     // verify the user for reset the password
     const verifyOtp = async () => {
+        setButtonLoading(true)
         try {
             let values = {
                 tempId: tempId,
@@ -104,24 +128,40 @@ export default function SignIn() {
             }
             const response = await axios.post(`${BASE_URL}/users/reset-verify-otp`, values)
             if (response.status === 200) {
+                setButtonLoading(false)
+
                 setShowPasswordFields(true)
                 setShowOtpField(false)
             }
         } catch (error) {
+            setButtonLoading(false)
             if (error.response) {
                 // If the error has a response from the server
                 const errorMessage = error.response.data.message || 'An error occurred. Please try again later.';
-                toast.error(errorMessage);
+                setOtpError(errorMessage)
+                // toast.error(errorMessage);
             } else {
-                // If there's no response from the server, it might be a network error
-                toast.error('Network error. Please try again later.');
+                // toast.error('Network error. Please try again later.');
+                setOtpError('Network error. Please try again later.');
             }
         }
     }
 
     // reset password update
     const handlePasswordUpdate = async () => {
+        setButtonLoading(true)
+        setPassError('')
+        if (password !== confirmPassword) {
+            setPassError('Passwords do not match...Please check your passwords properly and try again to update the password...');
+            setButtonLoading(false)
 
+            return;
+        }
+        if (!passwordRegex.test(password)) {
+            setPassError('Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one digit, and one special character.');
+            setButtonLoading(false)
+            return;
+        }
         let values = {
             tempId: tempId,
             password: password
@@ -129,17 +169,21 @@ export default function SignIn() {
         try {
             const response = await axios.patch(`${BASE_URL}/users/reset-password-validate`, values)
             if (response.status === 200) {
+                setButtonLoading(false)
                 setOpen(!open)
                 toast.success(response.data.message || 'Password updated successfully');
             }
         } catch (error) {
+            setButtonLoading(false)
             if (error.response) {
                 // If the error has a response from the server
                 const errorMessage = error.response.data.message || 'An error occurred. Please try again later.';
-                toast.error(errorMessage);
+                // toast.error(errorMessage);
+                setErrorMessage(errorMessage)
             } else {
                 // If there's no response from the server, it might be a network error
-                toast.error('Network error. Please try again later.');
+                // toast.error('Network error. Please try again later.');
+                set('Network error. Please try again later.');
             }
         }
     }
@@ -148,6 +192,12 @@ export default function SignIn() {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     };
+    const isValidOtp = (otp) => {
+        return /^\d{6}$/.test(otp);
+    };
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 
 
     // google button which return G-account datas
@@ -220,13 +270,16 @@ export default function SignIn() {
         }
     }
 
+    // sign in using inputs
     const onSubmit = async (values, actions) => {
         console.log('submitting form:', values);
+        setButtonLoading(true)
         try {
             const response = await axios.post(`${BASE_URL}/users/login`, values)
             console.log("Response:", response.data)
             if (response.data) {
                 console.log("arrived success")
+                setButtonLoading(false);
 
                 if (response.data.role === "user") {
                     const { access, refresh, user } = response.data;
@@ -239,17 +292,20 @@ export default function SignIn() {
                     toast.success('Logged in')
                     navigate('/')
                 } else {
+                    setButtonLoading(false);
                     toast.error("Only signed users can login")
                     actions.setErrors({ general: 'Only users are allowed to log in.' });
                 }
 
             } else {
+                setButtonLoading(false);
                 toast.error("Check credentials")
                 actions.setErrors({ general: 'Login failed. Please try again.' });
             }
 
         } catch (error) {
             console.log('Error', error)
+            setButtonLoading(false);
             // Check if the error has a response property, which means it's an HTTP error
             if (error.response) {
                 // Extract the custom error message from the response data
@@ -283,57 +339,71 @@ export default function SignIn() {
         backgroundImage: `url(${bg})`,
         backgroundSize: 'cover',
         minHeight: '100vh',
-
     };
 
     const dialogFont = {
         fontFamily: "Platypi"
     }
 
-
-
-
     console.log("first", resetEmail)
-
 
     return (
         <>
-
-            <div style={imageStyle}>
-                <div className='shadow-md'>
-                    <Header />
+            {pageLoading ? (
+                <div style={imageStyle}>
+                    <div className='shadow-md'>
+                        <Skeleton height={60} width="100%" />
+                    </div>
+                    <Card className="my-20 py-4 max-w-md mx-10 rounded-xl p-5" color='transparent' style={divStyle}>
+                        <Skeleton height={40} />
+                        <Skeleton height={20} count={2} style={{ marginTop: 20 }} />
+                        <Skeleton height={40} style={{ marginTop: 20 }} />
+                        <Skeleton height={40} style={{ marginTop: 20 }} />
+                        <Skeleton height={40} style={{ marginTop: 20 }} />
+                    </Card>
                 </div>
-                <Card className="my-20 py-4 max-w-md mx-10  rounded-xl p-5" color='transparent' style={divStyle}>
-                    <Typography className='text-center font-mono p-4' variant="h3" color="teal" style={dialogFont}>Log In</Typography>
-                    <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
+            ) : (
 
-                        <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" autoFocus />
-                        {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
-
-                        <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
-                        {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
-
-                        <Button className="bg-blue-500 mb-5" type='submit'>Login</Button>
-                        {/* <Button id='signinDiv' className='bg-transparent'></Button> */}
-
-                    </form>
-                    <div className="bg-white" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
-                        <div id='signinDiv' ></div>
+                <div style={imageStyle}>
+                    <div className='shadow-md'>
+                        <Header />
                     </div>
-                    <div className="flex items-center gap-1">
-                        <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
-                        <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" onClick={handleOpen}>Click here</Typography>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
-                        <Link to='/signup' >
-                            <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
-                        </Link>
-                    </div>
-                </Card>
-            </div>
+                    <Card className="my-20 py-4 max-w-md mx-10  rounded-xl p-5" color='transparent' style={divStyle}>
+                        <Typography className='text-center font-mono p-4' variant="h3" color="teal" style={dialogFont}>Log In</Typography>
+                        <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
 
-            <Dialog open={open} style={{ backdropFilter: 'blur(20px)', backgroundColor: 'rgba(255, 255, 255, .5)', fontFamily: "Platypi", }}>
+                            <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" autoFocus />
+                            {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
+
+                            <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
+                            {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
+
+                            {/* <Button className="bg-blue-500 mb-5" type='submit'>Login</Button> */}
+                            <div className='flex gap-2'>
+                                <Button className="bg-blue-500 mb-2 mt-2 w-full rounded-none" type="submit" disabled={buttonLoading}>
+                                    {buttonLoading ? <ClipLoader size={12} color={"#0000FF"} /> : 'Login'}
+                                </Button>
+
+                                <div className="" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                                    <div id='signinDiv' >googleSignin</div>
+                                </div>
+                            </div>
+                        </form>
+                        <div className="flex items-center gap-1">
+                            <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
+                            <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" onClick={handleOpen}>Click here</Typography>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
+                            <Link to='/signup' >
+                                <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
+                            </Link>
+                        </div>
+                    </Card>
+                </div>
+            )}
+
+            <Dialog open={open} >
                 <DialogHeader className='justify-center mb-5' style={dialogFont}>Forgot Your Password?</DialogHeader>
 
                 <div className='mx-5 mb-5'>
@@ -342,32 +412,39 @@ export default function SignIn() {
                             <Typography className='' variant='paragraph'>{resetEmail}</Typography>
                             <Typography className='' variant='paragraph'><MdOutlineVerifiedUser className='text-green-600 w-10 h-7' /></Typography>
                         </div>
-
                     ) : (
                         <DialogFooter className='space-y-4'>
                             <Input label='Enter your registered Email' variant='standard' type='email'
                                 onChange={(e) => setResetEmail(e.target.value)}
-                                className='text-headingColor text-xl' style={dialogFont} color='black' />
+                                className='text-headingColor text-xl' style={dialogFont} color='black' autoFocus />
                             <Button variant="text" color="red"
                                 onClick={resetState} className="mr-1">
                                 <span>cancel</span>
                             </Button>
                             <Button variant="gradient" color="green" onClick={handleSendResetEmail}
                                 disabled={!isValidEmail(resetEmail)}>
-                                <span style={{ fontSize: '10px' }}>Validate Email</span>
+                                {/* <span style={{ fontSize: '10px' }}>Validate Email</span> */}
+                                {buttonLoading ? <ClipLoader size={12} color={"green"} /> : 'verify Email'}
                             </Button>
                         </DialogFooter>
                     )}
                 </div>
                 <div className='mx-5 mb-5'>
                     {showOtpField ? (
-                        <DialogFooter className='space-y-4'>
-                            <Input variant='standard' label='otp' style={{ width: '250px', fontFamily: "Platypi" }} maxLength={6} minLength={0} onChange={(e) => { setOtp(e.target.value) }} />
-                            <Button variant="text" color="red"
-                                onClick={resetState} className="mr-1">
-                                <span>Cancel</span>
-                            </Button>
-                            <Button color='green' disabled={otp.length !== 6} onClick={verifyOtp}>Verify Otp</Button>
+                        <DialogFooter className='space-y-4 justify-between'>
+                            <div className='mb-5 space-y-5'>
+                                <Input variant='standard' label='otp' style={{ width: '250px', fontFamily: "Platypi" }} maxLength={6} minLength={0} onChange={(e) => { setOtp(e.target.value) }} autoFocus />
+                                {otpError && <p className='text-red-900 text-xs self-end'>{otpError}</p>}
+                            </div>
+                            <div className='mt-5 flex flex-col gap-2'>
+                                <Button variant="text" color="red"
+                                    onClick={resetState} className="mr-1">
+                                    <span>Cancel</span>
+                                </Button>
+                                <Button color='green' disabled={!isValidOtp(otp)} onClick={verifyOtp}>
+                                    {buttonLoading ? <ClipLoader size={12} color={"green"} /> : 'verify Otp'}
+                                </Button>
+                            </div>
                         </DialogFooter>
                     ) : null}
                     {showPasswordFields ? (
@@ -376,21 +453,24 @@ export default function SignIn() {
                             <MdOutlineVerifiedUser className='text-green-600 w-10 h-7' />
                         </div>) : null}
                 </div>
-                <div className='mx-2 mb-5'>
+                <div className=''>
                     {showPasswordFields ? (
                         <DialogFooter className='space-y-4'>
                             <Input label='New Password' variant='standard' type='password'
-                                onChange={(e) => setPassword(e.target.value)} style={dialogFont} />
+                                onChange={(e) => setPassword(e.target.value)} style={dialogFont} autoFocus />
                             <Input label='Confirm New Password' variant='standard' type='password'
                                 onChange={(e) => setConfirmPassword(e.target.value)} style={dialogFont} />
-                            <Button variant="text" color="red"
-                                onClick={resetState} className="mr-1">
-                                <span>Cancel</span>
-                            </Button>
-                            <Button variant="gradient" color="green" onClick={handlePasswordUpdate}
-                                disabled={!password || !confirmPassword}>
-                                <span>Update Password</span>
-                            </Button>
+                            {passError && <p className='text-red-900 text-xs self-start'>{passError}</p>}
+                            <div>
+                                <Button variant="text" color="red"
+                                    onClick={resetState} className="mr-1">
+                                    <span>Cancel</span>
+                                </Button>
+                                <Button variant="gradient" color="green" onClick={handlePasswordUpdate}
+                                >
+                                    {buttonLoading ? <ClipLoader size={12} color={"green"} /> : 'Update Password'}
+                                </Button>
+                            </div>
                         </DialogFooter>
                     ) : (null)}
                 </div>

@@ -29,12 +29,6 @@ const validate = values => {
     //     errors.username = 'Numbers are not allowed'
     // }
 
-    // if (!values.email) {
-    //     errors.email = "Cant be empty"
-    // }
-    // else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(values.email)) {
-    //     errors.email = 'Invalid email format'
-    // }
 
     // if (!values.password) {
     //     errors.password = "Cant be empty"
@@ -49,6 +43,7 @@ const validate = values => {
     // }
     // return errors
 }
+
 
 export default function SignUp() {
 

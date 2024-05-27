@@ -14,7 +14,7 @@ import homeCover10 from '../../assets/cover/10.jpg'
 import homeCover11 from '../../assets/cover/11.jpg'
 import homeCover12 from '../../assets/cover/12.jpg'
 import homeCover13 from '../../assets/cover/13.jpg'
-
+import Skeleton from 'react-loading-skeleton'
 import bg from '../../assets/background/background.jpg'
 import icon from '../../assets/homePageIcons/landing-custom-icon-1.png'
 import icon2 from '../../assets/homePageIcons/landing-custom-icon-2.png'
@@ -27,15 +27,38 @@ export default function Home() {
 
     const [location, setLocation] = useState(null);
     const [address, setAddress] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate()
+
+    // useEffect(() => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(async (position) => {
+    //             try {
+    //                 const apiKey = '9c09d04cf46241b98facdb7fd80de5a0'
+    //                 const { latitude, longitude } = position.coords;
+    //                 const response = await axios.get('https://api.geoapify.com/v1/geocode/reverse', {
+    //                     params: {
+    //                         lat: latitude,
+    //                         lon: longitude,
+    //                         apiKey: apiKey
+    //                     }
+    //                 })
+    //                 setAddress(response.data.features[0].properties.formatted);
+    //             } catch (error) {
+    //                 console.log("Geolocation is not supported by this browser.");
+    //             }
+    //         });
+    //     } else {
+    //         console.log("Geolocation is not supported by this browser.");
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
-                // setLocation(position);
                 try {
-                    const apiKey = '9c09d04cf46241b98facdb7fd80de5a0'
+                    const apiKey = '9c09d04cf46241b98facdb7fd80de5a0';
                     const { latitude, longitude } = position.coords;
                     const response = await axios.get('https://api.geoapify.com/v1/geocode/reverse', {
                         params: {
@@ -43,16 +66,22 @@ export default function Home() {
                             lon: longitude,
                             apiKey: apiKey
                         }
-                    })
+                    });
                     setAddress(response.data.features[0].properties.formatted);
+                    setLoading(false);
                 } catch (error) {
                     console.log("Geolocation is not supported by this browser.");
+                    setLoading(false);
                 }
             });
         } else {
             console.log("Geolocation is not supported by this browser.");
+            setLoading(false);
         }
     }, []);
+
+
+
 
     const associtaList = () => {
         navigate('/secured/associate-list')
@@ -72,8 +101,44 @@ export default function Home() {
         height: '450px',
     };
 
+
+    if (loading) {
+        return (
+            <div >
+                <div className='relative'>
+                    <div className='absolute inset-0 z-10'>
+                        <Header />
+                    </div>
+                    <Skeleton height={100} width="100%" />
+                    <Skeleton height={500} width="100%" />
+                </div>
+                <div className='flex justify-center mt-1 md:mt-5'>
+                    <Skeleton height={50} width={300} />
+                </div>
+                <div className='flex justify-center mt-1 md:mt-2'>
+                    <Skeleton height={20} width={200} />
+                </div>
+                <div className='flex flex-wrap md:flex-nowrap space-x-5 m-5 items-center'>
+                    <div className='w-full md:w-1/2'>
+                        <Skeleton height={300} />
+                    </div>
+                    <div className='w-full md:w-1/2'>
+                        <Card className="mt-6 w-full">
+                            <CardBody>
+                                <Skeleton count={5} />
+                            </CardBody>
+                        </Card>
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+
+
+
     return (
-        <div style={{ backgroundImage: `url(${bg})`, backgroundSize: 'object-cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', }}>
+        <div >
 
             <div className='relative'>
                 <div className='absolute inset-0 z-10'>
@@ -144,7 +209,7 @@ export default function Home() {
                 style={{ backgroundColor: 'rgb(0,36,107)' }}>
                 <div className="max-w-4xl mx-auto text-left lg:w-1/2 w-full mb-8 lg:mb-0">
                     <div className='container flex flex-col items-center text-left gap-y-5'>
-                        <h1 className="text-5xl font-bold text-white mb-6">Book Your Slot Today </h1>
+                        <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-6">Book Your Slot Today </h1>
                         <p className="text-white text-xl mb-8" style={{ fontFamily: 'Playball' }}>
                             Build your online store with WooCommerce — the most popular WordPress plugin that lets you create a digital shop for free!
                             Build your online store with WooCommerce — the most popular WordPress plugin that lets you create a digital shop for free!
