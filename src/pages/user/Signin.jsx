@@ -61,6 +61,7 @@ export default function SignIn() {
     const [tempId, setTempId] = useState()
     const [confirmPassword, setConfirmPassword] = useState('')
     const [buttonLoading, setButtonLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
     const [pageLoading, setPageLoading] = useState(true);
     const [otpError, setOtpError] = useState('');
     const [passError, setPassError] = useState('');
@@ -85,7 +86,7 @@ export default function SignIn() {
         setPassError('')
     };
 
-    
+
     useEffect(() => {
         setTimeout(() => {
             setPageLoading(false);
@@ -204,7 +205,7 @@ export default function SignIn() {
 
     // google button which return G-account datas
     const handleCallbackResponse = (response) => {
-        console.log("Encoded jwt id token:" + response.credential);
+        // console.log("Encoded jwt id token:" + response.credential);
         var userObject = jwtDecode(response.credential);
         console.log(userObject)
 
@@ -223,9 +224,7 @@ export default function SignIn() {
         if (userAuthenticated) {
             navigate('/')
         }
-
-        if (!pageLoading) {
-
+        if (!pageLoading && !googleLoading) {
             /* global google*/
             google.accounts.id.initialize({
 
@@ -238,41 +237,35 @@ export default function SignIn() {
             )
         }
 
-    }, [pageLoading, userAuthenticated])
+    }, [pageLoading, userAuthenticated, googleLoading])
 
     const signinGoogle = async (data) => {
+        setGoogleLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL}/users/login`, data)
-            console.log("Response:", response.data)
-
+            const response = await axios.post(`${BASE_URL}/users/login`, data);
+            setGoogleLoading(false);
             if (response.data) {
-
-                console.log("arrived success")
-
                 if (response.data.role === "user") {
-
-
                     const { access, refresh, user } = response.data;
-
-                    console.log("user datas", response.data.user)
-
                     localStorage.setItem('userAccess', access);
                     localStorage.setItem('userRefresh', refresh);
                     localStorage.setItem("userDetails", JSON.stringify(user));
-                    dispatch(loginUser())
-                    toast.success('Logged in ')
-                    navigate('/')
+                    dispatch(loginUser());
+                    toast.success('Logged in');
+                    navigate('/');
                 } else {
-                    actions.setErrors({ general: 'Only users are allowed to log in.' });
+                    toast.error('Only users are allowed to log in.');
                 }
-
             } else {
-                actions.setErrors({ general: 'Login failed. Please try again.' });
+                toast.error('Login failed. Please try again.');
             }
-
         } catch (error) {
-            console.log('Error', error)
-            actions.setErrors({ general: 'An error occurred. Please try again later.' });
+            setGoogleLoading(false);
+            if (error.response && error.response.data) {
+                toast.error(error.response.data.detail || 'An error occurred. Please try again later.');
+            } else {
+                toast.error('An error occurred. Please try again later.');
+            }
         }
     }
 
@@ -373,38 +366,44 @@ export default function SignIn() {
                     <div className='shadow-md'>
                         <Header />
                     </div>
-                    <Card className="my-20 py-4 max-w-md mx-10  rounded-xl p-5" color='transparent' style={divStyle}>
-                        <Typography className='text-center font-mono p-4' variant="h3" color="teal" style={dialogFont}>Log In</Typography>
-                        <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
 
-                            <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" autoFocus />
-                            {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
+                    {googleLoading ? (
+                        <div className="flex justify-center items-center h-screen opacity-25">
+                            <ClipLoader size={70} color={"#123abc"} />
+                        </div>
+                    ) : (
 
-                            <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
-                            {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
+                        <Card className="my-20 py-4 max-w-md mx-10  rounded-xl p-5" color='transparent' style={divStyle}>
+                            <Typography className='text-center font-mono p-4' variant="h3" color="teal" style={dialogFont}>Log In</Typography>
+                            <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
 
-                            {/* <Button className="bg-blue-500 mb-5" type='submit'>Login</Button> */}
-                            <div className='flex gap-2'>
-                                <Button className="bg-blue-500 mb-2 mt-2 w-full rounded-none" type="submit" disabled={buttonLoading}>
-                                    {buttonLoading ? <ClipLoader size={12} color={"#0000FF"} /> : 'Login'}
-                                </Button>
+                                <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" autoFocus />
+                                {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
 
-                                <div className="" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
-                                    <div id='signinDiv' >googleSignin</div>
+                                <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
+                                {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
+                                <div className='flex gap-2'>
+                                    <Button className="bg-blue-500 mb-2 mt-2 w-full rounded-none" type="submit" disabled={buttonLoading}>
+                                        {buttonLoading ? <ClipLoader size={12} color={"#0000FF"} /> : 'Login'}
+                                    </Button>
+
+                                    <div className="" style={{ width: '100% ', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                                        <div id='signinDiv' >googleSignin</div>
+                                    </div>
                                 </div>
+                            </form>
+                            <div className="flex items-center gap-1">
+                                <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
+                                <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" onClick={handleOpen}>Click here</Typography>
                             </div>
-                        </form>
-                        <div className="flex items-center gap-1">
-                            <Typography className="my-2 text-black text-sm sm:text-md" >Forgot Password ? </Typography>
-                            <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" onClick={handleOpen}>Click here</Typography>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
-                            <Link to='/signup' >
-                                <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
-                            </Link>
-                        </div>
-                    </Card>
+                            <div className="flex items-center gap-2">
+                                <Typography className='text-black text-xs sm:text-sm'>Dont Have Any Account ?</Typography>
+                                <Link to='/signup' >
+                                    <Typography className="text-primaryColor text-sm sm:text-md hover:cursor-pointer" >Sign up</Typography>
+                                </Link>
+                            </div>
+                        </Card>
+                    )}
                 </div>
             )}
 
