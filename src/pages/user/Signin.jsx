@@ -85,11 +85,13 @@ export default function SignIn() {
         setPassError('')
     };
 
+    
     useEffect(() => {
         setTimeout(() => {
             setPageLoading(false);
-        }, 300); // Simulate loading delay
+        }, 1000); // Simulate loading delay
     }, []);
+
 
     // reset-password mail validation
     const handleSendResetEmail = async () => {
@@ -221,18 +223,22 @@ export default function SignIn() {
         if (userAuthenticated) {
             navigate('/')
         }
-        /* global google*/
-        google.accounts.id.initialize({
 
-            client_id: "443952256934-sn2mj7pnfnblangilokooid8mvd81ldl.apps.googleusercontent.com",
-            callback: handleCallbackResponse
-        });
-        google.accounts.id.renderButton(
-            document.getElementById('signinDiv'),
-            { theme: "outline", size: "large" }
-        )
+        if (!pageLoading) {
 
-    }, [])
+            /* global google*/
+            google.accounts.id.initialize({
+
+                client_id: "443952256934-sn2mj7pnfnblangilokooid8mvd81ldl.apps.googleusercontent.com",
+                callback: handleCallbackResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById('signinDiv'),
+                { theme: "outline", size: "large" }
+            )
+        }
+
+    }, [pageLoading, userAuthenticated])
 
     const signinGoogle = async (data) => {
         try {
@@ -357,7 +363,6 @@ export default function SignIn() {
                     <Card className="my-20 py-4 max-w-md mx-10 rounded-xl p-5" color='transparent' style={divStyle}>
                         <Skeleton height={40} />
                         <Skeleton height={20} count={2} style={{ marginTop: 20 }} />
-                        <Skeleton height={40} style={{ marginTop: 20 }} />
                         <Skeleton height={40} style={{ marginTop: 20 }} />
                         <Skeleton height={40} style={{ marginTop: 20 }} />
                     </Card>

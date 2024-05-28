@@ -71,7 +71,6 @@ export default function SignUp() {
     useEffect(() => {
         /* global google*/
         google.accounts.id.initialize({
-
             client_id: "443952256934-sn2mj7pnfnblangilokooid8mvd81ldl.apps.googleusercontent.com",
             callback: handleCallbackResponse
         });
@@ -84,10 +83,10 @@ export default function SignUp() {
 
     const signUpGoogle = async (data) => {
         try {
-            const response = await axios.post(`${BASE_URL}/users/register`, data)
+            const response = await axios.post(`${BASE_URL}/users/google-signup`, data)
             console.log("Response:", response.data)
             if (response.data) {
-                console.log("arrived success")
+                console.log("arrived success", response.data)
                 toast.success("Successfull SignUp")
                 navigate('/signin')
             } else {
@@ -151,8 +150,6 @@ export default function SignUp() {
             actions.setErrors({ general: 'An error occurred. Please try again later.' }); actions.set4()
         }
 
-        // setOtp(val)
-        // console.log(val, "otp joined")
     }
 
 
@@ -236,7 +233,6 @@ export default function SignUp() {
                             <Typography className="text-primaryColor text-xs sm:text-sm hover:cursor-pointer">Log In</Typography>
                         </Link>
                     </div>
-                    {/* <button onClick={handleOpen}>hai</button> */}
                 </Card>
             </div>
 

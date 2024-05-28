@@ -18,7 +18,7 @@ const Chat = (props) => {
     let userData, userId, associateUser, associateId, sender, receiver, client
 
     if (chatperson.role === 'user') {
-        console.log('workinggggggggggggggggggggggggggg for associate')
+        console.log('workinggggggggggggg for associate')
         userId = chatperson.id
         console.log(userId, "user id ")
         associateUser = JSON.parse(localStorage.getItem('user'))

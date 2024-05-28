@@ -1,4 +1,5 @@
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import 'react-loading-skeleton/dist/skeleton.css'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';

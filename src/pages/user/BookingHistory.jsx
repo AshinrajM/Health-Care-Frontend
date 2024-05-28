@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
-
+import { SlCalender } from "react-icons/sl";
 import { FaStar } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
@@ -88,7 +88,9 @@ const BookingHistory = () => {
   }
 
   const style = {
-    fontFamily: "Platypi"
+    fontFamily: "Playball",
+    fontWeight: 600,
+    
   }
 
 
@@ -101,14 +103,16 @@ const BookingHistory = () => {
         <div><Header /></div>
         <div className='flex justify-center m-5'>
           {noBookings && (
-            <img src={backgroundImage} alt="No bookings yet" className='rounded-2xl' />
+            <div className='flex flex-col gap-5 '>
+              <div className='self-center mb-6'>
+                <SlCalender className='w-52 h-52 ' color='gray' />
+              </div>
+              <p className='text-2xl tracking-widest mb-2 text-gray-600' style={style}>There is no  bookings yet. Start Booking today</p>
+              <Button className='mb-5 tracking-widest' color='gray' onClick={(e) => navigate('/secured/associate-list')}>Start Booking</Button>
+            </div>
+
           )}
         </div>
-        {noBookings && (
-          <div className='absolute bottom-32 left-1/2 transform -translate-x-1/2 flex justify-center items-center'>
-            <p className='text-teal-800 text-center text-2xl tracking-widest' style={style}>Start booking for your Loved One's</p>
-          </div>
-        )}
         <div><Footer /></div>
 
       </div>
