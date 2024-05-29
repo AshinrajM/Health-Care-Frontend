@@ -111,7 +111,6 @@ export default function Home() {
                         <Header />
                     </div>
                     <Skeleton height={100} width="100%" />
-                    <Skeleton height={500} width="100%" />
                 </div>
                 <div className='flex justify-center mt-1 md:mt-5'>
                     <Skeleton height={50} width={300} />
@@ -201,10 +200,6 @@ export default function Home() {
                 </div>
 
             </div>
-
-
-
-
 
             <div className="min-h-screen flex flex-col lg:flex-row items-center p-12"
                 style={{ backgroundColor: 'rgb(0,36,107)' }}>

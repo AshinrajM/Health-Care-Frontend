@@ -5,7 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { ClipLoader } from 'react-spinners';
+import { ClipLoader, ClockLoader } from 'react-spinners';
+import { Audio, ColorRing } from 'react-loader-spinner'
 import { useFormik } from 'formik';
 import { loginUser } from '../../redux/userSlice';
 import { jwtDecode } from 'jwt-decode';
@@ -33,12 +34,12 @@ const validate = values => {
     let errors = {};
 
     if (!values.email) {
-        errors.email = "Can't be empty";
+        errors.email = "Email field Can't be empty";
     } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(values.email)) {
         errors.email = 'Invalid email format'
     }
     if (!values.password) {
-        errors.password = "Can't be empty";
+        errors.password = "Password field Can't be empty";
     } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i.test(values.password)) {
         errors.password = 'Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one digit, and one special character.'
     }
@@ -182,7 +183,7 @@ export default function SignIn() {
                 // If the error has a response from the server
                 const errorMessage = error.response.data.message || 'An error occurred. Please try again later.';
                 // toast.error(errorMessage);
-                setErrorMessage(errorMessage)
+                setPassError(errorMessage)
             } else {
                 // If there's no response from the server, it might be a network error
                 // toast.error('Network error. Please try again later.');
@@ -271,6 +272,7 @@ export default function SignIn() {
 
     // sign in using inputs
     const onSubmit = async (values, actions) => {
+        // event.preventDefault();
         console.log('submitting form:', values);
         setButtonLoading(true)
         try {
@@ -338,6 +340,7 @@ export default function SignIn() {
         backgroundImage: `url(${bg})`,
         backgroundSize: 'cover',
         minHeight: '100vh',
+        // opacity: googleLoading ? '50%' : '100%',
     };
 
     const dialogFont = {
@@ -349,16 +352,18 @@ export default function SignIn() {
     return (
         <>
             {pageLoading ? (
-                <div style={imageStyle}>
+                <div style={imageStyle} >
                     <div className='shadow-md'>
-                        <Skeleton height={60} width="100%" />
+                        <Skeleton height={80} width="100%" />
                     </div>
+
                     <Card className="my-20 py-4 max-w-md mx-10 rounded-xl p-5" color='transparent' style={divStyle}>
                         <Skeleton height={40} />
                         <Skeleton height={20} count={2} style={{ marginTop: 20 }} />
                         <Skeleton height={40} style={{ marginTop: 20 }} />
                         <Skeleton height={40} style={{ marginTop: 20 }} />
                     </Card>
+
                 </div>
             ) : (
 
@@ -366,22 +371,42 @@ export default function SignIn() {
                     <div className='shadow-md'>
                         <Header />
                     </div>
-
                     {googleLoading ? (
-                        <div className="flex justify-center items-center h-screen opacity-25">
-                            <ClipLoader size={70} color={"#123abc"} />
+                        <div className="flex justify-center items-center h-screen">
+                            {/* Loader with full opacity */}
+                            <div style={{ position: 'absolute', zIndex: 1 }}>
+                                <ColorRing
+                                    visible={true}
+                                    height="80"
+                                    width="80"
+                                    ariaLabel="color-ring-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClass="color-ring-wrapper"
+                                    colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                                />
+                            </div>
+                            {/* Background with 50% opacity */}
+                            <div className="flex justify-center items-center h-screen opacity-30"></div>
                         </div>
                     ) : (
-
                         <Card className="my-20 py-4 max-w-md mx-10  rounded-xl p-5" color='transparent' style={divStyle}>
                             <Typography className='text-center font-mono p-4' variant="h3" color="teal" style={dialogFont}>Log In</Typography>
                             <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit}>
 
-                                <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} color="black" autoFocus />
-                                {formik.errors.email ? <p className='text-red-900 text-xs self-end'>{formik.errors.email}</p> : null}
+                                <Input variant='standard' label="Email" name="email" onChange={formik.handleChange} value={formik.values.email} onBlur={formik.handleBlur} color="black" />
 
-                                <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} value={formik.values.password} />
-                                {formik.errors.password ? <p className='text-red-900 text-xs self-end'>{formik.errors.password}</p> : null}
+
+                                <Input type='password' variant='standard' label="Password" name="password" color="black" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} />
+
+                                <div className='self-end'>
+                                    {formik.touched.email && formik.errors.email && (
+                                        <p className='text-red-900 text-xs'>{formik.errors.email}</p>
+                                    )}
+                                    {formik.touched.password && formik.errors.password && (
+                                        <p className='text-red-900 text-xs'>{formik.errors.password}</p>
+                                    )}
+                                </div>
+
                                 <div className='flex gap-2'>
                                     <Button className="bg-blue-500 mb-2 mt-2 w-full rounded-none" type="submit" disabled={buttonLoading}>
                                         {buttonLoading ? <ClipLoader size={12} color={"#0000FF"} /> : 'Login'}
