@@ -210,7 +210,9 @@ const BookingHistory = () => {
                           <Button color='red' variant='gradient' size='sm' className='rounded-md text-xs px-3' onClick={() => handleOpen(booking)}>Cancel Booking</Button>
                         </>
                       ) : null}
-                      <Button color='indigo' size='sm' className='rounded-md text-xs px-3'>Details</Button>
+
+                      {/* <Button color='indigo' size='sm' className='rounded-md text-xs px-3'>Details</Button> */}
+
                     </div>
                   </div>
                 </AccordionBody>

@@ -180,7 +180,7 @@ const Profile = () => {
         <>
             <Header />
             {(user &&
-                <div className='flex justify-center items-center md:mt-20 mb-10 mx-2'>
+                <div className='flex justify-center items-center md:mt-20 mb-6 mx-2'>
                     <Card className="w-full max-w-[42rem] flex  md:flex-row mx-6 hover:shadow-2xl border border-gray-400">
                         <CardHeader
                             shadow={false}
