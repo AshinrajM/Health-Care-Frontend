@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, } from "@material-tailwind/react";
 import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon }
     from "@heroicons/react/24/solid";
-import { MdOutlineNotificationsActive } from "react-icons/md";
+// import { MdOutlineNotificationsActive } from "react-icons/md";
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logoutAssociate } from '../../redux/userSlice';
@@ -61,14 +61,14 @@ const SideBarAssociate = () => {
                             Bookings
                         </ListItem>
                     </Link>
-                    <Link to='/associates/check/associate-dashboard'>
+                    {/* <Link to='/associates/check/associate-dashboard'>
                         <ListItem>
                             <ListItemPrefix>
                                 <UserGroupIcon className="h-5 w-5" />
                             </ListItemPrefix>
                             Chat
                         </ListItem>
-                    </Link>
+                    </Link> */}
                     <Link to='/associates/check/associate-schedules'>
                         <ListItem>
                             <ListItemPrefix>
@@ -87,22 +87,17 @@ const SideBarAssociate = () => {
                     </Link>
                     {/* <ListItem>
                         <ListItemPrefix>
-                            <PhotoIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Banners
-                    </ListItem> */}
-                    <ListItem>
-                        <ListItemPrefix>
                             <MdOutlineNotificationsActive className="h-5 w-5" />
                         </ListItemPrefix>
                         Notifications
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem className='text-red-500 hover:bg-red-200' onClick={handleLogout}>
                         <ListItemPrefix>
                             <PowerIcon className="h-5 w-5" />
                         </ListItemPrefix>
                         Log Out
                     </ListItem>
+
                 </List>
             </Card>
         </>
