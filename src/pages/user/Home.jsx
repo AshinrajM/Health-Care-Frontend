@@ -16,7 +16,7 @@ import homeCover11 from '../../assets/cover/11.jpg'
 import homeCover12 from '../../assets/cover/12.jpg'
 import homeCover13 from '../../assets/cover/13.jpg'
 import Skeleton from 'react-loading-skeleton'
-import bg from '../../assets/background/background.jpg'
+import bg from '../../assets/background/shape.png'
 import icon from '../../assets/homePageIcons/landing-custom-icon-1.png'
 import icon2 from '../../assets/homePageIcons/landing-custom-icon-2.png'
 import icon3 from '../../assets/homePageIcons/landing-custom-icon-5.png'
@@ -139,8 +139,7 @@ export default function Home() {
 
     return (
         <div >
-
-            <div className='relative'>
+            <div className='relative' >
                 <div className='absolute inset-0 z-10'>
                     <Header />
                 </div>

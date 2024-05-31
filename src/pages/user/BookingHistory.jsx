@@ -123,13 +123,13 @@ const BookingHistory = () => {
   } else {
 
     return (
-      <div className=''>
-        <div className='shadow-md'>
+      <div>
+        <div className='shadow-sm'>
           <Header />
         </div>
 
         <>
-          <div className='mx-4 sm:mx-8 md:mx-12 lg:mx-24 xl:mx-48 mb-5 mt-10 '>
+          <div className='mx-4 sm:mx-8 md:mx-12 lg:mx-24 xl:mx-48 mb-36 mt-20 '>
             {bookings && bookings.map((booking, index) => (
               <Accordion
                 key={index}
@@ -179,8 +179,6 @@ const BookingHistory = () => {
                     </div>
                   </div>
                   <div className='w-full sm:w-1/2 flex flex-col'>
-
-
                     <div className='flex justify-end items-center gap-2'>
                       <Typography className='flex items-center gap-1 text-black text-sm mb-2'>
                         <FaStar color='yellow' className='w-4 h-4' />

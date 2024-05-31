@@ -189,82 +189,10 @@ const AssociateList = () => {
                                 </Card>
                             </div>
 
-                            <div className=''>
+                            <div >
                                 <NurseCard />
                             </div>
-
-                            {/* <Dialog open={openBooking}>
-                                <DialogHeader style={dialogStyle}>Confirm Selection</DialogHeader>
-                                <DialogBody className='space-y-5 text-black'>
-                                    <div className='flex justify-between'>
-                                        <Typography variant=''>Associate:</Typography>
-                                        <Typography variant='h6' color='gray'>{selectedCard?.associate.name}</Typography>
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <Typography>Date:</Typography>
-                                        <Typography variant='paragraph'>{selectedCard?.date}</Typography>
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <Typography>Fee per hour </Typography>
-                                        <Typography>{selectedCard?.associate.fee_per_hour}</Typography>
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <Typography>shift :</Typography>
-                                        <div className=''>
-                                            <div className="flex items-center">
-                                                {selectedCard?.is_morning ?
-                                                    <Radio
-                                                        color="green"
-                                                        name="shift"
-                                                        value="morning"
-                                                        checked={selectedOption === "morning"}
-                                                        onChange={() => handleOptionChange("morning")}
-                                                        label="Morning"
-                                                    />
-                                                    : null}
-                                                {selectedCard?.is_noon ?
-                                                    <Radio
-                                                        color="red"
-                                                        name="shift"
-                                                        value="noon"
-                                                        checked={selectedOption === "noon"}
-                                                        onChange={() => handleOptionChange("noon")}
-                                                        label="Noon"
-                                                    />
-                                                    : null}
-                                                {selectedCard?.is_morning && selectedCard?.is_noon ?
-                                                    <Radio
-                                                        color="indigo"
-                                                        name="shift"
-                                                        value="fullday"
-                                                        checked={selectedOption === "fullday"}
-                                                        onChange={() => handleOptionChange("fullday")}
-                                                        label="Full Day"
-                                                    />
-                                                    : null}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <Input label='Enter location' value={location} onChange={(e) => setLocation(e.target.value)} required />
-
-                                    </div>
-                                    <div>
-                                        <Input label='Enter mobile number' value={phone} onChange={(e) => setPhone(e.target.value)} required />
-                                    </div>
-                                </DialogBody>
-                                <DialogFooter className='gap-5'>
-                                    <Button variant="text" color="red" onClick={() => setOpenBooking(!openBooking)}>
-                                        Cancel
-                                    </Button>
-                                    <Button variant="gradient" color="green" onClick={confirm} disabled={!isFormValid}>
-                                        Confirm Booking
-                                    </Button>
-                                </DialogFooter>
-                            </Dialog> */}
-
-
+                            
                             <div className='mt-10'>
                                 <Footer />
                             </div>

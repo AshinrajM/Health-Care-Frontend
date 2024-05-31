@@ -8,7 +8,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../api/api';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useNavigate } from 'react-router-dom';
-
+import '../Cards/custom.css'
 
 const InitialsAvatar = ({ name }) => {
     const getInitials = (name) => {
@@ -18,7 +18,7 @@ const InitialsAvatar = ({ name }) => {
     };
 
     return (
-        <div className="w-16 h-16 rounded-full bg-cyan-900 flex items-center justify-center text-white text-2xl font-bold">
+        <div className="w-14 h-14 rounded-full bg-cyan-900 flex items-center justify-center text-white text-xl font-thin">
             {getInitials(name)}
         </div>
     );
@@ -36,7 +36,7 @@ const NurseCard = () => {
     const [selectedDate, setSelectedDate] = useState('')
     const [selectedOption, setSelectedOption] = useState('');
     const [location, setLocation] = useState('')
-    const [phone, setPhone] = useState('')
+    // const [phone, setPhone] = useState('')
     const [validationError, setValidationError] = useState('');
 
     const navigate = useNavigate('')
@@ -91,15 +91,18 @@ const NurseCard = () => {
     }
 
     const handleSubmit = () => {
-        const { isValid, message } = isValidInput(location, phone);
+        const { isValid, message } = isValidInput(location);
         if (!isValid) {
             setValidationError(message);
         } else {
+
+            // here have to find whcih slot is selected using date
+
             const bookingDatas = {
                 associate: selectedAssociate,
                 shift: selectedOption,
                 date: selectedDate,
-                phone: phone,
+                // phone: phone,
                 location: location
             }
 
@@ -109,9 +112,9 @@ const NurseCard = () => {
         }
     }
 
-    const isValidInput = (location, phone) => {
+    const isValidInput = (location) => {
         // Check if both fields are not empty
-        if (!location.trim() || !phone.trim()) {
+        if (!location.trim()) {
             return { isValid: false, message: 'Location and phone number cannot be empty' };
         }
 
@@ -122,10 +125,10 @@ const NurseCard = () => {
         }
 
         // Check if phone number is a valid Indian number
-        const isValidNumber = isValidPhoneNumber(phone, 'IN');
-        if (!isValidNumber) {
-            return { isValid: false, message: 'Please enter a valid Indian phone number' };
-        }
+        // const isValidNumber = isValidPhoneNumber(phone, 'IN');
+        // if (!isValidNumber) {
+        //     return { isValid: false, message: 'Please enter a valid Indian phone number' };
+        // }
 
         // If all conditions are met, return isValid as true
         return { isValid: true };
@@ -159,11 +162,11 @@ const NurseCard = () => {
             {loading ? (
                 <div>Loading...</div> // Display loading message or spinner
             ) : (
-                <div className="flex  justify-center gap-6 p-6 ">
+                <div className="flex  justify-center gap-6 p-8 ">
                     {availabilityData.map((data, index) => (
-                        <div key={index} className="w-full md:w-1/3 lg:w-1/3 p-6 bg-green-100
+                        <div key={index} className="w-full md:w-1/4 lg:w-1/4 p-2 bg-green-100
                         rounded-lg shadow-md overflow-hidden m-0 hover:shadow-xl hover:scale-105 duration-200">
-                            <div className="flex items-center p-5">
+                            <div className="flex items-center p-3">
                                 <InitialsAvatar name={data.name} />
                                 <div className="ml-4">
                                     <div className="flex items-center">
@@ -185,7 +188,7 @@ const NurseCard = () => {
                                 <div className="mb-4 flex">
                                     <div className="text-black mb-2">
                                         <FontAwesomeIcon icon={faCalendarAlt} className="mr-4"
-                                            style={{ height: '40px', width: '28px' }} />
+                                            style={{ height: '30px', width: '28px' }} />
                                     </div>
                                     <div className="mb-1">
                                         <Select
@@ -205,10 +208,11 @@ const NurseCard = () => {
                                         {/* <p className='text-xs mt-2 text-gray-600'>Nb : here you can see the available dates </p> */}
                                     </div>
                                 </div>
-                                <button className="w-full py-2 px-4 bg-blue-gray-700 text-white rounded-md hover:bg-blue-gray-400 focus:outline-none"
+                                <Button className="btn  w-full py-2 px-4 mb-3 "
                                     onClick={() => handleBooking(data)}>
                                     Book Appoinment
-                                </button>
+                                </Button>
+                                <Button className="w-full py-2 px-4 bg-blue-gray-700 text-white rounded-md hover:bg-blue-gray-400 focus:outline-none">More Details</Button>
                             </div>
                         </div>
                     ))}
@@ -277,12 +281,12 @@ const NurseCard = () => {
                             </div>
                             <div>
                                 <Input label='Enter location' value={location} onChange={(e) => setLocation(e.target.value)} required />
-
-                            </div>
-                            <div>
-                                <Input label='Enter mobile number' value={phone} onChange={(e) => setPhone(e.target.value)} required />
                                 {validationError && <Typography className='text-xs' color="red">{validationError}</Typography>}
                             </div>
+                            {/* <div>
+                                <Input label='Enter mobile number' value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                                {validationError && <Typography className='text-xs' color="red">{validationError}</Typography>}
+                            </div> */}
                         </DialogBody>
 
                         <DialogFooter className='gap-5'>

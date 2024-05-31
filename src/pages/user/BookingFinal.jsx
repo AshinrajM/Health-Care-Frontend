@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardBody, CardFooter, Typography, Button } from "@material-tailwind/react";
 import Header from '../../components/Header/Header';
 import { BASE_URL } from '../../api/api'
@@ -14,35 +14,70 @@ const BookingFinal = () => {
     const [finalData, setFinalData] = useState('')
     const [user, setUser] = useState('')
     const navigate = useNavigate()
+    const location = useLocation();
+
+
+
+    // here have to find whcih slot is selected using date
 
     useEffect(() => {
-        const bookingDatas = localStorage.getItem('bookingDetail')
-        const userDatas = localStorage.getItem('userDetails')
-        setFinalData(JSON.parse(bookingDatas))
-        setUser(JSON.parse(userDatas))
-    }, [])
+        const bookingDatas = location.state;
+        console.log("datas", bookingDatas)
+        const userDetailsString = localStorage.getItem('userDetails');
+        const parsedUserData = userDetailsString ? JSON.parse(userDetailsString) : null;
+        setUser(parsedUserData); // Set userData state
 
+        if (bookingDatas) {
+            setFinalData(bookingDatas);
+        }
+    }, [location.state])
 
     const cancelBooking = () => {
-        localStorage.removeItem("bookingDetail");
         navigate('/secured/associate-list')
     }
 
 
+    console.log("final data and user", finalData, user)
+
     let payable_amount;
-    if (finalData && finalData.slot && finalData.slot.associate) {
-        payable_amount = finalData.slot.associate.fee_per_hour * (finalData.shift === "full day" ? 8 : 4);
+    if (finalData) {
+        payable_amount = finalData.associate.fee_per_hour * (finalData.shift === "full day" ? 8 : 4);
     }
+
+
+    const date = finalData.date
+    let slotId
+
+    const handleDateClick = (date) => {
+        if (finalData.associate && finalData.associate.slots) {
+            const slotObj = finalData.associate.slots.find(slot => slot.date === date);
+            if (slotObj) {
+                slotId = slotObj.id
+                console.log(slotObj, "show date with slot Object");
+            } else {
+                console.log('No slot found for the given date');
+            }
+        } else {
+            console.log('Associate or slots are undefined');
+        }
+    };
+    if (finalData) {
+        handleDateClick(date)
+    }
+    console.log(slotId, "slotId")
 
     const values = {
         user_id: user ? user.id : null,
-        slot_id: finalData && finalData.slot ? finalData.slot.id : null,
+        slot_id: slotId,
         payable_amount: payable_amount,
-        shift: finalData ? finalData.shift : null
+        shift: finalData ? finalData.shift : null,
+        location: finalData ? finalData.location : null,
+        // phone: finalData ? finalData.phone : null
     };
+    console.log(values, 'values sending')
+
 
     const BookingConfirm = async () => {
-        console.log(values, 'values')
 
         try {
             const response = await axios.post(`${BASE_URL}/booking/checkout`, values)
@@ -72,14 +107,15 @@ const BookingFinal = () => {
                             </Typography>
                         </div>
                         <br />
-                        {finalData && finalData.slot && finalData.slot.associate && (
+                        {/* {finalData && finalData.associate && finalData.associate.slot && ( */}
+                        {finalData && (
                             <>
                                 <div className='flex justify-between'>
                                     <Typography variant="h6" color="blue-gray" className="mb-2">
                                         Associate Name
                                     </Typography>
                                     <Typography variant="h6" color="blue-gray" className="mb-2">
-                                        {finalData.slot.associate.name}
+                                        {finalData.associate.name}
                                         {/* {finalData.slot.id} */}
                                     </Typography>
                                 </div>
@@ -96,15 +132,7 @@ const BookingFinal = () => {
                                         Date
                                     </Typography>
                                     <Typography variant="h6" color="blue-gray" className="mb-2">
-                                        {finalData.slot.date}
-                                    </Typography>
-                                </div>
-                                <div className='flex justify-between'>
-                                    <Typography variant="h6" color="blue-gray" className="mb-2">
-                                        User Contact no.
-                                    </Typography>
-                                    <Typography variant="h6" color="blue-gray" className="mb-2">
-                                        {finalData.phone}
+                                        {finalData.date}
                                     </Typography>
                                 </div>
                                 <div className='flex justify-between'>
@@ -116,13 +144,14 @@ const BookingFinal = () => {
                                     </Typography>
                                 </div>
                                 <br />
+                                <hr className='border border-b-gray-900 mb-5' />
                                 <div className='flex justify-between'>
                                     <Typography variant="h6" color="blue-gray" className="mb-2">
                                         Fee
                                     </Typography>
                                     <div className='flex'>
                                         <Typography variant="h6" color="blue-gray" className="">
-                                            ₹{finalData.slot.associate.fee_per_hour}/Hr
+                                            ₹{finalData.associate.fee_per_hour}/Hr
                                         </Typography>
                                         <Typography variant="h6" color="red" className="mb-3 items-end ">
                                             &nbsp;x{finalData.shift === "fullday" ? 8 : 4}
@@ -142,11 +171,15 @@ const BookingFinal = () => {
                         )}
                     </CardBody>
                     <CardFooter className="pt-0 w-full flex gap-4">
-                        <Button className='w-full bg-red-700' onClick={cancelBooking} >CANCEL</Button>
-                        <Button className='w-full bg-blue-800' onClick={BookingConfirm} >Confirm Booking</Button>
+                        <Button className='w-1/2 bg-red-700 rounded-none' onClick={cancelBooking} >CANCEL</Button>
+                        <button className="Btn2 w-1/2">
+                            Pay
+                            <svg class="svgIcon" viewBox="0 0 576 512"><path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path></svg>
+                        </button>
                     </CardFooter>
                 </Card >
             </div>
+                        {/* <Button className='w-full bg-green-900' onClick={BookingConfirm} >Confirm Booking</Button> */}
         </div>
     )
 }
