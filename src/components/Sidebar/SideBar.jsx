@@ -37,18 +37,22 @@ export default function SideBar() {
                     </Typography>
                 </div>
                 <List>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <PresentationChartBarIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Dashboard
-                    </ListItem>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <ShoppingBagIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Bookings
-                    </ListItem>
+                    <Link to='/admin/entry/dashboard'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <PresentationChartBarIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Dashboard
+                        </ListItem>
+                    </Link>
+                    <Link to='/admin/entry/bookings-list'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <ShoppingBagIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Bookings
+                        </ListItem>
+                    </Link>
                     <Link to='/admin/entry/users'>
                         <ListItem>
                             <ListItemPrefix>
@@ -65,12 +69,6 @@ export default function SideBar() {
                             Associates
                         </ListItem>
                     </Link>
-                    {/* <ListItem>
-                        <ListItemPrefix>
-                            <BriefcaseIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Associates
-                    </ListItem> */}
                     <ListItem>
                         <ListItemPrefix>
                             <PhotoIcon className="h-5 w-5" />

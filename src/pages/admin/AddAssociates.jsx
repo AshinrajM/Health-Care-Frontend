@@ -94,7 +94,6 @@ export default function AddAssociates() {
     }, [])
 
 
-
     return (
         <div className="bg-blue-gray-500 flex flex-col md:flex-row">
             <div>

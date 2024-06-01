@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Card, Typography, List, ListItem, ListItemPrefix, ListItemSuffix, } from "@material-tailwind/react";
 import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGroupIcon, BriefcaseIcon }
     from "@heroicons/react/24/solid";
+// import { MdOutlineNotificationsActive } from "react-icons/md";
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logoutAssociate } from '../../redux/userSlice';
 import logo from '../../assets/logo/Hc2.png'
+import { GrSchedule } from "react-icons/gr";
 
 
 const SideBarAssociate = () => {
@@ -43,7 +45,7 @@ const SideBarAssociate = () => {
                     </Typography>
                 </div>
                 <List>
-                    <Link to='/associates/check/dashboard'>
+                    <Link to='/associates/check/associate-dashboard'>
                         <ListItem>
                             <ListItemPrefix>
                                 <PresentationChartBarIcon className="h-5 w-5" />
@@ -51,18 +53,28 @@ const SideBarAssociate = () => {
                             Dashboard
                         </ListItem>
                     </Link>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <ShoppingBagIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Bookings
-                    </ListItem>
-                    <Link to='/associates/entry/users'>
+                    <Link to='/associates/check/associate-bookings'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <ShoppingBagIcon className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Bookings
+                        </ListItem>
+                    </Link>
+                    {/* <Link to='/associates/check/associate-dashboard'>
                         <ListItem>
                             <ListItemPrefix>
                                 <UserGroupIcon className="h-5 w-5" />
                             </ListItemPrefix>
                             Chat
+                        </ListItem>
+                    </Link> */}
+                    <Link to='/associates/check/associate-schedules'>
+                        <ListItem>
+                            <ListItemPrefix>
+                                <GrSchedule className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Scheduled Dates
                         </ListItem>
                     </Link>
                     <Link to='/associates/check/associate-profile'>
@@ -70,21 +82,22 @@ const SideBarAssociate = () => {
                             <ListItemPrefix>
                                 <BriefcaseIcon className="h-5 w-5" />
                             </ListItemPrefix>
-                            Associate Profile
+                            Profile
                         </ListItem>
                     </Link>
-                    <ListItem>
+                    {/* <ListItem>
                         <ListItemPrefix>
-                            <PhotoIcon className="h-5 w-5" />
+                            <MdOutlineNotificationsActive className="h-5 w-5" />
                         </ListItemPrefix>
-                        Banners
-                    </ListItem>
+                        Notifications
+                    </ListItem> */}
                     <ListItem className='text-red-500 hover:bg-red-200' onClick={handleLogout}>
                         <ListItemPrefix>
                             <PowerIcon className="h-5 w-5" />
                         </ListItemPrefix>
                         Log Out
                     </ListItem>
+
                 </List>
             </Card>
         </>
