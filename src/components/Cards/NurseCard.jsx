@@ -36,7 +36,6 @@ const NurseCard = () => {
     const [selectedDate, setSelectedDate] = useState('')
     const [selectedOption, setSelectedOption] = useState('');
     const [location, setLocation] = useState('')
-    // const [phone, setPhone] = useState('')
     const [validationError, setValidationError] = useState('');
 
     const navigate = useNavigate('')
@@ -115,7 +114,7 @@ const NurseCard = () => {
     const isValidInput = (location) => {
         // Check if both fields are not empty
         if (!location.trim()) {
-            return { isValid: false, message: 'Location and phone number cannot be empty' };
+            return { isValid: false, message: 'Location cannot be empty' };
         }
 
         // Check if location contains only text
@@ -123,23 +122,14 @@ const NurseCard = () => {
         if (!locationRegex.test(location.trim())) {
             return { isValid: false, message: 'Location should contain only text' };
         }
-
-        // Check if phone number is a valid Indian number
-        // const isValidNumber = isValidPhoneNumber(phone, 'IN');
-        // if (!isValidNumber) {
-        //     return { isValid: false, message: 'Please enter a valid Indian phone number' };
-        // }
-
-        // If all conditions are met, return isValid as true
         return { isValid: true };
     };
 
 
     const handleModalCancel = () => {
-        setPhone('')
         setLocation('')
         setSelectedOption('')
-        setShowDialog(false)
+        setShowDialog(!showDialog)
     }
 
     const textStyle = {

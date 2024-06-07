@@ -5,6 +5,7 @@ import { PresentationChartBarIcon, ShoppingBagIcon, PowerIcon, PhotoIcon, UserGr
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logoutAdmin, logoutUser } from '../../redux/userSlice';
+import bg from '../../assets/logo/Hc2.png'
 
 export default function SideBar() {
 
@@ -30,10 +31,10 @@ export default function SideBar() {
     }
     return (
         <>
-            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none">
+            <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none h-full ">
                 <div className="mb-2 p-4">
                     <Typography variant="h5" color="blue-gray">
-                        <img src="https://cdn3.vectorstock.com/i/1000x1000/08/42/medical-care-logo-icon-design-vector-22560842.jpg" alt="" />
+                        <img src={bg} alt="" />
                     </Typography>
                 </div>
                 <List>
@@ -69,12 +70,6 @@ export default function SideBar() {
                             Associates
                         </ListItem>
                     </Link>
-                    <ListItem>
-                        <ListItemPrefix>
-                            <PhotoIcon className="h-5 w-5" />
-                        </ListItemPrefix>
-                        Banners
-                    </ListItem>
                     <ListItem className='text-red-500 hover:bg-red-200' onClick={handleLogout}>
                         <ListItemPrefix>
                             <PowerIcon className="h-5 w-5" />
