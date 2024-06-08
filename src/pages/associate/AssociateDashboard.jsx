@@ -8,6 +8,9 @@ import { CiWallet } from "react-icons/ci";
 import { RiUserStarLine } from "react-icons/ri";
 import { MdMedicalServices } from "react-icons/md";
 import { BASE_URL } from "../../api/api"
+import 'react-calendar/dist/Calendar.css';
+// import './custom-calendar.css';
+import '../../components/Cards/custom.css'
 import moment from 'moment';
 
 
@@ -23,6 +26,8 @@ const AssociateDashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [slot, setSlot] = useState('')
   const [open, setOpen] = useState(false);
+  const [slotDates, setSlotDates] = useState([]);
+  const [services, setServices] = useState('')
 
 
 
@@ -56,7 +61,12 @@ const AssociateDashboard = () => {
       const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
       if (response.status === 200) {
         console.log(response.data, 'latest associate user data')
-        setUser(response.data)
+        setUser(response.data.user)
+        const availableSlots = response.data.available_slots
+        // const extractedDates = availableSlots.map(slot => slot.date);
+        const extractedDates = availableSlots.map(slot => moment(slot.date).format('YYYY-MM-DD'));
+        setSlotDates(extractedDates);
+        setServices(response.data.count)
       }
     } catch (error) {
       console.log("error found", error)
@@ -68,38 +78,18 @@ const AssociateDashboard = () => {
   const today = new Date()
   const startDate = new Date(today.setDate(today.getDate() + 1))
   const endDate = new Date(today.setDate(today.getDate() + 7))
-
   const inputDate = selectedDate
-
   const inputDateFormat = 'YYYY//MM/DD'
-
   const momentObject = moment(inputDate, inputDateFormat)
   const utcDate = momentObject.utc().format();
-
   const actual = utcDate.toString().split('T')[0]
   console.log(actual, "utc date")
 
-
-  // const scheduledDates = async (associateId) => {
-  //   try {
-
-  //     const res = await axios.get(`${BASE_URL}/booking/slot/?associate_id=${associateId}`)
-  //     if (res.data) {
-  //       setAvailabilityData(res.data)
-  //       toast.success("availibility get data of slot")
-  //     }
-  //   } catch (error) {
-  //     toast.error("found error")
-  //   }
-  // }
-
-  // console.log(availabilityData, "full data")
 
 
   const handleSubmit = async () => {
     let values = {
       associate: associate.id,
-      // date: selectedDate.toISOString().split('T')[0],
       date: actual,
       is_morning: morningShift,
       is_noon: noonShift,
@@ -111,13 +101,11 @@ const AssociateDashboard = () => {
 
       if (response.data) {
         console.log(response.data, "res submit")
-        const arr = [...availabilityData, response.data]
-        setAvailabilityData(arr)
         toast.success("Slot Created")
         setMorningShift(false)
         setNoonShift(false)
         setSelectedDate(new Date())
-
+        getAssociateUser();
       } else {
         toast.error("not found")
       }
@@ -132,10 +120,23 @@ const AssociateDashboard = () => {
     }
   }
 
-  const deleteSlot = (data) => {
-    console.log(data, "datas slot")
-    setSlot(data)
+
+  // Function to determine if a date should be marked
+  const isDateMarked = (date) => {
+    return slotDates.includes(moment(date).format('YYYY-MM-DD'));
   }
+
+  // Custom class name for marked dates
+  const tileClassName = ({ date, view }) => {
+    if (view === 'month') {
+      if (isDateMarked(date)) {
+        return 'react-calendar__tile--highlight';
+      }
+    }
+    return null;
+  }
+
+  console.log("slotDates", slotDates)
 
   console.log(selectedDate, "CHOOSEN DATE")
 
@@ -164,7 +165,7 @@ const AssociateDashboard = () => {
         </div>
         <div>
           <div className='flex justify-around m-10 gap-8'>
-            <div className='w-1/3'>
+            <div className='w-1/2'>
               <Card className="">
                 <CardBody className='flex items-center'>
                   <CiWallet className='h-12 w-12 text-black' />
@@ -172,19 +173,19 @@ const AssociateDashboard = () => {
                 </CardBody>
               </Card>
             </div>
-            <div className='w-1/3'>
+            {/* <div className='w-1/3'>
               <Card className="">
                 <CardBody className='flex items-center'>
                   <RiUserStarLine className='h-12 w-12 text-black' />
                   <Typography variant='h4' color='black'> &nbsp; 4.5</Typography>
                 </CardBody>
               </Card>
-            </div>
-            <div className='w-1/3'>
+            </div> */}
+            <div className='w-1/2'>
               <Card className="">
                 <CardBody className='flex items-center'>
                   <MdMedicalServices className='h-12 w-12 text-black' />
-                  <Typography variant='h4' color='black'>Services: &nbsp; 53</Typography>
+                  <Typography variant='h4' color='black'>Services: &nbsp; {services}</Typography>
                 </CardBody>
               </Card>
             </div>
@@ -196,7 +197,8 @@ const AssociateDashboard = () => {
               </Typography>
               <div className='flex flex-col sm:flex-row space-x-0 sm:space-x-6 justify-center'>
                 <div className="w-full sm:w-96">
-                  <Calendar minDate={startDate} maxDate={endDate} onChange={(date) => setSelectedDate(date)} value={selectedDate} style={{ height: '500px' }} />
+                  <Calendar minDate={startDate} maxDate={endDate} tileClassName={tileClassName}
+                    onChange={(date) => setSelectedDate(date)} value={selectedDate} style={{ height: '500px' }} />
                 </div>
                 <div className="w-full sm:w-96">
                   <Card className="w-full py-2 bg-pink-100">

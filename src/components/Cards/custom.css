@@ -53,7 +53,7 @@
 .btn:active {
     filter: brightness(.7);
     transform: scale(.98);
-} 
+}
 
 
 
@@ -225,3 +225,10 @@
     transition-duration: 0.5s;
     transform: rotate(160deg);
 }
+
+
+.react-calendar__tile--highlight {
+    background: blue !important;
+    color: white !important;
+}
+

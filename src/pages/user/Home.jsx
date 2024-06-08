@@ -209,8 +209,8 @@ export default function Home() {
                             Build your online store with WooCommerce — the most popular WordPress plugin that lets you create a digital shop for free!
                             Build your online store with WooCommerce — the most popular WordPress plugin that lets you create a digital shop for free!
                         </p>
-                        <Button variant='text' size='lg' color='white'
-                            className='bg-white text-blue-900  rounded-none hover:bg-blue-gray-200'>
+                        <Button variant='text' size='lg' color='white' className='bg-white
+                         text-blue-900  rounded-none hover:bg-blue-gray-200' onClick={associtaList}>
                             start booking
                         </Button>
                     </div>

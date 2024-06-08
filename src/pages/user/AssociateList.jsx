@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
 import { FaStar } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
