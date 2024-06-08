@@ -8,8 +8,8 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 import { FaUsers } from "react-icons/fa6";
-import nurse from '../../assets/homePageIcons/nurseicon.png'
 import { MdGroups3 } from "react-icons/md";
+import '../../components/Cards/custom.css';
 
 
 const chartConfig = {
@@ -127,105 +127,12 @@ export default function AdminHome() {
 
 
     return (
-        // <div className='bg-blue-gray-100 flex h-screen'>
-        //     <div className='fixed w-1/5 h-full'>
-        //         <SideBar />
-        //     </div>
-        //     <div className='ml-64  overflow-auto w-full'>
-
-        //         <div className='flex m-10 gap-5 relative'>
-        //             <Card className="w-1/3">
-        //                 <CardBody className='flex justify-between items-center p-10'>
-        //                     <div><FaUsers className='h-16 w-16' /></div>
-        //                     <div className='flex flex-col'>
-        //                         <Typography variant='h4' color='black'>Users</Typography>
-        //                         <Typography variant='h4' color='black'> &nbsp; 67</Typography>
-        //                     </div>
-        //                 </CardBody>
-        //             </Card>
-        //             <Card className="w-1/3">
-        //                 <CardBody className='flex justify-between items-center p-10'>
-        //                     <div>
-        //                         <MdGroups3 className='h-16 w-16' />
-
-        //                     </div>
-        //                     <div className='flex flex-col'>
-        //                         <Typography variant='h4' color='black'>Associates</Typography>
-        //                         <Typography variant='h4' color='black'> &nbsp; 67</Typography>
-        //                     </div>
-        //                 </CardBody>
-        //             </Card>
-        //             <Card className="w-1/3">
-        //                 <CardBody className='flex justify-between items-center p-10'>
-        //                     <div><FaUsers className='h-16 w-16' /></div>
-        //                     <div className='flex flex-col'>
-        //                         <Typography variant='h4' color='black'>Bookings</Typography>
-        //                         <Typography variant='h4' color='black'> &nbsp; 67</Typography>
-        //                     </div>
-        //                 </CardBody>
-        //             </Card>
-
-        //         </div>
-        //         <div className='m-10 flex justify-evenly gap-3'>
-        //             <Card className='w-1/2'>
-        //                 <CardHeader
-        //                     floated={false}
-        //                     shadow={false}
-        //                     color="transparent"
-        //                     className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
-        //                 >
-        //                     <div>
-        //                         <Typography variant="h6" color="blue-gray">
-        //                             Total Bookings Chart
-        //                         </Typography>
-        //                         <Typography
-        //                             variant="small"
-        //                             color="gray"
-        //                             className="max-w-sm font-normal"
-        //                         >
-        //                             Showing up the datas of booking till date
-        //                         </Typography>
-        //                     </div>
-        //                 </CardHeader>
-        //                 <CardBody className="mt-4 grid place-items-center px-2">
-        //                     <Chart {...chartConfig} />
-        //                 </CardBody>
-        //             </Card>
-        //             <Card className='w-1/2 '>
-        //                 <CardHeader
-        //                     floated={false}
-        //                     shadow={false}
-        //                     color="transparent"
-        //                     className="flex flex-col gap-4 rounded-none md:flex-row 
-        //                     md:items-center"
-        //                 >
-        //                     <div>
-        //                         <Typography variant="h6" color="blue-gray">
-        //                             Sales Chart
-        //                         </Typography>
-        //                         <Typography
-        //                             variant="small"
-        //                             color="gray"
-        //                             className="max-w-sm font-normal"
-        //                         >
-        //                             Here you can see the sales datas through each months
-        //                         </Typography>
-        //                     </div>
-        //                 </CardHeader>
-        //                 <CardBody className="px-2 pb-0">
-        //                     <Chart {...chartConfigBar} />
-        //                 </CardBody>
-        //             </Card>
-        //         </div>
-
-        //     </div>
-
-        // </div>
-        <div className="flex h-screen bg-blue-gray-100">
-            <div className="fixed w-1/5 h-full">
+        <div className="flex flex-col md:flex-row h-screen bg-blue-gray-100">
+            <div className="md:w-64 md:fixed md:h-full">
                 <SideBar />
             </div>
-            <div className="ml-1/5 flex-1 overflow-auto p-4 lg:ml-64 sm:ml-40">
+
+            <div className="flex-1 overflow-auto p-4 lg:ml-64 md:ml-64">
                 <div className="flex flex-wrap gap-4 mb-4">
                     <Card className="flex-1 min-w-[300px]">
                         <CardBody className="flex justify-between items-center p-5">
