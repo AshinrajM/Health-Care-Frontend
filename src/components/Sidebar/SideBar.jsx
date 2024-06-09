@@ -59,10 +59,11 @@ export default function SideBar() {
                 className={`fixed inset-y-0 left-0 z-50 w-64 overflow-y-auto bg-white transition duration-300 ease-out transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
                     } md:translate-x-0`}
             >
-                <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none h-full">
+                <Card className="h-[calc(100vh)] w-full max-w-[16rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none">
                     <div className="mb-2 p-4">
-                        <Typography variant="h5" color="blue-gray">
-                            <img src={bg} alt="" />
+                        <Typography variant="h5" color="blue-gray"  >
+                            <img src={bg} alt="" className='filter drop-shadow-xl' 
+                            style={{ filter: 'drop-shadow(0 4px 6px rgba(204,8,233, 0.4))' }} />
                         </Typography>
                     </div>
                     <List>

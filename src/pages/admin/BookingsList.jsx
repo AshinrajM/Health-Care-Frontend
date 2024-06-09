@@ -44,7 +44,7 @@ const BookingsList = () => {
     }
 
     return (
-        <div className='bg-blue-gray-500 flex flex-col lg:flex-row'>
+        <div className='bg-blue-gray-500 flex flex-col lg:flex-row h-screen'>
             <div className='lg:w-64 flex-none'>
                 <SideBar />
             </div>

@@ -25,7 +25,7 @@ export default function AdminAssociates() {
         getAssociates()
     }, [])
     return (
-        <div className='bg-blue-gray-500 flex flex-col lg:flex-row'>
+        <div className='bg-blue-gray-500 flex flex-col lg:flex-row h-screen'>
             <div className='lg:w-64 flex-none'>
                 <SideBar />
             </div>
@@ -52,34 +52,12 @@ export default function AdminAssociates() {
                                         <td className='p-2' style={{ textAlign: 'center' }}>{index + 1}</td>
                                         <td className='p-2' style={{ textAlign: 'center' }}>{associate.name}</td>
                                         <td className='p-2' style={{ textAlign: 'center' }}>{associate.certificate_no}</td>
-                                        {/* <td className='p-2' style={{ display: 'flex', justifyContent: 'center' }}>
-                                            {associate.is_active ? <FaLockOpen className="w-7 h-7" /> : <FaLock className="w-7 h-7" />}
-                                        </td> */}
-                                        {/* <td>{associate.is_active ? <Button color="red" size="sm">Block</Button> : <Button color="blue" size="sm">UnBlock</Button>}</td> */}
+                                    
                                     </tr>
                                     ))
                                 }
                             </tbody>
-                            {/* <tbody>
-                                <tr className='text-black' style={{ borderBottom: '1px dotted' }}>
-                                    <td className='p-2' style={{ textAlign: 'center' }}>1</td>
-                                    <td className='p-2' style={{ textAlign: 'center' }}>salman@example.com</td>
-                                    <td className='p-2' style={{ textAlign: 'center' }}>Active</td>
-                                    <td className='p-2' style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <FaLockOpen className="w-7 h-7" />
-                                    </td>
-                                </tr>
-                            </tbody> */}
-                            {/* <tbody>
-                                <tr className='text-black' style={{ borderBottom: '1px dotted' }}>
-                                    <td className='p-2' style={{ textAlign: 'center' }}>1</td>
-                                    <td className='p-2' style={{ textAlign: 'center' }}>salman@example.com</td>
-                                    <td className='p-2' style={{ textAlign: 'center' }}>Active</td>
-                                    <td className='p-2' style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <FaLockOpen className="w-7 h-7" />
-                                    </td>
-                                </tr>
-                            </tbody> */}
+                            
                         </table>
                     </div>
                 </Card>
