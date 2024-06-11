@@ -44,16 +44,21 @@ const NurseCard = () => {
     useEffect(() => {
         const allAvailablilty = async () => {
             try {
+                console.log("Calling API to fetch available associates...");
                 const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                console.log("API Response:", response.data);
+                console.log("API Response: second");
                 if (response.data && response.data.length > 0) {
                     setAvailabilityData(response.data)
                     toast.success("successfully rendered")
                     console.log(response.data.length, "repsonse data")
                 } else {
+                    console.log("object chceking else")
                     setNoSlot(true)
                 }
                 setLoading(false);
             } catch (error) {
+                console.log("in error section")
                 toast.error("error found")
                 console.log(error, "error")
                 setLoading(false);

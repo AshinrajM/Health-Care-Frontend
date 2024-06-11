@@ -58,10 +58,10 @@ export default function AdminUsers() {
 
     return (
         <div className='bg-blue-gray-500 flex flex-col lg:flex-row h-screen'>
-            <div className='lg:w-64 flex-none'>
+            <div className='md:w-64 md:fixed md:h-full'>
                 <SideBar />
             </div>
-            <div className='flex-1 mx-4 lg:mx-10 my-4 lg:my-36'>
+            <div className='flex-1 overflow-auto p-4 lg:ml-64 md:ml-64'>
                 <Typography variant='h2' color='white'>Users</Typography>
                 <Card className='rounded-none bg-gray-100'>
                     <div className='overflow-x-auto'>

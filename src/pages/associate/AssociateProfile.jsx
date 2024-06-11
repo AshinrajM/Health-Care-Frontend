@@ -4,11 +4,11 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Button, Input, Dial
 import homeCover from '../../assets/profile/user.jpg';
 import { FaUserEdit } from "react-icons/fa";
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../../api/api'
 import axios from 'axios';
 
+
 const AssociateProfile = () => {
-
-
 
     const [user, setUser] = useState(null)
     const [associate, setAssociate] = useState(null);

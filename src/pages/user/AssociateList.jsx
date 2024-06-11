@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import backgroundImage from '../../assets/background/3.jpg'
 import Skeleton from 'react-loading-skeleton';
 import NurseCard from '../../components/Cards/NurseCard';
+import { LiaWalkingSolid } from "react-icons/lia";
+
 
 const AssociateList = () => {
 
@@ -17,11 +19,11 @@ const AssociateList = () => {
     const [fee, setFee] = useState(0);
     const [openDetail, setOpenDetail] = useState(false)
     const [openBooking, setOpenBooking] = useState(false)
-    const [availabilityData, setAvailabilityData] = useState([]);
+    // const [availabilityData, setAvailabilityData] = useState([]);
     const [selectedCard, setSelectedCard] = useState(null)
     const [selectedOption, setSelectedOption] = useState('');
-    const [location, setLocation] = useState('')
-    const [phone, setPhone] = useState('')
+    // const [location, setLocation] = useState('')
+    // const [phone, setPhone] = useState('')
     const [noSlot, setNoSlot] = useState(false)
     const [loading, setLoading] = useState(true)
 
@@ -51,36 +53,37 @@ const AssociateList = () => {
     };
 
 
-    const isFormValid = location.trim() !== '' && phone.trim() !== '' && selectedOption !== '';
+    // const isFormValid = location.trim() !== '' && phone.trim() !== '' && selectedOption !== '';
 
-    const confirm = () => {
-        if (!isFormValid) {
-            return;
-        }
+    // const confirm = () => {
+    //     if (!isFormValid) {
+    //         return;
+    //     }
 
-        const bookingDetail = {
-            location: location,
-            phone: phone,
-            shift: selectedOption,
-            slot: selectedCard
-        }
-        localStorage.setItem("bookingDetail", JSON.stringify(bookingDetail));
+    //     const bookingDetail = {
+    //         location: location,
+    //         phone: phone,
+    //         shift: selectedOption,
+    //         slot: selectedCard
+    //     }
+    //     localStorage.setItem("bookingDetail", JSON.stringify(bookingDetail));
 
-        setOpenBooking(!openBooking)
+    //     setOpenBooking(!openBooking)
 
-        navigate('/secured/checkout');
-    }
+    //     navigate('/secured/checkout');
+    // }
 
     useEffect(() => {
         const allAvailablilty = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/booking/available-list/`);
+                const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                console.log(response.data, "repsonse data main")
                 setLoading(false)
                 if (response.data && response.data.length > 0) {
-                    setAvailabilityData(response.data)
-                    toast.success("successfully rendered")
-                    console.log(response.data.length, "repsonse data")
+                    // setAvailabilityData(response.data)
+                    console.log(response.data.length, "repsonse data main2")
                 } else {
+                    console.log("check in else in main 3")
                     setNoSlot(true)
                 }
             } catch (error) {
@@ -91,16 +94,16 @@ const AssociateList = () => {
         allAvailablilty()
     }, [])
 
-    const dialogStyle = {
-        fontFamily: "Jersey 25",
-        fontSize: '20px',
-        fontWeight: '550',
-    }
+    // const dialogStyle = {
+    //     fontFamily: "Jersey 25",
+    //     fontSize: '20px',
+    //     fontWeight: '550',
+    // }
 
 
     const textStyle = {
         fontFamily: "Afacad",
-        fontSize: '14px',
+        fontSize: '16px',
         fontWeight: '550',
     }
 
@@ -144,15 +147,28 @@ const AssociateList = () => {
                             <div><Header /></div>
                             <div className='flex justify-center m-5'>
                                 {noSlot && (
-                                    <img src={backgroundImage} alt="No bookings yet" className='rounded-2xl' />
+                                    <>
+                                        {/* <img src={backgroundImage} alt="No bookings yet" className='rounded-xl' /> */}
+                                        <div className='flex flex-col gap-5 '>
+                                            <div className='flex mb-5'>
+
+                                                <div className='self-center '>
+                                                    <LiaWalkingSolid className='w-52 h-52 ' color='gray' />
+                                                </div>
+                                                <div className='self-center '>
+                                                    <LiaWalkingSolid className='w-52 h-52 ' color='gray' />
+                                                </div>
+                                            </div>
+                                            <p className='text-2xl tracking-widest mb-0 text-gray-600'
+                                                style={textStyle}>There is no  slots available Everybody is busy. Try again Later</p>
+                                            <Button className='mb-3 tracking-widest' color='gray' onClick={(e) => navigate('/')} style={{ wordSpacing: '1rem' }}
+                                            >Try again later</Button>
+                                        </div>
+
+
+                                    </>
                                 )}
                             </div>
-                            {noSlot && (
-                                <div className='absolute bottom-32 left-1/2 transform -translate-x-1/2 flex justify-center items-center'>
-                                    <p className='text-teal-800 text-center text-2xl 
-                                    tracking-widest'>Every One is taking Service <br /> Please wait.....</p>
-                                </div>
-                            )}
                             <div><Footer /></div>
                         </>
                     ) : (
@@ -191,7 +207,7 @@ const AssociateList = () => {
                             <div >
                                 <NurseCard />
                             </div>
-                            
+
                             <div className='mt-10'>
                                 <Footer />
                             </div>

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import Rating from '@mui/material/Rating';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { SlCalender } from "react-icons/sl";
-import { FaStar } from "react-icons/fa6";
+import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
 import { BASE_URL } from '../../api/api';
@@ -9,6 +17,51 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaRegMessage } from "react-icons/fa6";
 import { FaDotCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
+
+
+const StyledRating = styled(Rating)(({ theme }) => ({
+  '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
+    color: theme.palette.action.disabled,
+  },
+  '& .MuiSvgIcon-root': {
+    fontSize: '5rem',
+    padding: '10px',
+  },
+}));
+
+const customIcons = {
+  1: {
+    icon: <SentimentVeryDissatisfiedIcon color="error" />,
+    label: 'Very Dissatisfied',
+  },
+  2: {
+    icon: <SentimentDissatisfiedIcon color="error" />,
+    label: 'Dissatisfied',
+  },
+  3: {
+    icon: <SentimentSatisfiedIcon color="warning" />,
+    label: 'Neutral',
+  },
+  4: {
+    icon: <SentimentSatisfiedAltIcon color="success" />,
+    label: 'Satisfied',
+  },
+  5: {
+    icon: <SentimentVerySatisfiedIcon color="success" />,
+    label: 'Very Satisfied',
+  },
+};
+
+
+function IconContainer(props) {
+  const { value, ...other } = props;
+  return <span {...other}>{customIcons[value].icon}</span>;
+}
+
+IconContainer.propTypes = {
+  value: PropTypes.number.isRequired,
+};
 
 
 
@@ -19,8 +72,15 @@ const BookingHistory = () => {
   const [bookings, setBookings] = useState(null)
   const [noBookings, setNoBookings] = useState(false)
   const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false)
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [openAccordion, setOpenAccordion] = useState(null);
+  const [rating, setRating] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const bookingsPerPage = 5;
+
+
 
   const navigate = useNavigate()
 
@@ -33,17 +93,55 @@ const BookingHistory = () => {
     setOpen(!open);
   }
 
-  const getBookings = async (userId) => {
+  const handleReviewModal = (booking) => {
+    setSelectedBooking(booking)
+    setOpen2(!open2);
+  }
+  const handleClose = () => {
+    setRating(null)
+    setOpen2(!open2);
+  }
+
+  const handleRating = async (bookingId) => {
+    const datas = {
+      bookingId: bookingId,
+      rating: rating
+    }
+    try {
+      const response = await axios.post(`${BASE_URL}/booking/add-rating`, datas)
+      setOpen2(!open2)
+      console.log("object", response.data)
+      toast.success(response.data.message)
+      getBookings(user.id)
+
+    } catch (error) {
+      setOpen2(!open2)
+      console.log("object", error)
+    }
+  }
+
+  const getBookings = async (userId, page = 1) => {
     console.log(userId, "active user")
-    const response = await axios.get(`${BASE_URL}/booking/bookings?userId=${userId}`)
-    if (response.data && response.data.booking.length > 0) {
-      console.log(response.data)
-      setBookings(response.data.booking)
+    // const response = await axios.get(`${BASE_URL}/booking/bookings?userId=${userId}`)
+    const response = await axios.get(`${BASE_URL}/booking/bookings?userId=${userId}&page=${page}`);
+    console.log("check resaponse pagination", response.data)
+    // if (response.data) {
+    //   console.log(response.data, "checking the received booking datas")
+    //   if (response.data.booking.results.length > 0) {
+    //     setBookings(response.data.booking.results)
+    //   }
+    if (response.data) {
+      setBookings(response.data.booking.results);
+      setTotalPages(Math.ceil(response.data.booking.count / bookingsPerPage));
+      setNoBookings(response.data.booking.results.length === 0);
     } else {
       setNoBookings(true)
     }
 
   }
+
+
+  console.log("chek state bookings", bookings)
 
   const handleBookingCancel = async (booking_id) => {
     const bookingId = booking_id
@@ -57,6 +155,8 @@ const BookingHistory = () => {
       if (response.status === 200) {
         console.log(response.data, "received response")
         getBookings(user.id)
+        console.log("response", response.data)
+        toast.success(response.data.success)
       }
       setOpen(!open)
     } catch (error) {
@@ -70,10 +170,12 @@ const BookingHistory = () => {
     if (userDetails) {
       const parsedUser = JSON.parse(userDetails);
       setUser(parsedUser);
-      getBookings(parsedUser.id)
+      // getBookings(parsedUser.id)
+      getBookings(parsedUser.id, currentPage)
     }
 
-  }, [])
+  }, [currentPage])
+
 
   const formatDate = (dateString) => {
     const dateParts = dateString.split('-');
@@ -98,6 +200,11 @@ const BookingHistory = () => {
 
   console.log(user, "details")
   console.log(bookings, 'booking datas')
+
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   if (noBookings) {
     return (
@@ -129,7 +236,7 @@ const BookingHistory = () => {
         </div>
 
         <>
-          <div className='mx-4 sm:mx-8 md:mx-12 lg:mx-24 xl:mx-48 mb-36 mt-20 '>
+          <div className='mx-4 sm:mx-8 md:mx-12 lg:mx-24 xl:mx-48 mb-12 mt-20 '>
             {bookings && bookings.map((booking, index) => (
               <Accordion
                 key={index}
@@ -148,7 +255,12 @@ const BookingHistory = () => {
                     <Typography color="black" className="mb-2 sm:mb-0" style={style}>
                       Associate : {booking.associate.name}
                     </Typography>
-                    <p className='opacity-70'><FaDotCircle className='w-3 h-4' color={booking.status === 'confirmed' ? 'green' : 'red'} /></p>
+                    <p className='opacity-70'>
+                      <FaDotCircle
+                        className='w-3 h-4'
+                        style={{ color: booking.status === 'completed' ? 'green' : booking.status === 'confirmed' ? 'blue' : booking.status === 'cancelled' ? 'red' : 'gray' }}
+                      />
+                    </p>
                   </AccordionHeader>
                 </div>
                 <AccordionBody className="text-black flex flex-col sm:flex-row justify-between">
@@ -179,19 +291,6 @@ const BookingHistory = () => {
                     </div>
                   </div>
                   <div className='w-full sm:w-1/2 flex flex-col'>
-                    <div className='flex justify-end items-center gap-2'>
-                      <Typography className='flex items-center gap-1 text-black text-sm mb-2'>
-                        <FaStar color='yellow' className='w-4 h-4' />
-                        <FaStar color='yellow' className='w-4 h-4' />
-                        <FaStar color='yellow' className='w-4 h-4' />
-                        <FaStar color='yellow' className='w-4 h-4' />
-                      </Typography>
-                    </div>
-                    <div className='flex justify-end items-center gap-2'>
-                      <Typography variant="small" color="blue-gray" className="mb-1">
-                        110 reviews, good
-                      </Typography>
-                    </div>
                     <div className='flex justify-end'>
                       <Typography className='mb-1 mt-4 sm:mt-0' variant='paragraph'
                         color={booking.status === 'confirmed' ? 'blue' : booking.status === 'completed' ? 'green' : 'red'}>
@@ -208,15 +307,40 @@ const BookingHistory = () => {
                           <Button color='red' variant='gradient' size='sm' className='rounded-md text-xs px-3' onClick={() => handleOpen(booking)}>Cancel Booking</Button>
                         </>
                       ) : null}
-
-                      {/* <Button color='indigo' size='sm' className='rounded-md text-xs px-3'>Details</Button> */}
-
+                    </div>
+                    <div className='self-end'>
+                      {
+                        booking.status === 'completed' && !booking.rating?.rating_value ? (
+                          <Button
+                            color='yellow'
+                            className='rounded-md text-xs px-2 tracking-wider p-3'
+                            onClick={() => handleReviewModal(booking)}
+                          >
+                            Add rating
+                          </Button>
+                        ) : null
+                      }
                     </div>
                   </div>
                 </AccordionBody>
               </Accordion>
             ))}
           </div>
+
+          <div className='flex justify-center mt-2'>
+            <Button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1} className='rounded-full'>
+              <GrLinkPrevious className='h-6 w-6' />
+            </Button>
+            <span className='mx-4 mt-2 text-center'>{currentPage} / {totalPages}</span>
+            <Button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages} className='rounded-full'>
+              <GrLinkNext className='h-6 w-6' />
+            </Button>
+          </div>
+
         </>
         <div className='mt-20'>
           <Footer />
@@ -241,6 +365,42 @@ const BookingHistory = () => {
               </Button>
               <Button variant="gradient" color="green"
                 onClick={() => handleBookingCancel(selectedBooking?.booking_id)}>
+                <span>Confirm </span>
+              </Button>
+            </DialogFooter>
+          </Dialog>
+          <Dialog open={open2}>
+            <DialogHeader>Rate the Service by {selectedBooking?.associate.name}</DialogHeader>
+            <DialogBody className='flex flex-col gap-5'>
+              {/* <Typography>
+                Twenty five years of {selectedBooking?.booking_id}
+                blood sweat and tears, and I&apos;m never giving up, I&apos;m just
+                Here
+                getting started. I&apos;m up to something. Fan luv. <br />
+              </Typography> */}
+
+
+              <StyledRating className='self-center'
+                name="highlight-selected-only"
+                defaultValue={2}
+                IconContainerComponent={IconContainer}
+                getLabelText={(value) => customIcons[value].label}
+                highlightSelectedOnly
+                value={rating}
+                onChange={(e, newValue) => setRating(newValue)}
+              />
+              {/* <p>value:{rating}</p> */}
+            </DialogBody>
+            <DialogFooter className='gap-5'>
+              <Button
+                variant="text"
+                color="red"
+                onClick={() => handleClose()}
+                className="mr-1">
+                <span>Cancel</span>
+              </Button>
+              <Button variant="gradient" color="green"
+                onClick={() => handleRating(selectedBooking?.booking_id)}>
                 <span>Confirm </span>
               </Button>
             </DialogFooter>

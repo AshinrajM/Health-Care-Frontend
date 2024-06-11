@@ -216,7 +216,8 @@ const Profile = () => {
                                 </Button>
                                 <Button variant='outlined' onClick={handleOpen}>
                                     <FaUserEdit className=' size-5' /></Button>
-                                <Button variant='outlined' onClick={handlePassOpen}>Change Password</Button>
+                                {user.is_google ? null :
+                                    <Button variant='outlined' onClick={handlePassOpen}>Change Password</Button>}
                             </CardFooter>
                         </CardBody>
                     </Card>
