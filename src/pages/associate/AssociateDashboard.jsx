@@ -28,6 +28,7 @@ const AssociateDashboard = () => {
   const [open, setOpen] = useState(false);
   const [slotDates, setSlotDates] = useState([]);
   const [services, setServices] = useState('')
+  const [rating, setRating] = useState(null)
 
 
 
@@ -46,7 +47,6 @@ const AssociateDashboard = () => {
       setUser(userDetails)
       setAssociate(associateDetails)
       console.log(associateDetails.id)
-      // scheduledDates(associateDetails.id)
       getAssociateUser()
     }
   }, [])
@@ -55,7 +55,6 @@ const AssociateDashboard = () => {
   const getAssociateUser = async () => {
 
     const userdata = JSON.parse(localStorage.getItem('user'))
-
     const associateUserId = userdata.id
     try {
       const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
@@ -67,6 +66,7 @@ const AssociateDashboard = () => {
         const extractedDates = availableSlots.map(slot => moment(slot.date).format('YYYY-MM-DD'));
         setSlotDates(extractedDates);
         setServices(response.data.count)
+        setRating(response.data.average_rating)
       }
     } catch (error) {
       console.log("error found", error)
@@ -75,13 +75,18 @@ const AssociateDashboard = () => {
 
   console.log(selectedDate)
 
-  const today = new Date()
-  const startDate = new Date(today.setDate(today.getDate() + 1))
-  const endDate = new Date(today.setDate(today.getDate() + 7))
-  const inputDate = selectedDate
-  const inputDateFormat = 'YYYY//MM/DD'
-  const momentObject = moment(inputDate, inputDateFormat)
-  const utcDate = momentObject.utc().format();
+  // const today = new Date()
+  // const startDate = new Date(today.setDate(today.getDate()+1))
+  // const endDate = new Date(today.setDate(today.getDate() + 7))
+  // const inputDate = selectedDate
+  const today = new Date();
+  const startDate = new Date(today.getTime() + 24 * 60 * 60 * 1000); // Start from tomorrow
+  const endDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // End after 7 days
+  const inputDate = selectedDate;
+  // const inputDateFormat = 'YYYY//MM/DD'
+  // const momentObject = moment(inputDate, inputDateFormat)
+  // const utcDate = momentObject.utc().format();
+  const utcDate = moment(inputDate).format('YYYY-MM-DD'); 
   const actual = utcDate.toString().split('T')[0]
   console.log(actual, "utc date")
 
@@ -173,14 +178,14 @@ const AssociateDashboard = () => {
                 </CardBody>
               </Card>
             </div>
-            {/* <div className='w-1/3'>
+            <div className='w-1/3'>
               <Card className="">
                 <CardBody className='flex items-center'>
                   <RiUserStarLine className='h-12 w-12 text-black' />
-                  <Typography variant='h4' color='black'> &nbsp; 4.5</Typography>
+                  <Typography variant='h4' color='black'> &nbsp;{rating?.average_rating}</Typography>
                 </CardBody>
               </Card>
-            </div> */}
+            </div>
             <div className='w-1/2'>
               <Card className="">
                 <CardBody className='flex items-center'>

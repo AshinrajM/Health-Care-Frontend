@@ -254,11 +254,11 @@ export default function Home() {
 
 
 
-            {address && (
+            {/* {address && (
                 <div>
                     <p>Address:{address}</p>
                 </div>
-            )}
+            )} */}
 
 
             <div className='flex flex-col md:flex-row '>

@@ -18,7 +18,7 @@ const InitialsAvatar = ({ name }) => {
     };
 
     return (
-        <div className="w-14 h-14 rounded-full bg-cyan-900 flex items-center justify-center text-white text-xl font-thin">
+        <div className="w-10 h-10 p-6 rounded-full bg-cyan-900 flex items-center justify-center text-white text-xl font-thin">
             {getInitials(name)}
         </div>
     );
@@ -161,7 +161,7 @@ const NurseCard = () => {
                     {availabilityData.map((data, index) => (
                         <div key={index} className="w-full md:w-1/4 lg:w-1/4 p-2 bg-green-100
                         rounded-lg shadow-md overflow-hidden m-0 hover:shadow-xl hover:scale-105 duration-200">
-                            <div className="flex items-center p-3">
+                            <div className="flex items-center p-1">
                                 <InitialsAvatar name={data.name} />
                                 <div className="ml-4">
                                     <div className="flex items-center">

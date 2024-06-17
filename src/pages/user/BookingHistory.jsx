@@ -327,6 +327,7 @@ const BookingHistory = () => {
             ))}
           </div>
 
+
           <div className='flex justify-center mt-2'>
             <Button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -359,7 +360,8 @@ const BookingHistory = () => {
               <Button
                 variant="text"
                 color="red"
-                onClick={handleOpen}
+                // onClick={handleOpen}
+                onClick={() => setOpen(!open)}
                 className="mr-1">
                 <span>Cancel</span>
               </Button>
@@ -372,14 +374,6 @@ const BookingHistory = () => {
           <Dialog open={open2}>
             <DialogHeader>Rate the Service by {selectedBooking?.associate.name}</DialogHeader>
             <DialogBody className='flex flex-col gap-5'>
-              {/* <Typography>
-                Twenty five years of {selectedBooking?.booking_id}
-                blood sweat and tears, and I&apos;m never giving up, I&apos;m just
-                Here
-                getting started. I&apos;m up to something. Fan luv. <br />
-              </Typography> */}
-
-
               <StyledRating className='self-center'
                 name="highlight-selected-only"
                 defaultValue={2}

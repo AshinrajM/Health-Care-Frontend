@@ -94,13 +94,6 @@ const AssociateList = () => {
         allAvailablilty()
     }, [])
 
-    // const dialogStyle = {
-    //     fontFamily: "Jersey 25",
-    //     fontSize: '20px',
-    //     fontWeight: '550',
-    // }
-
-
     const textStyle = {
         fontFamily: "Afacad",
         fontSize: '16px',

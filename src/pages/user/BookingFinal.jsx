@@ -41,7 +41,7 @@ const BookingFinal = () => {
 
     let payable_amount;
     if (finalData) {
-        payable_amount = finalData.associate.fee_per_hour * (finalData.shift === "full day" ? 8 : 4);
+        payable_amount = finalData.associate.fee_per_hour * (finalData.shift === "fullday" ? 8 : 4);
     }
 
 
