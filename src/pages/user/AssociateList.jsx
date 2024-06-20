@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaStar } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import { Card, CardBody, Button, Input, Radio } from "@material-tailwind/react";
+import { Card, CardBody, Button, Input, Radio, Typography } from "@material-tailwind/react";
 import { BASE_URL } from "../../api/api";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -15,13 +15,13 @@ import { LiaWalkingSolid } from "react-icons/lia";
 
 const AssociateList = () => {
 
-    const [exp, setExp] = useState(0);
-    const [fee, setFee] = useState(0);
-    const [openDetail, setOpenDetail] = useState(false)
-    const [openBooking, setOpenBooking] = useState(false)
+    // const [exp, setExp] = useState(0);
+    // const [fee, setFee] = useState(0);
+    // const [openDetail, setOpenDetail] = useState(false)
+    // const [openBooking, setOpenBooking] = useState(false)
     // const [availabilityData, setAvailabilityData] = useState([]);
-    const [selectedCard, setSelectedCard] = useState(null)
-    const [selectedOption, setSelectedOption] = useState('');
+    // const [selectedCard, setSelectedCard] = useState(null)
+    // const [selectedOption, setSelectedOption] = useState('');
     // const [location, setLocation] = useState('')
     // const [phone, setPhone] = useState('')
     const [noSlot, setNoSlot] = useState(false)
@@ -29,16 +29,16 @@ const AssociateList = () => {
 
     const navigate = useNavigate();
 
-    const handleOpenBooking = (data) => {
-        console.log(data, "data")
-        setSelectedCard(data)
-        setOpenBooking(!openBooking)
+    // const handleOpenBooking = (data) => {
+    //     console.log(data, "data")
+    //     setSelectedCard(data)
+    //     setOpenBooking(!openBooking)
 
-    }
+    // }
 
-    const handleOpenDetail = () => {
-        setOpenDetail(!openDetail);
-    }
+    // const handleOpenDetail = () => {
+    //     setOpenDetail(!openDetail);
+    // }
 
     const currentDate = new Date();
 
@@ -48,30 +48,10 @@ const AssociateList = () => {
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 7);
 
-    const handleOptionChange = (value) => {
-        setSelectedOption(value);
-    };
+    // const handleOptionChange = (value) => {
+    //     setSelectedOption(value);
+    // };
 
-
-    // const isFormValid = location.trim() !== '' && phone.trim() !== '' && selectedOption !== '';
-
-    // const confirm = () => {
-    //     if (!isFormValid) {
-    //         return;
-    //     }
-
-    //     const bookingDetail = {
-    //         location: location,
-    //         phone: phone,
-    //         shift: selectedOption,
-    //         slot: selectedCard
-    //     }
-    //     localStorage.setItem("bookingDetail", JSON.stringify(bookingDetail));
-
-    //     setOpenBooking(!openBooking)
-
-    //     navigate('/secured/checkout');
-    // }
 
     useEffect(() => {
         const allAvailablilty = async () => {
@@ -132,8 +112,6 @@ const AssociateList = () => {
                     <Footer />
                 </>
             ) : (
-
-
                 <>
                     {noSlot ? (
                         <>
@@ -169,7 +147,7 @@ const AssociateList = () => {
                             <div className='shadow-md'>
                                 <Header />
                             </div>
-                            <div>
+                            {/* <div>
                                 <Card className="mt-6 bg-green-300  shadow-xl rounded-none">
                                     <CardBody className='flex space-x-5 items-center justify-center'>
                                         <div >
@@ -195,9 +173,13 @@ const AssociateList = () => {
                                         </div>
                                     </CardBody>
                                 </Card>
-                            </div>
+                            </div> */}
 
                             <div >
+                                <div className='ml-8 flex flex-col  justify-center mt-10'>
+                                    <Typography variant='h2' color='indigo' className='text-center'>Associates Available</Typography>
+                                    <Typography color='indigo' className='text-sm text-center'>Choose your dates & confirm your bookings</Typography>
+                                </div>
                                 <NurseCard />
                             </div>
 

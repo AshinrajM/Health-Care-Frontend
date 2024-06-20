@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CiLocationOn } from "react-icons/ci";
 import { faCalendarAlt, faMapMarkerAlt, faStar, faIndianRupee, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { Select, Option, Dialog, DialogBody, DialogHeader, DialogFooter, Typography, Radio, Input, Button } from "@material-tailwind/react";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { BASE_URL } from '../../api/api';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import { useNavigate } from 'react-router-dom';
 import '../Cards/custom.css'
 
@@ -47,7 +47,6 @@ const NurseCard = () => {
                 console.log("Calling API to fetch available associates...");
                 const response = await axios.get(`${BASE_URL}/booking/available-associates`);
                 console.log("API Response:", response.data);
-                console.log("API Response: second");
                 if (response.data && response.data.length > 0) {
                     setAvailabilityData(response.data)
                     toast.success("successfully rendered")
@@ -157,7 +156,7 @@ const NurseCard = () => {
             {loading ? (
                 <div>Loading...</div> // Display loading message or spinner
             ) : (
-                <div className="flex  justify-center gap-6 p-8 ">
+                <div className="flex  justify-start gap-6 p-8 ">
                     {availabilityData.map((data, index) => (
                         <div key={index} className="w-full md:w-1/4 lg:w-1/4 p-2 bg-green-100
                         rounded-lg shadow-md overflow-hidden m-0 hover:shadow-xl hover:scale-105 duration-200">
@@ -165,22 +164,26 @@ const NurseCard = () => {
                                 <InitialsAvatar name={data.name} />
                                 <div className="ml-4">
                                     <div className="flex items-center">
-                                        <h2 className="text-xl text-gray-900 truncate" style={{ fontFamily: 'Krona One', textTransform: 'uppercase' }}>{data.name}</h2>
+                                        <h2 className="text-lg text-gray-900 truncate" style={{ fontFamily: 'Krona One', textTransform: 'uppercase' }}>{data.name}</h2>
                                         <FontAwesomeIcon icon={faCheckCircle} className="ml-2 text-green-500" />
                                     </div>
                                     <p>{data.age} years old</p>
                                 </div>
                             </div>
                             <div className="px-8 py-4">
-                                <div className="flex items-center mb-4 text-black">
+                                <div className="flex items-center mb-4 gap-2 ml-2 text-black">
                                     <FontAwesomeIcon icon={faBriefcase} className="mr-4" />
                                     <p className='px-2' style={textStyle}>{data.experience} Years</p>
                                 </div>
-                                <div className="flex items-center mb-4 text-black">
+                                <div className="flex items-center mb-4 gap-2 ml-2 text-black">
                                     <FontAwesomeIcon icon={faIndianRupee} className="mr-4" />
                                     <p className='px-3' style={textStyle}>{data.fee_per_hour} / hr</p>
                                 </div>
-                                <div className="mb-4 flex">
+                                <div className="flex items-center mb-4 gap-5 text-black">
+                                    <CiLocationOn  className="h-6 w-6 self-start" />
+                                    <p className='px-3' style={textStyle}>{data.user.location}</p>
+                                </div>
+                                <div className="mb-4 flex gap-1">
                                     <div className="text-black mb-2">
                                         <FontAwesomeIcon icon={faCalendarAlt} className="mr-4"
                                             style={{ height: '30px', width: '28px' }} />
@@ -200,7 +203,6 @@ const NurseCard = () => {
                                                 </Option>
                                             ))}
                                         </Select>
-                                        {/* <p className='text-xs mt-2 text-gray-600'>Nb : here you can see the available dates </p> */}
                                     </div>
                                 </div>
                                 <Button className="btn  w-full py-2 px-4 mb-3 "
