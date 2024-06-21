@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import {
-    Button, Typography, Dialog, DialogHeader, DialogBody,
-    DialogFooter, Radio
-} from "@material-tailwind/react";
+import { Button, Typography, Dialog, DialogHeader, DialogBody, DialogFooter, Radio } from "@material-tailwind/react";
 import { LuMessagesSquare } from "react-icons/lu";
 import SideBarAssociate from '../../components/SideBarAssociate/SideBarAssociate';
 import axios from 'axios';
-import { BASE_URL } from '../../api/api';
+// import { BASE_URL } from '../../api/api';
 import outlined from '@material-tailwind/react/theme/components/timeline/timelineIconColors/outlined';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axiosInstance from '../../api/api';
 
 const Bookings = () => {
 
@@ -17,7 +15,7 @@ const Bookings = () => {
     const [noBooking, setNoBooking] = useState(false)
     const [open, setOpen] = React.useState(false);
     const [selectedStatus, setSelectedStatus] = useState('confirmed');
-
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
     const navigate = useNavigate()
 
 
@@ -27,7 +25,8 @@ const Bookings = () => {
     const getBookings = async (Id) => {
         console.log("object", Id)
         try {
-            const response = await axios.get(`${BASE_URL}/booking/associate-booking?associateId=${Id}`)
+            // const response = await axios.get(`${BASE_URL}/booking/associate-booking?associateId=${Id}`)
+            const response = await axiosInstance.get(`/booking/associate-booking?associateId=${Id}`)
             console.log(response, "sacgub")
             if (response.data && response.data.length > 0) {
                 console.log(response.data, "booking data")
@@ -64,10 +63,19 @@ const Bookings = () => {
         }
         console.log(values, "sending values")
         try {
-            const response = await axios.patch(`${BASE_URL}/booking/associate-booking`, values)
+            // const response = await axios.patch(`${BASE_URL}/booking/associate-booking`, values)
+            const response = await axiosInstance.patch(`/booking/associate-booking`, values)
             if (response.status === 200) {
                 setOpen(!open)
+                const updatedBookings = bookings.map((booking) => {
+                    if (booking.booking_id === booking_id) {
+                        return { ...booking, status: selectedStatus };
+                    }
+                    return booking;
+                });
+                setBookings(updatedBookings);
                 toast.success("booking updated")
+
             }
 
         } catch (error) {
@@ -76,6 +84,10 @@ const Bookings = () => {
             toast.error("found error, try again")
 
         }
+    }
+    const openDialog = (bookingId) => {
+        setSelectedBookingId(bookingId)
+        setOpen(!open)
     }
 
     const handleCancel = () => {
@@ -105,7 +117,8 @@ const Bookings = () => {
                                     {TABLE_HEAD.map((head) => (
                                         <th
                                             key={head}
-                                            className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                                            className="border-b border-blue-gray-100
+                                             bg-blue-gray-50 p-4"
                                         >
                                             <Typography
                                                 variant="small"
@@ -133,7 +146,6 @@ const Bookings = () => {
                                                     className="font-normal "
                                                 >
                                                     {index + 1}
-                                                    {/* Displaying serial number (index + 1) */}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
@@ -199,7 +211,8 @@ const Bookings = () => {
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-normal"
+                                                    className={`font-normal ${status === 'confirmed' ? 'text-blue-500' : status === 'completed' ? 'text-green-500' : status === 'cancelled' ? 'text-red-500' : 'text-gray-500'}`}
+
                                                 >
                                                     {status}
                                                 </Typography>
@@ -212,7 +225,8 @@ const Bookings = () => {
                                                         className="font-normal"
                                                     >
                                                         <Button variant='outlined'
-                                                            onClick={() => setOpen(!open)}>Update status</Button>
+                                                            onClick={() => openDialog(booking_id)}>Update status
+                                                        </Button>
 
                                                     </Typography>
 
@@ -223,7 +237,7 @@ const Bookings = () => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    NA
+                                                    N/A
                                                 </Typography>
 
                                             </td>
@@ -240,14 +254,14 @@ const Bookings = () => {
 
                 </div>
             )}
-            {bookings && bookings.map(({ booking_id }, index) => (
+            {selectedBookingId && (
 
-                <div key={index}>
+                <div>
                     <Dialog open={open} >
                         <DialogHeader>Update Booking Status</DialogHeader>
                         <DialogBody>
                             This is the final procedure about bookings <br />
-                            {booking_id} - update booking status here
+                            {selectedBookingId} - update booking status here
                             <div className="flex gap-10">
                                 <Radio name="type" label="confirmed" color='blue'
                                     onChange={() => setSelectedStatus('confirmed')} defaultChecked />
@@ -266,7 +280,7 @@ const Bookings = () => {
                             </Button>
                             <Button variant="outlined" color="green"
                                 className='hover:bg-green-700 hover:text-white'
-                                onClick={() => handleUpdateStatus(booking_id)}
+                                onClick={() => handleUpdateStatus(selectedBookingId)}
                                 disabled={selectedStatus !== 'completed'}>
                                 <span>Update</span>
                             </Button>
@@ -274,7 +288,7 @@ const Bookings = () => {
                     </Dialog>
                 </div>
 
-            ))}
+            )}
 
         </div>
 

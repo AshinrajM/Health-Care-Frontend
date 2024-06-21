@@ -1,42 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { FaStar } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import { Card, CardBody, Button, Input, Radio } from "@material-tailwind/react";
-import { BASE_URL } from "../../api/api";
+import { Card, CardBody, Button, Typography } from "@material-tailwind/react";
+import axiosInstance from "../../api/api";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import backgroundImage from '../../assets/background/3.jpg'
 import Skeleton from 'react-loading-skeleton';
 import NurseCard from '../../components/Cards/NurseCard';
+import { LiaWalkingSolid } from "react-icons/lia";
+
 
 const AssociateList = () => {
 
-    const [exp, setExp] = useState(0);
-    const [fee, setFee] = useState(0);
-    const [openDetail, setOpenDetail] = useState(false)
-    const [openBooking, setOpenBooking] = useState(false)
-    const [availabilityData, setAvailabilityData] = useState([]);
-    const [selectedCard, setSelectedCard] = useState(null)
-    const [selectedOption, setSelectedOption] = useState('');
-    const [location, setLocation] = useState('')
-    const [phone, setPhone] = useState('')
+
     const [noSlot, setNoSlot] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const navigate = useNavigate();
-
-    const handleOpenBooking = (data) => {
-        console.log(data, "data")
-        setSelectedCard(data)
-        setOpenBooking(!openBooking)
-
-    }
-
-    const handleOpenDetail = () => {
-        setOpenDetail(!openDetail);
-    }
 
     const currentDate = new Date();
 
@@ -46,41 +28,20 @@ const AssociateList = () => {
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 7);
 
-    const handleOptionChange = (value) => {
-        setSelectedOption(value);
-    };
 
 
-    const isFormValid = location.trim() !== '' && phone.trim() !== '' && selectedOption !== '';
-
-    const confirm = () => {
-        if (!isFormValid) {
-            return;
-        }
-
-        const bookingDetail = {
-            location: location,
-            phone: phone,
-            shift: selectedOption,
-            slot: selectedCard
-        }
-        localStorage.setItem("bookingDetail", JSON.stringify(bookingDetail));
-
-        setOpenBooking(!openBooking)
-
-        navigate('/secured/checkout');
-    }
 
     useEffect(() => {
         const allAvailablilty = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/booking/available-list/`);
+                // const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                const response = await axiosInstance.get('/booking/available-associates');
+                console.log(response.data, "repsonse data main")
                 setLoading(false)
                 if (response.data && response.data.length > 0) {
-                    setAvailabilityData(response.data)
-                    toast.success("successfully rendered")
-                    console.log(response.data.length, "repsonse data")
+                    console.log(response.data.length, "repsonse data main2")
                 } else {
+                    console.log("check in else in main 3")
                     setNoSlot(true)
                 }
             } catch (error) {
@@ -91,16 +52,9 @@ const AssociateList = () => {
         allAvailablilty()
     }, [])
 
-    const dialogStyle = {
-        fontFamily: "Jersey 25",
-        fontSize: '20px',
-        fontWeight: '550',
-    }
-
-
     const textStyle = {
         fontFamily: "Afacad",
-        fontSize: '14px',
+        fontSize: '16px',
         fontWeight: '550',
     }
 
@@ -136,23 +90,32 @@ const AssociateList = () => {
                     <Footer />
                 </>
             ) : (
-
-
                 <>
                     {noSlot ? (
                         <>
                             <div><Header /></div>
                             <div className='flex justify-center m-5'>
                                 {noSlot && (
-                                    <img src={backgroundImage} alt="No bookings yet" className='rounded-2xl' />
+                                    <>
+                                        <div className='flex flex-col gap-5 '>
+                                            <div className='flex mb-5'>
+
+                                                <div className='self-center '>
+                                                    <LiaWalkingSolid className='w-52 h-52 ' color='gray' />
+                                                </div>
+                                                <div className='self-center '>
+                                                    <LiaWalkingSolid className='w-52 h-52 ' color='gray' />
+                                                </div>
+                                            </div>
+                                            <p className='text-2xl tracking-widest mb-0 text-gray-600'
+                                                style={textStyle}>There is no  slots available Everybody is busy. Try again Later</p>
+                                            <Button className='mb-3 tracking-widest' color='gray'
+                                                onClick={(e) => navigate('/')} style={{ wordSpacing: '1rem' }}
+                                            >Try again later</Button>
+                                        </div>
+                                    </>
                                 )}
                             </div>
-                            {noSlot && (
-                                <div className='absolute bottom-32 left-1/2 transform -translate-x-1/2 flex justify-center items-center'>
-                                    <p className='text-teal-800 text-center text-2xl 
-                                    tracking-widest'>Every One is taking Service <br /> Please wait.....</p>
-                                </div>
-                            )}
                             <div><Footer /></div>
                         </>
                     ) : (
@@ -160,7 +123,7 @@ const AssociateList = () => {
                             <div className='shadow-md'>
                                 <Header />
                             </div>
-                            <div>
+                            {/* <div>
                                 <Card className="mt-6 bg-green-300  shadow-xl rounded-none">
                                     <CardBody className='flex space-x-5 items-center justify-center'>
                                         <div >
@@ -173,7 +136,7 @@ const AssociateList = () => {
                                             <input type="range" min={0} max={1000} value={fee} step={100} className='range range-primary' onChange={(e) => setFee(parseInt(e.target.value))} />
                                         </div>
                                         <div >
-                                            <p className='text-black'>Experience : {exp}yrs</p>
+                                         <p className='text-black'>Experience : {exp}yrs</p>
                                             <input type="range" min={0} max={5} value={exp} step={1} className='range range-primary' onChange={(e) => setExp(parseInt(e.target.value))} />
                                         </div>
                                         <div className='flex space-x-2'>
@@ -186,13 +149,17 @@ const AssociateList = () => {
                                         </div>
                                     </CardBody>
                                 </Card>
-                            </div>
+                            </div> */}
 
                             <div >
+                                <div className='ml-8 flex flex-col  justify-center mt-10'>
+                                    <Typography variant='h2' color='indigo' className='text-center'>Associates Available</Typography>
+                                    <Typography color='indigo' className='text-sm text-center'>Choose your dates & confirm your bookings</Typography>
+                                </div>
                                 <NurseCard />
                             </div>
-                            
-                            <div className='mt-10'>
+
+                            <div className='mt-24'>
                                 <Footer />
                             </div>
                         </>

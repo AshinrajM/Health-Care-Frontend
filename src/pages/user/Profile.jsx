@@ -9,8 +9,8 @@ import homeCover from '../../assets/profile/user.jpg';
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
 import axios from 'axios';
+import axiosInstance from '../../api/api';
 import { toast } from 'react-toastify';
-import { BASE_URL } from '../../api/api';
 
 
 const Profile = () => {
@@ -51,7 +51,8 @@ const Profile = () => {
         const userdata = JSON.parse(localStorage.getItem('userDetails'))
         const associateUserId = userdata.id
         try {
-            const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
+            // const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
+            const response = await axiosInstance.get(`/users/get-user?userId=${associateUserId}`)
             if (response.status === 200) {
                 console.log(response.data, 'latest associate user data')
                 setUser(response.data)
@@ -117,7 +118,7 @@ const Profile = () => {
                 formData.append('profile_picture', profile_picture)
             }
             console.log('id', user.id)
-            const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+            const response = await axiosInstance.patch('/users/userslist', formData)
             console.log(response.data, "response data")
             handleOpen()
             setUser(response.data)
@@ -155,7 +156,7 @@ const Profile = () => {
                 formData.append('newPassword', newPassword);
                 formData.append('id', user.id)
 
-                const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+                const response = await axiosInstance.patch('/users/userslist', formData)
                 console.log(response.data, "response data , password changed")
                 handlePassOpen()
                 toast.success("password Updated")
@@ -216,7 +217,8 @@ const Profile = () => {
                                 </Button>
                                 <Button variant='outlined' onClick={handleOpen}>
                                     <FaUserEdit className=' size-5' /></Button>
-                                <Button variant='outlined' onClick={handlePassOpen}>Change Password</Button>
+                                {user.is_google ? null :
+                                    <Button variant='outlined' onClick={handlePassOpen}>Change Password</Button>}
                             </CardFooter>
                         </CardBody>
                     </Card>

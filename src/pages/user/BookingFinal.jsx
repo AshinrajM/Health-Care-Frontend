@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardBody, CardFooter, Typography, Button } from "@material-tailwind/react";
 import Header from '../../components/Header/Header';
-import { BASE_URL } from '../../api/api'
+import axiosInstance from '../../api/api'
 import { API_URL } from '../../Config/config';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -41,7 +41,7 @@ const BookingFinal = () => {
 
     let payable_amount;
     if (finalData) {
-        payable_amount = finalData.associate.fee_per_hour * (finalData.shift === "full day" ? 8 : 4);
+        payable_amount = finalData.associate.fee_per_hour * (finalData.shift === "fullday" ? 8 : 4);
     }
 
 
@@ -80,7 +80,8 @@ const BookingFinal = () => {
     const BookingConfirm = async () => {
 
         try {
-            const response = await axios.post(`${BASE_URL}/booking/checkout`, values)
+            // const response = await axios.post(`${BASE_URL}/booking/checkout`, values)
+            const response = await axiosInstance.post('/booking/checkout', values)
             const checkoutUrl = response.data.url;
             window.location.href = checkoutUrl;
 
@@ -172,11 +173,11 @@ const BookingFinal = () => {
                     </CardBody>
                     <CardFooter className="pt-0 w-full flex gap-4">
                         <Button className='w-1/2 bg-red-700 rounded-none' onClick={cancelBooking} >CANCEL</Button>
-                        {/* <button className="Btn2 w-1/2">
+                        <button className="Btn2 w-1/2 " onClick={BookingConfirm}>
                             Pay
                             <svg class="svgIcon" viewBox="0 0 576 512"><path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path></svg>
-                        </button> */}
-                        <Button className='w-full bg-green-900' onClick={BookingConfirm} >Confirm Booking</Button>
+                        </button>
+                        {/* <Button className='w-full bg-green-900' onClick={BookingConfirm} >Confirm Booking</Button> */}
 
                     </CardFooter>
                 </Card >

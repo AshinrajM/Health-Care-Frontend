@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAdmin } from '../../redux/userSlice';
-import { BASE_URL } from "../../api/api";
+import { BASE_URL } from "../../api/baseUrl";
 import { toast } from 'react-toastify';
 
 const initialValues = {
@@ -34,6 +34,7 @@ export default function AdminLogin() {
   const onSubmit = async (values, actions) => {
     console.log("adminData", values)
     try {
+      // const response = await axios.post(`${BASE_URL}/users/login`, values)
       const response = await axios.post(`${BASE_URL}/users/login`, values)
       console.log("Response:", response.data)
 
@@ -92,7 +93,7 @@ export default function AdminLogin() {
         <Card className="my-10 max-w-md mx-auto rounded-xl p-10  " style={divStyle}>
           <Typography className='text-center p-2 m-5' variant="h2" color="teal">Log In</Typography>
           <form className="flex flex-col gap-4 w-full" onSubmit={formik.handleSubmit}>
-            <Input variant='standard' label="Enter Admin ID" name='email' color="white" onChange={formik.handleChange} value={formik.values.email} autoFocus/>
+            <Input variant='standard' label="Enter Admin ID" name='email' color="white" onChange={formik.handleChange} value={formik.values.email} autoFocus />
             <Input variant='standard' label="Enter Password" name='password' type='password' color="white" onChange={formik.handleChange} value={formik.values.password} />
             <Button className='bg-blue-700 rounded-3xl w-full' type='submit'>Log In</Button>
           </form>

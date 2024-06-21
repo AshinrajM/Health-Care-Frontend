@@ -6,19 +6,17 @@ import Header from '../../components/Header/Header';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { ClipLoader, ClockLoader } from 'react-spinners';
-import { Audio, ColorRing } from 'react-loader-spinner'
+import { ColorRing } from 'react-loader-spinner'
 import { useFormik } from 'formik';
 import { loginUser } from '../../redux/userSlice';
 import { jwtDecode } from 'jwt-decode';
-import { BASE_URL } from "../../api/api";
+import { BASE_URL } from "../../api/baseUrl";
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
 import bg from '../../assets/background/cover.jpg'
-
-
 import { toast } from 'react-toastify'
 import { MdOutlineVerifiedUser } from "react-icons/md";
-// import { data } from 'autoprefixer';
+import axiosInstance from '../../api/api';
 
 
 
@@ -100,7 +98,8 @@ export default function SignIn() {
         console.log(resetEmail)
         setButtonLoading(true)
         try {
-            const response = await axios.post(`${BASE_URL}/users/reset-password-validate`, { email: resetEmail })
+            const response = await axios.post(`${BASE_URL}/users/reset-password-validate`,
+                { email: resetEmail })
             setButtonLoading(false)
             if (response.status === 200) {
                 setShowOtpField(!showOtpField)

@@ -7,9 +7,8 @@ import { toast } from 'react-toastify';
 import { CiWallet } from "react-icons/ci";
 import { RiUserStarLine } from "react-icons/ri";
 import { MdMedicalServices } from "react-icons/md";
-import { BASE_URL } from "../../api/api"
+import axiosInstance from "../../api/api";
 import 'react-calendar/dist/Calendar.css';
-// import './custom-calendar.css';
 import '../../components/Cards/custom.css'
 import moment from 'moment';
 
@@ -24,17 +23,17 @@ const AssociateDashboard = () => {
   const [morningShift, setMorningShift] = useState(false);
   const [noonShift, setNoonShift] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [slot, setSlot] = useState('')
-  const [open, setOpen] = useState(false);
+  // const [slot, setSlot] = useState('')
+  // const [open, setOpen] = useState(false);
   const [slotDates, setSlotDates] = useState([]);
   const [services, setServices] = useState('')
+  const [rating, setRating] = useState(null)
 
 
 
-  const handleOpen = () => {
-
-    setOpen(!open);
-  }
+  // const handleOpen = () => {
+  //   setOpen(!open);
+  // }
 
 
   useEffect(() => {
@@ -46,7 +45,6 @@ const AssociateDashboard = () => {
       setUser(userDetails)
       setAssociate(associateDetails)
       console.log(associateDetails.id)
-      // scheduledDates(associateDetails.id)
       getAssociateUser()
     }
   }, [])
@@ -55,18 +53,18 @@ const AssociateDashboard = () => {
   const getAssociateUser = async () => {
 
     const userdata = JSON.parse(localStorage.getItem('user'))
-
     const associateUserId = userdata.id
     try {
-      const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
+      // const response = await axios.get(`${BASE_URL}/users/get-user?userId=${associateUserId}`)
+      const response = await axiosInstance.get(`/users/get-user?userId=${associateUserId}`)
       if (response.status === 200) {
         console.log(response.data, 'latest associate user data')
         setUser(response.data.user)
         const availableSlots = response.data.available_slots
-        // const extractedDates = availableSlots.map(slot => slot.date);
         const extractedDates = availableSlots.map(slot => moment(slot.date).format('YYYY-MM-DD'));
         setSlotDates(extractedDates);
         setServices(response.data.count)
+        setRating(response.data.average_rating)
       }
     } catch (error) {
       console.log("error found", error)
@@ -75,13 +73,11 @@ const AssociateDashboard = () => {
 
   console.log(selectedDate)
 
-  const today = new Date()
-  const startDate = new Date(today.setDate(today.getDate() + 1))
-  const endDate = new Date(today.setDate(today.getDate() + 7))
-  const inputDate = selectedDate
-  const inputDateFormat = 'YYYY//MM/DD'
-  const momentObject = moment(inputDate, inputDateFormat)
-  const utcDate = momentObject.utc().format();
+  const today = new Date();
+  const startDate = new Date(today.getTime() + 24 * 60 * 60 * 1000); // Start from tomorrow
+  const endDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // End after 7 days
+  const inputDate = selectedDate;
+  const utcDate = moment(inputDate).format('YYYY-MM-DD');
   const actual = utcDate.toString().split('T')[0]
   console.log(actual, "utc date")
 
@@ -94,10 +90,11 @@ const AssociateDashboard = () => {
       is_morning: morningShift,
       is_noon: noonShift,
     }
-    console.log(values, "semding values")
+    console.log(values, "sending values")
 
     try {
-      const response = await axios.post(`${BASE_URL}/booking/slot/`, values)
+      // const response = await axios.post(`${BASE_URL}/booking/slot/`, values)
+      const response = await axiosInstance.post('/booking/slot/', values)
 
       if (response.data) {
         console.log(response.data, "res submit")
@@ -173,14 +170,14 @@ const AssociateDashboard = () => {
                 </CardBody>
               </Card>
             </div>
-            {/* <div className='w-1/3'>
+            <div className='w-1/3'>
               <Card className="">
                 <CardBody className='flex items-center'>
                   <RiUserStarLine className='h-12 w-12 text-black' />
-                  <Typography variant='h4' color='black'> &nbsp; 4.5</Typography>
+                  <Typography variant='h4' color='black'> &nbsp;{rating?.average_rating}</Typography>
                 </CardBody>
               </Card>
-            </div> */}
+            </div>
             <div className='w-1/2'>
               <Card className="">
                 <CardBody className='flex items-center'>
@@ -198,7 +195,8 @@ const AssociateDashboard = () => {
               <div className='flex flex-col sm:flex-row space-x-0 sm:space-x-6 justify-center'>
                 <div className="w-full sm:w-96">
                   <Calendar minDate={startDate} maxDate={endDate} tileClassName={tileClassName}
-                    onChange={(date) => setSelectedDate(date)} value={selectedDate} style={{ height: '500px' }} />
+                    onChange={(date) => setSelectedDate(date)} value={selectedDate}
+                    style={{ height: '500px' }} />
                 </div>
                 <div className="w-full sm:w-96">
                   <Card className="w-full py-2 bg-pink-100">
@@ -207,7 +205,8 @@ const AssociateDashboard = () => {
                       <div className=''>
                         <div className='space-x-2'>
                           <label>08:00 AM to 12:00 PM</label>
-                          <input type="checkbox" checked={morningShift} onChange={() => setMorningShift(!morningShift)} />
+                          <input type="checkbox" checked={morningShift}
+                            onChange={() => setMorningShift(!morningShift)} />
                         </div>
                         <div className='space-x-2'>
                           <label>01:00 PM to 05:00 PM</label>
@@ -218,38 +217,14 @@ const AssociateDashboard = () => {
                         <h1>Selected Date : {selectedDate.toDateString()}</h1>
                         <h1>Selected Shifts : {morningShift && 'Morning'} {morningShift && noonShift && '|'} {noonShift && 'Noon'}</h1>
                       </div>
-                      <Button variant='outlined' className='hover:bg-white hover:text-red-900 hover:' onClick={handleSubmit} disabled={!morningShift && !noonShift}>create availability</Button>
+                      <Button variant='outlined' className='hover:bg-white hover:text-red-900 hover:' onClick={handleSubmit} disabled={!morningShift && !noonShift}>
+                        create availability</Button>
                     </CardBody>
                   </Card>
                 </div>
               </div>
             </CardBody>
           </Card>
-          {/* <Card className='mx-10 mb-10'>
-            <div className='m-5'>
-              <Typography variant='h2' className='mb-5'>
-                Scheduled Dates
-              </Typography>
-              <div>
-                {availabilityData.map((item, index) => (
-                  <Card key={item} className=' p-5 bg-gray-500 mb-2'>
-                    <div className='flex justify-between '>
-                      <div>
-                        <Typography variant='h6' color='black'>Date &nbsp; : {item.date}</Typography>
-                        <Typography variant='h6' color='black'>Shifts :
-                          {item.is_morning ? 'Morning' : null} {item.is_morning && item.is_noon ? "," : null} {item.is_noon ? 'Noon' : null}</Typography>
-                      </div>
-                      <div>
-                        <Button variant='outlined' color='red'
-                          className='hover:bg-red-500 hover:text-white' onClick={handleOpen}>Delete Schedule</Button>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-
-              </div>
-            </div>
-          </Card> */}
         </div>
       </div>
 

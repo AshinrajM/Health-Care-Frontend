@@ -4,11 +4,12 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Button, Input, Dial
 import homeCover from '../../assets/profile/user.jpg';
 import { FaUserEdit } from "react-icons/fa";
 import { toast } from 'react-toastify';
+// import { BASE_URL } from '../../api/api'
+import axiosInstance from '../../api/api'
 import axios from 'axios';
 
+
 const AssociateProfile = () => {
-
-
 
     const [user, setUser] = useState(null)
     const [associate, setAssociate] = useState(null);
@@ -70,7 +71,8 @@ const AssociateProfile = () => {
                 formData.append('profile_picture', profile_picture)
             }
 
-            const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+            // const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+            const response = await axiosInstance.patch('/users/userslist', formData)
             console.log(response.data, "response data")
             handleOpen()
             setUser(response.data)
@@ -114,7 +116,8 @@ const AssociateProfile = () => {
                     formData.append('newPassword', newPassword);
                     formData.append('id', user.id)
 
-                    const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+                    // const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
+                    const response = await axiosInstance.patch('/users/userslist', formData)
                     console.log(response.data, "response data , password changed")
                     handlePassOpen()
                     toast.success("password changed successfully")

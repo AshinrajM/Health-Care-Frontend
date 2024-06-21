@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
-import SignIn from '../pages/user/SignIn';
-import SignUp from '../pages/user/SignUp'
+
+import SignIn from '../pages/user/Signin';
+import SignUp from '../pages/user/Signup';
 import Home from '../pages/user/Home'
 import Profile from '../pages/user/profile'
 import PrivateRouteUser from './PrivateRoutes/PrivateRouteUser'
@@ -25,7 +26,6 @@ export default function UserRoutes() {
         <Route path='success' element={< BookingSuccess />} />
         <Route path='failed' element={< BookingFailed />} />
         <Route path='bookings' element={< BookingHistory />} />
-        {/* <Route path='chat/:id/:role' element={< UserChat />} /> */}
         <Route path='chat' element={< UserChat />} />
       </Route>
     </Routes>
