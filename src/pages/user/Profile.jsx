@@ -45,7 +45,7 @@ const Profile = () => {
         getUser()
 
     }, [])
-    // console.log(user, "check")
+    console.log(user, "check")
 
     const getUser = async () => {
         const userdata = JSON.parse(localStorage.getItem('userDetails'))
