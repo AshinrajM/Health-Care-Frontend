@@ -11,7 +11,7 @@ import BookingSuccess from '../pages/user/BookingSuccess'
 import BookingFailed from '../pages/user/BookingFailed'
 import BookingHistory from '../pages/user/BookingHistory'
 import UserChat from '../pages/user/UserChat'
-
+import NotFound from '../components/NotFound';
 
 export default function UserRoutes() {
   return (
@@ -19,6 +19,8 @@ export default function UserRoutes() {
       <Route path='signin' element={<SignIn />} />
       <Route path='signup' element={<SignUp />} />
       <Route path='' element={<Home />} />
+      <Route path="*" element={<NotFound />} />
+
       <Route path='secured' element={<PrivateRouteUser />}>
         <Route path='profile' element={<Profile />} />
         <Route path='associate-list' element={<AssociateList />} />
@@ -27,6 +29,7 @@ export default function UserRoutes() {
         <Route path='failed' element={< BookingFailed />} />
         <Route path='bookings' element={< BookingHistory />} />
         <Route path='chat' element={< UserChat />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   )

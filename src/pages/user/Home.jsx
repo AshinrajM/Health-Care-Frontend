@@ -7,10 +7,13 @@ import { Card, CardHeader, CardBody, Typography, Button } from "@material-tailwi
 import { FaArrowRightLong } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import homeCover3 from '../../assets/cover/3.jpg'
-import homeCover10 from '../../assets/cover/10.jpg'
-import homeCover11 from '../../assets/cover/11.jpg'
-import homeCover12 from '../../assets/cover/12.jpg'
 import homeCover13 from '../../assets/cover/13.jpg'
+
+import homeCover10 from '../../assets/cover/cover1.webp'
+import homeCover11 from '../../assets/cover/cover2.webp'
+import homeCover12 from '../../assets/cover/cover3.webp'
+
+
 import Skeleton from 'react-loading-skeleton'
 import icon from '../../assets/homePageIcons/landing-custom-icon-1.png'
 import icon2 from '../../assets/homePageIcons/landing-custom-icon-2.png'

@@ -6,19 +6,22 @@ import AdminUsers from "../pages/admin/AdminUsers"
 import AdminAssociates from "../pages/admin/AdminAssociates"
 import AddAssociates from "../pages/admin/AddAssociates"
 import BookingsList from "../pages/admin/BookingsList"
-
+import NotFound from "../components/NotFound"
 
 export default function AdminRoutes() {
 
     return (
         <Routes>
             <Route path="login" element={<Login />} />
+            <Route path="*" element={<NotFound />} />
+
             <Route path="entry" element={<PrivateRouteAdmin />} >
                 <Route path="dashboard" element={<AdminHome />} />
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="associates" element={<AdminAssociates />} />
                 <Route path="add-associates" element={<AddAssociates />} />
                 <Route path="bookings-list" element={<BookingsList />} />
+                <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
     )
