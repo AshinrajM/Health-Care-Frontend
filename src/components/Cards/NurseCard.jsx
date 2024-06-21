@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CiLocationOn } from "react-icons/ci";
-import { faCalendarAlt, faMapMarkerAlt, faStar, faIndianRupee, faBriefcase } from '@fortawesome/free-solid-svg-icons';
+import { FaSuitcaseMedical } from "react-icons/fa6";
+import { BsCalendarDate } from "react-icons/bs";
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { Select, Option, Dialog, DialogBody, DialogHeader, DialogFooter, Typography, Radio, Input, Button } from "@material-tailwind/react";
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { BASE_URL } from '../../api/api';
+// import { BASE_URL } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 import '../Cards/custom.css'
+import icon from '../../assets/homePageIcons/bill.png'
+import axiosInstance from '../../api/api';
+
 
 const InitialsAvatar = ({ name }) => {
     const getInitials = (name) => {
@@ -37,19 +41,17 @@ const NurseCard = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [location, setLocation] = useState('')
     const [validationError, setValidationError] = useState('');
-
     const navigate = useNavigate('')
 
 
     useEffect(() => {
         const allAvailablilty = async () => {
             try {
-                console.log("Calling API to fetch available associates...");
-                const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                // const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                const response = await axiosInstance.get('/booking/available-associates');
                 console.log("API Response:", response.data);
                 if (response.data && response.data.length > 0) {
                     setAvailabilityData(response.data)
-                    toast.success("successfully rendered")
                     console.log(response.data.length, "repsonse data")
                 } else {
                     console.log("object chceking else")
@@ -105,7 +107,6 @@ const NurseCard = () => {
                 associate: selectedAssociate,
                 shift: selectedOption,
                 date: selectedDate,
-                // phone: phone,
                 location: location
             }
 
@@ -154,7 +155,7 @@ const NurseCard = () => {
     return (
         <>
             {loading ? (
-                <div>Loading...</div> // Display loading message or spinner
+                <div>Loading...</div>
             ) : (
                 <div className="flex  justify-start gap-6 p-8 ">
                     {availabilityData.map((data, index) => (
@@ -171,28 +172,27 @@ const NurseCard = () => {
                                 </div>
                             </div>
                             <div className="px-8 py-4">
-                                <div className="flex items-center mb-4 gap-2 ml-2 text-black">
-                                    <FontAwesomeIcon icon={faBriefcase} className="mr-4" />
+                                <div className="flex items-center mb-4 gap-2  text-black">
+                                    <FaSuitcaseMedical className="h-6 w-6 self-start" />
                                     <p className='px-2' style={textStyle}>{data.experience} Years</p>
                                 </div>
-                                <div className="flex items-center mb-4 gap-2 ml-2 text-black">
-                                    <FontAwesomeIcon icon={faIndianRupee} className="mr-4" />
-                                    <p className='px-3' style={textStyle}>{data.fee_per_hour} / hr</p>
+                                <div className="flex items-center mb-4 gap-2  text-black">
+                                    <img className='h-6 w-6' src={icon} alt="" />
+                                    <p className='px-2' style={textStyle}>₹  {data.fee_per_hour}/hr </p>
                                 </div>
-                                <div className="flex items-center mb-4 gap-5 text-black">
-                                    <CiLocationOn  className="h-6 w-6 self-start" />
-                                    <p className='px-3' style={textStyle}>{data.user.location}</p>
+                                <div className="flex items-center mb-4 gap-2  text-black">
+                                    <CiLocationOn className="h-6 w-6 self-start" />
+                                    <p className='px-2' style={textStyle}>{data.user.location} </p>
                                 </div>
-                                <div className="mb-4 flex gap-1">
+                                <div className="mb-4 flex items-center gap-4">
                                     <div className="text-black mb-2">
-                                        <FontAwesomeIcon icon={faCalendarAlt} className="mr-4"
-                                            style={{ height: '30px', width: '28px' }} />
+                                        <BsCalendarDate className="h-6 w-6 self-start" />
                                     </div>
                                     <div className="mb-1">
                                         <Select
                                             label="Select Date"
                                             color="lightBlue"
-                                            size="lg"
+                                            size="md"
                                             onChange={(val) => handleDateChange(data.id, val)}
                                             value={dates[data.id] || ''}
                                             className="border border-gray-700 rounded-md p-1
@@ -209,7 +209,7 @@ const NurseCard = () => {
                                     onClick={() => handleBooking(data)}>
                                     Book Appoinment
                                 </Button>
-                                <Button className="w-full py-2 px-4 bg-blue-gray-700 text-white rounded-md hover:bg-blue-gray-400 focus:outline-none">More Details</Button>
+
                             </div>
                         </div>
                     ))}

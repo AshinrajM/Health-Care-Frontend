@@ -6,6 +6,7 @@ import { Rings } from 'react-loader-spinner';
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import axios from "axios";
+import axiosInstance from "../../api/api";
 
 
 
@@ -127,7 +128,8 @@ export default function AddAssociates() {
         setLoading(true);
         console.log('submitted form :', values)
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/register-associate', values)
+            // const response = await axios.post('http://127.0.0.1:8000/users/register-associate', values)
+            const response = await axiosInstance.post('/users/register-associate', values)
             console.log("response:", response.data)
 
             if (response) {

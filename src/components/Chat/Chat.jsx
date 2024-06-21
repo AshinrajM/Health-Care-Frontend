@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import ChatHead from './ChatHead';
 import PrevChatBar from './PrevChatBar';
 import axios from 'axios';
-import { BASE_URL } from '../../api/api';
+import axiosInstance from '../../api/api';
 
 const Chat = (props) => {
 
@@ -46,7 +46,8 @@ const Chat = (props) => {
         if (sender && receiver) {
             async function getMessages() {
                 try {
-                    const response = await axios.get(`${BASE_URL}/chat/messages?sender=${sender}&receiver=${receiver}`)
+                    // const response = await axios.get(`${BASE_URL}/chat/messages?sender=${sender}&receiver=${receiver}`)
+                    const response = await axiosInstance.get(`/chat/messages?sender=${sender}&receiver=${receiver}`)
                     if (response.status === 200) {
                         console.log(response.data, "messages existing")
                         setMessages(response.data)

@@ -5,9 +5,10 @@ import SideBar from '../../components/Sidebar/SideBar'
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { BASE_URL } from '../../api/api'
+// import { BASE_URL } from '../../api/api'
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
+import axiosInstance from "../../api/api";
 
 
 export default function AdminUsers() {
@@ -22,9 +23,12 @@ export default function AdminUsers() {
     useEffect(() => {
         async function getAllUser() {
             try {
-                const users = await axios.get(`${BASE_URL}/users/userslist`)
-                console.log("sdsd", users.data);
-                setUsers(users.data)
+                // const users = await axios.get('${BASE_URL}/users/userslist')
+                const users = await axiosInstance.get('/users/userslist')
+                if (users.status === 200) {
+                    console.log("sdsd", users.data);
+                    setUsers(users.data)
+                }
 
             } catch (error) {
                 console.log(error);
@@ -47,20 +51,23 @@ export default function AdminUsers() {
     const confirmUserStatusChange = async () => {
         try {
             const data = { userId: selectedUserId }
-            const response = await axios.patch(`${BASE_URL}/users/register`, data)
-            toast.success("User status changed", response.data.email)
-            console.log("User status changed", response.data.email)
+            // const response = await axios.patch('${BASE_URL}/users/register', data)
+            const response = await axiosInstance.patch('/users/register', data)
+            if (response.status === 200) {
+                toast.success("User status changed", response.data.email)
+                console.log("User status changed", response.data.email)
 
-            setUsers(prevUsers => prevUsers.map(user => {
-                if (user.id === selectedUserId) {
-                    return {
-                        ...user,
-                        is_active: !selectedUserStatus
-                    };
-                }
-                return user;
-            }));
-            setShowModal(false);
+                setUsers(prevUsers => prevUsers.map(user => {
+                    if (user.id === selectedUserId) {
+                        return {
+                            ...user,
+                            is_active: !selectedUserStatus
+                        };
+                    }
+                    return user;
+                }));
+                setShowModal(false);
+            }
         } catch (error) {
             console.log(error)
             toast.error("Error found")
@@ -99,8 +106,8 @@ export default function AdminUsers() {
                             <div className='lg:w-64 flex-none'>
                                 <SideBar />
                             </div>
-                            <div className='flex-1 justify-center mx-16 mt-10'>
-                                <Typography variant='h2' color='white' className='flex justify-center mb-6'>No Bookings Yet</Typography>
+                            <div className='flex-1 justify-center mx-44 mt-10'>
+                                <Typography variant='h2' color='white' className='flex justify-center mb-6'>No Users Active</Typography>
                             </div>
                         </div>
                     ) : (

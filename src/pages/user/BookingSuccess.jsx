@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import Header from '../../components/Header/Header'
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { BASE_URL } from '../../api/api';
+import axiosInstance from '../../api/api';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import axios from 'axios';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -30,7 +30,8 @@ const BookingSuccess = () => {
     const bookingDetails = async (userId) => {
         console.log(userId, "from useeff")
         try {
-            const response = await axios.get(`${BASE_URL}/booking/latest-booking?userId=${userId}`)
+            // const response = await axios.get(`${BASE_URL}/booking/latest-booking?userId=${userId}`)
+            const response = await axiosInstance.get(`/booking/latest-booking?userId=${userId}`)
             if (response.data) {
                 console.log(response.data, "booking")
                 setBooking(response.data.booking)

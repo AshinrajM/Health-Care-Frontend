@@ -3,10 +3,11 @@ import { Button, Typography, Dialog, DialogHeader, DialogBody, DialogFooter, Rad
 import { LuMessagesSquare } from "react-icons/lu";
 import SideBarAssociate from '../../components/SideBarAssociate/SideBarAssociate';
 import axios from 'axios';
-import { BASE_URL } from '../../api/api';
+// import { BASE_URL } from '../../api/api';
 import outlined from '@material-tailwind/react/theme/components/timeline/timelineIconColors/outlined';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axiosInstance from '../../api/api';
 
 const Bookings = () => {
 
@@ -24,7 +25,8 @@ const Bookings = () => {
     const getBookings = async (Id) => {
         console.log("object", Id)
         try {
-            const response = await axios.get(`${BASE_URL}/booking/associate-booking?associateId=${Id}`)
+            // const response = await axios.get(`${BASE_URL}/booking/associate-booking?associateId=${Id}`)
+            const response = await axiosInstance.get(`/booking/associate-booking?associateId=${Id}`)
             console.log(response, "sacgub")
             if (response.data && response.data.length > 0) {
                 console.log(response.data, "booking data")
@@ -61,7 +63,8 @@ const Bookings = () => {
         }
         console.log(values, "sending values")
         try {
-            const response = await axios.patch(`${BASE_URL}/booking/associate-booking`, values)
+            // const response = await axios.patch(`${BASE_URL}/booking/associate-booking`, values)
+            const response = await axiosInstance.patch(`/booking/associate-booking`, values)
             if (response.status === 200) {
                 setOpen(!open)
                 const updatedBookings = bookings.map((booking) => {

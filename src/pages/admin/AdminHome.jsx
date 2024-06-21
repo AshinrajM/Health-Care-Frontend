@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import SideBar from '../../components/Sidebar/SideBar'
-import { BASE_URL } from '../../api/api';
+// import { BASE_URL } from '../../api/api';
 import { Card, CardBody, CardHeader, Typography } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 import { FaUsers } from "react-icons/fa6";
@@ -9,7 +9,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import { GiProfit } from "react-icons/gi";
 import { TbActivityHeartbeat } from "react-icons/tb";
-import axios from 'axios';
+import axiosInstance from '../../api/api';
 
 
 const chartConfigBar = {
@@ -131,7 +131,8 @@ export default function AdminHome() {
 
     const getDatas = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/booking/statistics`)
+            // const response = await axios.get(`${BASE_URL}/booking/statistics`)
+            const response = await axiosInstance.get('/booking/statistics')
             if (response.status === 200) {
                 console.log("received datas", response.data)
                 setData(response.data);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardBody, CardFooter, Typography, Button } from "@material-tailwind/react";
 import Header from '../../components/Header/Header';
-import { BASE_URL } from '../../api/api'
+import axiosInstance from '../../api/api'
 import { API_URL } from '../../Config/config';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -80,7 +80,8 @@ const BookingFinal = () => {
     const BookingConfirm = async () => {
 
         try {
-            const response = await axios.post(`${BASE_URL}/booking/checkout`, values)
+            // const response = await axios.post(`${BASE_URL}/booking/checkout`, values)
+            const response = await axiosInstance.post('/booking/checkout', values)
             const checkoutUrl = response.data.url;
             window.location.href = checkoutUrl;
 

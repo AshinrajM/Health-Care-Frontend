@@ -2,18 +2,16 @@
 import { useState } from 'react'
 import SideBar from '../../components/Sidebar/SideBar'
 import { Button, Card, Typography } from '@material-tailwind/react'
-import { BASE_URL } from '../../api/api'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
+import axiosInstance from '../../api/api'
 
 
 const getBookings = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/booking/booking-list/`);
-        // if (response.data && response.data.length > 0) {
-
+        // const response = await axios.get(`${BASE_URL}/booking/booking-list/`);
+        const response = await axiosInstance.get('/booking/booking-list/');
         console.log(response.data, "data"); // Log the data received
         return response.data;
 
@@ -44,7 +42,8 @@ const BookingsList = () => {
                     <SideBar />
                 </div>
                 <div className='flex-1 justify-center mx-16 mt-10'>
-                    <Typography variant='h2' color='white' className='flex justify-center mb-6'>No Bookings Yet</Typography>
+                    <Typography variant='h2' color='white' className='flex justify-center mb-6'>
+                        No Bookings Yet</Typography>
                 </div>
             </div>
 
@@ -67,7 +66,8 @@ const BookingsList = () => {
                 <SideBar />
             </div>
             <div className='flex-1 overflow-auto p-4 lg:ml-64 md:ml-64'>
-                <Typography variant='h2' color='white' className='mb-6 text-center lg:text-left'>Bookings</Typography>
+                <Typography variant='h2' color='white' className='mb-6 text-center 
+                lg:text-left'>Bookings</Typography>
                 <Card className='rounded-none bg-gray-100 flex'>
                     <div className='overflow-x-auto '>
                         <table className='text-black w-full'>

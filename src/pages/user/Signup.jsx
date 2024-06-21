@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
-import { BASE_URL } from '../../api/api';
+import { BASE_URL } from '../../api/baseUrl';
+import axiosInstance from '../../api/api';
 import { ClipLoader } from 'react-spinners';
 import bg from '../../assets/background/signup.jpg'
 import Skeleton from 'react-loading-skeleton';
@@ -77,7 +78,7 @@ export default function SignUp() {
     useEffect(() => {
         setTimeout(() => {
             setPageLoading(false);
-        }, 1000); // Simulate loading delay
+        }, 300); // Simulate loading delay
     }, []);
 
     useEffect(() => {

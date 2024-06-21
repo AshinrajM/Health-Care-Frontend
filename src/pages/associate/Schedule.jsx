@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogFooter } from "@material-tailwind/react";
 import axios from 'axios'
-import { BASE_URL } from '../../api/api'
+// import { BASE_URL } from '../../api/api'
+import axiosInstance from '../../api/api'
 import { toast } from 'react-toastify';
 import SideBarAssociate from '../../components/SideBarAssociate/SideBarAssociate'
 import '../../components/Cards/custom.css'
@@ -25,7 +26,8 @@ const Schedule = () => {
     console.log("id of slot", selectedSlotId)
     const scheduledDates = async (associateId) => {
         try {
-            const res = await axios.get(`${BASE_URL}/booking/slot/?associate_id=${associateId}`)
+            // const res = await axios.get(`${BASE_URL}/booking/slot/?associate_id=${associateId}`)
+            const res = await axiosInstance.get(`/booking/slot/?associate_id=${associateId}`)
             if (res.data) {
                 setAvailabilityData(res.data)
                 toast.success("availibility get data of slot")
@@ -37,7 +39,8 @@ const Schedule = () => {
 
     const handleSlot = async () => {
         try {
-            const res = await axios.delete(`${BASE_URL}/booking/slot/?slotId=${selectedSlotId}`)
+            // const res = await axios.delete(`${BASE_URL}/booking/slot/?slotId=${selectedSlotId}`)
+            const res = await axiosInstance.delete(`/booking/slot/?slotId=${selectedSlotId}`)
             if (res.status === 200) {
                 const updatedAvailabilityData = availabilityData.filter(
                     (item) => item.id !== selectedSlotId);

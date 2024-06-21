@@ -6,17 +6,12 @@ import { Carousel } from 'react-responsive-carousel';
 import { Card, CardHeader, CardBody, Typography, Button } from "@material-tailwind/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
-import homeCover from '../../assets/cover/homeCover.png';
-// import homeCover2 from '../../assets/cover/1.jpg'
 import homeCover3 from '../../assets/cover/3.jpg'
-import homeCover4 from '../../assets/cover/4.jpg';
-import homeCover5 from '../../assets/cover/cover.jpg'
 import homeCover10 from '../../assets/cover/10.jpg'
 import homeCover11 from '../../assets/cover/11.jpg'
 import homeCover12 from '../../assets/cover/12.jpg'
 import homeCover13 from '../../assets/cover/13.jpg'
 import Skeleton from 'react-loading-skeleton'
-import bg from '../../assets/background/shape.png'
 import icon from '../../assets/homePageIcons/landing-custom-icon-1.png'
 import icon2 from '../../assets/homePageIcons/landing-custom-icon-2.png'
 import icon3 from '../../assets/homePageIcons/landing-custom-icon-5.png'
@@ -32,28 +27,6 @@ export default function Home() {
 
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(async (position) => {
-    //             try {
-    //                 const apiKey = '9c09d04cf46241b98facdb7fd80de5a0'
-    //                 const { latitude, longitude } = position.coords;
-    //                 const response = await axios.get('https://api.geoapify.com/v1/geocode/reverse', {
-    //                     params: {
-    //                         lat: latitude,
-    //                         lon: longitude,
-    //                         apiKey: apiKey
-    //                     }
-    //                 })
-    //                 setAddress(response.data.features[0].properties.formatted);
-    //             } catch (error) {
-    //                 console.log("Geolocation is not supported by this browser.");
-    //             }
-    //         });
-    //     } else {
-    //         console.log("Geolocation is not supported by this browser.");
-    //     }
-    // }, []);
 
     useEffect(() => {
         if (navigator.geolocation) {

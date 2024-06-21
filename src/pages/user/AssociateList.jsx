@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { FaStar } from "react-icons/fa6";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import { Card, CardBody, Button, Input, Radio, Typography } from "@material-tailwind/react";
-import { BASE_URL } from "../../api/api";
+import { Card, CardBody, Button, Typography } from "@material-tailwind/react";
+import axiosInstance from "../../api/api";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import backgroundImage from '../../assets/background/3.jpg'
@@ -15,30 +14,11 @@ import { LiaWalkingSolid } from "react-icons/lia";
 
 const AssociateList = () => {
 
-    // const [exp, setExp] = useState(0);
-    // const [fee, setFee] = useState(0);
-    // const [openDetail, setOpenDetail] = useState(false)
-    // const [openBooking, setOpenBooking] = useState(false)
-    // const [availabilityData, setAvailabilityData] = useState([]);
-    // const [selectedCard, setSelectedCard] = useState(null)
-    // const [selectedOption, setSelectedOption] = useState('');
-    // const [location, setLocation] = useState('')
-    // const [phone, setPhone] = useState('')
+
     const [noSlot, setNoSlot] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const navigate = useNavigate();
-
-    // const handleOpenBooking = (data) => {
-    //     console.log(data, "data")
-    //     setSelectedCard(data)
-    //     setOpenBooking(!openBooking)
-
-    // }
-
-    // const handleOpenDetail = () => {
-    //     setOpenDetail(!openDetail);
-    // }
 
     const currentDate = new Date();
 
@@ -48,19 +28,17 @@ const AssociateList = () => {
     const maxDate = new Date();
     maxDate.setDate(currentDate.getDate() + 7);
 
-    // const handleOptionChange = (value) => {
-    //     setSelectedOption(value);
-    // };
+
 
 
     useEffect(() => {
         const allAvailablilty = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                // const response = await axios.get(`${BASE_URL}/booking/available-associates`);
+                const response = await axiosInstance.get('/booking/available-associates');
                 console.log(response.data, "repsonse data main")
                 setLoading(false)
                 if (response.data && response.data.length > 0) {
-                    // setAvailabilityData(response.data)
                     console.log(response.data.length, "repsonse data main2")
                 } else {
                     console.log("check in else in main 3")
@@ -119,7 +97,6 @@ const AssociateList = () => {
                             <div className='flex justify-center m-5'>
                                 {noSlot && (
                                     <>
-                                        {/* <img src={backgroundImage} alt="No bookings yet" className='rounded-xl' /> */}
                                         <div className='flex flex-col gap-5 '>
                                             <div className='flex mb-5'>
 
@@ -132,11 +109,10 @@ const AssociateList = () => {
                                             </div>
                                             <p className='text-2xl tracking-widest mb-0 text-gray-600'
                                                 style={textStyle}>There is no  slots available Everybody is busy. Try again Later</p>
-                                            <Button className='mb-3 tracking-widest' color='gray' onClick={(e) => navigate('/')} style={{ wordSpacing: '1rem' }}
+                                            <Button className='mb-3 tracking-widest' color='gray'
+                                                onClick={(e) => navigate('/')} style={{ wordSpacing: '1rem' }}
                                             >Try again later</Button>
                                         </div>
-
-
                                     </>
                                 )}
                             </div>
@@ -160,7 +136,7 @@ const AssociateList = () => {
                                             <input type="range" min={0} max={1000} value={fee} step={100} className='range range-primary' onChange={(e) => setFee(parseInt(e.target.value))} />
                                         </div>
                                         <div >
-                                            <p className='text-black'>Experience : {exp}yrs</p>
+                                         <p className='text-black'>Experience : {exp}yrs</p>
                                             <input type="range" min={0} max={5} value={exp} step={1} className='range range-primary' onChange={(e) => setExp(parseInt(e.target.value))} />
                                         </div>
                                         <div className='flex space-x-2'>
@@ -183,7 +159,7 @@ const AssociateList = () => {
                                 <NurseCard />
                             </div>
 
-                            <div className='mt-10'>
+                            <div className='mt-24'>
                                 <Footer />
                             </div>
                         </>

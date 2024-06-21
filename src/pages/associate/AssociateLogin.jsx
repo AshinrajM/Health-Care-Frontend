@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginAssociate } from "../../redux/userSlice";
-import { BASE_URL } from "../../api/api"
+import { BASE_URL } from "../../api/baseUrl"
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";

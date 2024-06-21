@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardBody, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
+import { Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Accordion, AccordionHeader, AccordionBody, } from "@material-tailwind/react";
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Rating from '@mui/material/Rating';
@@ -12,7 +12,7 @@ import { SlCalender } from "react-icons/sl";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
-import { BASE_URL } from '../../api/api';
+import axiosInstance from '../../api/api';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaRegMessage } from "react-icons/fa6";
@@ -108,7 +108,8 @@ const BookingHistory = () => {
       rating: rating
     }
     try {
-      const response = await axios.post(`${BASE_URL}/booking/add-rating`, datas)
+      // const response = await axios.post(`${BASE_URL}/booking/add-rating`, datas)
+      const response = await axios.post('/booking/add-rating', datas)
       setOpen2(!open2)
       console.log("object", response.data)
       toast.success(response.data.message)
@@ -123,13 +124,8 @@ const BookingHistory = () => {
   const getBookings = async (userId, page = 1) => {
     console.log(userId, "active user")
     // const response = await axios.get(`${BASE_URL}/booking/bookings?userId=${userId}`)
-    const response = await axios.get(`${BASE_URL}/booking/bookings?userId=${userId}&page=${page}`);
+    const response = await axiosInstance.get(`/booking/bookings?userId=${userId}&page=${page}`);
     console.log("check resaponse pagination", response.data)
-    // if (response.data) {
-    //   console.log(response.data, "checking the received booking datas")
-    //   if (response.data.booking.results.length > 0) {
-    //     setBookings(response.data.booking.results)
-    //   }
     if (response.data) {
       setBookings(response.data.booking.results);
       setTotalPages(Math.ceil(response.data.booking.count / bookingsPerPage));
@@ -151,7 +147,8 @@ const BookingHistory = () => {
       userId: userId
     }
     try {
-      const response = await axios.patch(`${BASE_URL}/booking/cancel-booking/`, values)
+      // const response = await axios.patch(`${BASE_URL}/booking/cancel-booking/`, values)
+      const response = await axiosInstance.patch('/booking/cancel-booking/', values)
       if (response.status === 200) {
         console.log(response.data, "received response")
         getBookings(user.id)

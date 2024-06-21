@@ -5,12 +5,12 @@ import { HiUserAdd } from "react-icons/hi";
 import SideBar from '../../components/Sidebar/SideBar'
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { BASE_URL } from '../../api/api'
 import addMoney from '../../assets/homePageIcons/rupees.png'
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import axios from "axios";
 import { toast } from "react-toastify";
+import axiosInstance from "../../api/api";
 
 
 export default function AdminAssociates() {
@@ -29,7 +29,8 @@ export default function AdminAssociates() {
     useEffect(() => {
         async function getAssociates() {
             try {
-                const associates = await axios.get(`${BASE_URL}/users/associatelist`)
+                // const associates = await axios.get(`${BASE_URL}/users/associatelist`)
+                const associates = await axiosInstance.get('/users/associatelist')
                 console.log("associates", associates.data);
                 setAssociates(associates.data)
 
@@ -47,7 +48,8 @@ export default function AdminAssociates() {
         }
 
         try {
-            const response = await axios.patch(`${BASE_URL}/users/associatelist`, values)
+            // const response = await axios.patch(`${BASE_URL}/users/associatelist`, values)
+            const response = await axiosInstance.patch('/users/associatelist', values)
             console.log("response", response.data)
             setAssociates(prevAssociates => prevAssociates.map(associate =>
                 associate.id === associateId ? { ...associate, is_active: !associate.is_active } : associate
@@ -74,7 +76,8 @@ export default function AdminAssociates() {
         }
         console.log("send values", salary)
         try {
-            const response = await axios.patch(`${BASE_URL}/users/update-associate-fee`, values)
+            // const response = await axios.patch(`${BASE_URL}/users/update-associate-fee`, values)
+            const response = await axiosInstance.patch('/users/update-associate-fee', values)
             console.log(response, "response")
             if (response.status === 200) {
                 toast.success(response.data.message);
@@ -302,7 +305,7 @@ export default function AdminAssociates() {
                         color="green"
                         onClick={() => handleAssociateSalary(selectedAssociate.id)}
                         disabled={!!error || !salary} // Disable the button if there's an error or the salary is empty 
-                        >
+                    >
                         <span>
                             {isLoading ? 'Updating...' : 'Update'}
                         </span>
