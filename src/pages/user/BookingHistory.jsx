@@ -137,7 +137,7 @@ const BookingHistory = () => {
   }
 
 
-  console.log("chek state bookings", bookings)
+  console.log("check state bookings", bookings)
 
   const handleBookingCancel = async (booking_id) => {
     const bookingId = booking_id
@@ -167,7 +167,6 @@ const BookingHistory = () => {
     if (userDetails) {
       const parsedUser = JSON.parse(userDetails);
       setUser(parsedUser);
-      // getBookings(parsedUser.id)
       getBookings(parsedUser.id, currentPage)
     }
 

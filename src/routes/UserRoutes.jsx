@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-
 import SignIn from '../pages/user/Signin';
 import SignUp from '../pages/user/Signup';
 import Home from '../pages/user/Home'
@@ -21,7 +20,6 @@ export default function UserRoutes() {
       <Route path='signup' element={<SignUp />} />
       <Route path='' element={<Home />} />
       <Route path="*" element={<NotFound />} />
-
       <Route path='secured' element={<PrivateRouteUser />}>
         <Route path='profile' element={<Profile/>} />
         <Route path='associate-list' element={<AssociateList />} />
