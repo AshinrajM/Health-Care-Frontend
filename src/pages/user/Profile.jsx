@@ -194,7 +194,7 @@ const Profile = () => {
                         >
                             {user.profile_picture ? (
                                 <img
-                                    src={`http://localhost:8000${user.profile_picture}`}
+                                    src={`https://kickmart.online${user.profile_picture}`}
                                     alt="card-image"
                                     className="h-full w-full object-cover"
                                 />) : (
