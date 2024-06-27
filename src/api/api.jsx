@@ -18,7 +18,6 @@ if (userToken) {
 console.log("Token being sent:", token);
 
 const axiosInstance = axios.create({
-    // baseURL: 'http://127.0.0.1:8000',
     baseURL: 'http://3.82.108.203/',
     headers: {
         'Content-Type': 'application/json',
