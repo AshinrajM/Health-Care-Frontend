@@ -118,13 +118,17 @@ const Profile = () => {
                 formData.append('profile_picture', profile_picture)
             }
             console.log('id', user.id)
-            const response = await axiosInstance.patch('/users/userslist', formData)
+            const response = await axiosInstance.patch('/users/userslist', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
             console.log(response.data, "response data")
             handleOpen()
             setUser(response.data)
 
             if (response.data.profile_picture) {
-                // Assuming the profile_picture field contains the URL of the updated image
                 setUser(prevUser => ({ ...prevUser, profile_picture: response.data.profile_picture }));
             }
             const updatedUserDetails = {
