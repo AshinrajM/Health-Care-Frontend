@@ -18,7 +18,7 @@ if (userToken) {
 console.log("Token being sent:", token);
 
 const axiosInstance = axios.create({
-    baseURL: 'https://kickmart.online/',
+    baseURL: 'https://kickmart.online',
     headers: {
         'Content-Type': 'application/json',
     },
