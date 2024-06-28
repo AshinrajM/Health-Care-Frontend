@@ -8,10 +8,9 @@ import { ClipLoader } from 'react-spinners';
 import homeCover from '../../assets/profile/user.jpg';
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer';
-import axios from 'axios';
 import axiosInstance from '../../api/api';
 import { toast } from 'react-toastify';
-
+import { BASE_URL } from '../../api/baseUrl';
 
 const Profile = () => {
 
@@ -194,7 +193,8 @@ const Profile = () => {
                         >
                             {user.profile_picture ? (
                                 <img
-                                    src={`https://kickmart.online${user.profile_picture}`}
+                                    // src={`https://kickmart.online${user.profile_picture}`}
+                                    src={`${BASE_URL}${user.profile_picture}`}
                                     alt="card-image"
                                     className="h-full w-full object-cover"
                                 />) : (
