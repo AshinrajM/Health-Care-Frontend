@@ -159,7 +159,13 @@ const Profile = () => {
                 formData.append('newPassword', newPassword);
                 formData.append('id', user.id)
 
-                const response = await axiosInstance.patch('/users/userslist', formData)
+                const response = await axiosInstance.patch('/users/userslist', formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                )
                 console.log(response.data, "response data , password changed")
                 handlePassOpen()
                 toast.success("password Updated")

@@ -72,7 +72,13 @@ const AssociateProfile = () => {
             }
 
             // const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
-            const response = await axiosInstance.patch('/users/userslist', formData)
+            const response = await axiosInstance.patch('/users/userslist', formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
             console.log(response.data, "response data")
             handleOpen()
             setUser(response.data)
@@ -117,7 +123,13 @@ const AssociateProfile = () => {
                     formData.append('id', user.id)
 
                     // const response = await axios.patch('http://127.0.0.1:8000/users/userslist', formData)
-                    const response = await axiosInstance.patch('/users/userslist', formData)
+                    const response = await axiosInstance.patch('/users/userslist', formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        }
+                    )
                     console.log(response.data, "response data , password changed")
                     handlePassOpen()
                     toast.success("password changed successfully")
