@@ -126,7 +126,7 @@ const AssociateProfile = () => {
                     const response = await axiosInstance.patch('/users/userslist', formData,
                         {
                             headers: {
-                                'Content-Type': 'multipart/form-data',
+                                'Content-Type': 'application/json',
                             },
                         }
                     )
